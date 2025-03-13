@@ -12,7 +12,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class QuizListPage extends StatefulWidget {
-  const QuizListPage({Key key, this.loader}) : super(key: key);
+  const QuizListPage({Key? key, required this.loader}) : super(key: key);
   final CustomLoader loader;
 
   @override
@@ -23,9 +23,8 @@ class _QuizListPageState extends State<QuizListPage> {
   Widget _quizTile(AssignmentModel model) {
     return Container(
         decoration: AppTheme.decoration(context),
-        margin: EdgeInsets.only(bottom: 12),
-        padding: EdgeInsets.symmetric(vertical: 8),
-        // height: 50,
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         alignment: Alignment.center,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,22 +45,9 @@ class _QuizListPageState extends State<QuizListPage> {
                     style: Theme.of(context).textTheme.titleSmall,
                     maxLines: 3,
                   ).vP4,
-                  // Text(
-                  //   "Subject: Englishhss",
-                  //   style: Theme.of(context).textTheme.subtitle2,
-                  //   maxLines: 3,
-                  // ).vP4,
-                  // Text(
-                  //   "Time Alloted: ${model.duration} min",
-                  //   style: Theme.of(context).textTheme.subtitle2,
-                  //   maxLines: 3,
-                  // ).vP4
                 ],
               ),
             ).ripple(() {
-              // if (Provider.of<HomeState>(context, listen: false).isTeacher) {
-              //   return;
-              // }
               Alert.dialog(
                 context,
                 title: model.title,
@@ -77,7 +63,7 @@ class _QuizListPageState extends State<QuizListPage> {
                 child: Container(
                   child: Column(
                     children: [
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -88,14 +74,14 @@ class _QuizListPageState extends State<QuizListPage> {
                           )
                         ],
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         children: [
                           Image.asset(Images.question, height: 30).p(12),
                           Text("${model.questions} questions"),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         children: [
                           Image.asset(Images.timer, height: 30).p(12),
@@ -113,25 +99,24 @@ class _QuizListPageState extends State<QuizListPage> {
                 onDelete: () => deleteQuiz(model.id),
                 onEdit: () {},
               ),
-            // SizedBox(width: 12),
           ],
         ));
   }
 
   void deleteQuiz(String id) {
     Alert.yesOrNo(context,
-        message: "Are you sure, you want to delete this Quiz ?",
+        message: "Are you sure, you want to delete this Quiz?",
         title: "Message",
         barrierDismissible: true,
         onCancel: () {}, onYes: () async {
-      widget.loader.showLoader(context);
-      final isDeleted =
+          widget.loader.showLoader(context);
+          final isDeleted =
           await Provider.of<QuizState>(context, listen: false).deleteQuiz(id);
-      if (isDeleted) {
-        Utility.displaySnackbar(context, msg: "Quiz Deleted");
-      }
-      widget.loader.hideLoader();
-    });
+          if (isDeleted) {
+            Utility.displaySnackbar(context, msg: "Quiz Deleted");
+          }
+          widget.loader.hideLoader();
+        });
   }
 
   @override
@@ -139,8 +124,8 @@ class _QuizListPageState extends State<QuizListPage> {
     return Consumer<QuizState>(
       builder: (context, state, child) {
         return ListView.builder(
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           itemCount: state.assignmentsList.length,
           itemBuilder: (_, index) {
             return _quizTile(state.assignmentsList[index]);
