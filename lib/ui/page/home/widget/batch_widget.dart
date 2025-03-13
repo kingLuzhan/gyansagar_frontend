@@ -4,7 +4,7 @@ import 'package:gyansagar_frontend/model/batch_time_slot_model.dart'; // Import 
 import 'package:gyansagar_frontend/ui/page/batch/batch_master_page.dart';
 import 'package:gyansagar_frontend/ui/page/home/student_list_preview.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
-import 'package:gyansagar_frontend/ui/widget/p_chiip.dart';
+import 'package:gyansagar_frontend/ui/widget/p_chiip.dart'; // Corrected import
 
 class BatchWidget extends StatelessWidget {
   const BatchWidget(
@@ -37,6 +37,8 @@ class BatchWidget extends StatelessWidget {
             borderColor: Colors.transparent,
             style: (theme.textTheme.bodyLarge ?? TextStyle()).copyWith(
                 fontSize: 14, color: theme.colorScheme.onSecondary),
+            isCrossIcon: false, // Added isCrossIcon parameter
+            onDeleted: () {}, // Added onDeleted parameter
           ),
           SizedBox(height: 10),
           Row(

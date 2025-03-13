@@ -73,7 +73,10 @@ class PTextField extends StatelessWidget {
                 type == FieldType.confirmPassword)
                 ? TextInputAction.done
                 : TextInputAction.next,
-            validator: (value) => PValidator.buildValidators(context, type)(value),
+            validator: (value) {
+              final validator = PValidator.buildValidators(context, type);
+              return validator != null ? validator(value) : null;
+            },
             onFieldSubmitted: onSubmit,
           ),
         ),

@@ -159,7 +159,7 @@ class _CreateBatchState extends State<CreatePoll> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 PTextField(
-                  type: Type.text,
+                  type: FieldType.text,
                   controller: _question,
                   label: "Poll question",
                   hintText: "Enter question",

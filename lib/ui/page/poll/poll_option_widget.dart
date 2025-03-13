@@ -52,7 +52,7 @@ class _PollOptionState extends State<PollOption> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0), // Provide non-null values
       child: PTextField(
-        type: Type.text,
+        type: FieldType.text,
         controller: controller,
         hintText: "Enter option ${widget.index}",
         maxLines: 0,
