@@ -1,9 +1,8 @@
 class Constants {
   static const String productionBaseUrl = "http://34.222.54.250:3000/api/";
-  static const String developmentBaseUrl =
-      "https://pensil-staging.herokuapp.com/api";
+  static const String developmentBaseUrl = "https://pensil-staging.herokuapp.com/api";
   static const String batch = "batch";
-  static const String announcement = 'announcement'; // Corrected spelling
+  static const String announcement = 'announcement';
   static const String assignment = 'assignment';
   static const String login = 'login';
   static const String profile = 'profile';
@@ -28,7 +27,7 @@ class Constants {
   }
 
   static String getMyAnnouncement(bool isStudent) {
-    return isStudent ? studentAnnouncements : announcement; // Corrected spelling
+    return isStudent ? studentAnnouncements : announcement;
   }
 
   static String getMyBatchDetailTimeLine(bool isStudent, String batchId) {
@@ -46,15 +45,15 @@ class Constants {
   }
 
   static String getBatchAnnouncementList(String batchId) {
-    return "$batch/$batchId/$announcement"; // Corrected spelling
+    return "$batch/$batchId/$announcement";
   }
 
   static String uploadDocInAnnouncement(String announcementId) {
-    return "$announcement/$announcementId/doc/upload"; // Corrected spelling
+    return "$announcement/$announcementId/doc/upload";
   }
 
   static String uploadImageInAnnouncement(String announcementId) {
-    return "$announcement/$announcementId/upload"; // Corrected spelling
+    return "$announcement/$announcementId/upload";
   }
 
   static String getBatchAssignmentList(String batchId, bool isStudent) {
@@ -91,7 +90,7 @@ class Constants {
   }
 
   static String crudAnnouncement(String id) {
-    return "$announcement/$id"; // Corrected spelling
+    return "$announcement/$id";
   }
 
   static String crudMaterial(String id) {
