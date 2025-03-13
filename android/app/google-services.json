@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1048749660780",
+    "project_id": "gyansagar-bd947",
+    "storage_bucket": "gyansagar-bd947.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048749660780:android:541019e80861cf6869d649",
+        "android_client_info": {
+          "package_name": "com.example.gyansagar_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048749660780-535o8jo54pmm3dasfbqr511h83o8sfc4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gyansagar_frontend",
+            "certificate_hash": "2cc36db888ded51d370f057222c156709b5f28e4"
+          }
+        },
+        {
+          "client_id": "1048749660780-eho4363jv1t6kgq1rj8hljlf7q9rr82l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhPfM8TAtBOHyaaxo_ksxhAM_YPBKdtcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048749660780-eho4363jv1t6kgq1rj8hljlf7q9rr82l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
