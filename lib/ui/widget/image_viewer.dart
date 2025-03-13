@@ -11,7 +11,7 @@ class ImageViewer extends StatelessWidget {
     );
   }
 
-  const ImageViewer({Key key, this.path}) : super(key: key);
+  const ImageViewer({Key? key, required this.path}) : super(key: key); // Marked 'key' as nullable and 'path' as required
   final String path;
 
   @override

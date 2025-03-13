@@ -117,18 +117,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       child: value
                           ? PTextField(
                         key: ValueKey(1),
-                        type: Type.email,
+                        type: FieldType.email, // Changed from Type.email to FieldType.email
                         controller: email,
                         label: "Email ID",
                         hintText: "Enter your email id",
-                        height: null,
+                        height: 70, // Provide a non-null value
                       ).hP16
                           : PTextField(
                         key: ValueKey(2),
-                        type: Type.phone,
+                        type: FieldType.phone, // Changed from Type.phone to FieldType.phone
                         controller: mobile,
                         label: "Mobile No.",
-                        height: null,
+                        height: 70, // Provide a non-null value
                         hintText: "Enter your mobile no",
                       ).hP16);
                 }),

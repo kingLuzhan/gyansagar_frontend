@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pensil_app/ui/theme/theme.dart';
+import 'package:gyansagar_frontend/ui/theme/theme.dart';
 
 class FabButton extends StatelessWidget {
-  const FabButton(
-      {Key key,
-      this.onPressed,
-      this.icon,
-      this.animationValue,
-      this.text,
-      this.translateButton})
-      : super(key: key);
-  final Function onPressed;
+  const FabButton({
+    Key? key,
+    required this.onPressed,
+    required this.icon,
+    required this.animationValue,
+    required this.text,
+    required this.translateButton,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
   final String icon;
   final double animationValue;
   final String text;

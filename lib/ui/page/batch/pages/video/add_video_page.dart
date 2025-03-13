@@ -201,21 +201,21 @@ class _AddVideoPageState extends State<AddVideoPage> {
                       children: <Widget>[
                         SizedBox(height: 16),
                         PTextField(
-                          type: Type.text,
+                          type: FieldType.text,
                           controller: _title,
                           label: "Title",
                           hintText: "Enter title here",
                           maxLines: null,
-                          height: null,
+                          height: 70, // Provide a non-null value
                         ),
                         SizedBox(height: 16),
                         PTextField(
-                            type: Type.optional,
+                            type: FieldType.optional,
                             controller: _description,
                             label: "Description",
                             hintText: "Enter here",
                             maxLines: null,
-                            height: null,
+                            height: 70, // Provide a non-null value
                             padding: EdgeInsets.symmetric(vertical: 16)),
                         SizedBox(height: 20),
                         Row(

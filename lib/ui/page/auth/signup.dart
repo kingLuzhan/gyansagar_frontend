@@ -104,20 +104,20 @@ class _SignUpState extends State<SignUp> {
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
             SizedBox(height: 30),
             PTextField(
-              type: Type.text,
+              type: FieldType.text,
               controller: name,
               label: "Name",
               hintText: "Enter name.",
             ).hP16,
             PTextField(
-              type: Type.email,
+              type: FieldType.email,
               controller: email,
               label: "Email",
               hintText: "Enter email here",
             ).hP16,
             SizedBox(height: 10),
             PTextField(
-              type: Type.phone,
+              type: FieldType.phone,
               controller: mobile,
               label: "Mobile",
               hintText: "Enter mobile here",
@@ -127,7 +127,7 @@ class _SignUpState extends State<SignUp> {
               valueListenable: passwordVisibility,
               builder: (context, value, child) {
                 return PTextField(
-                    type: Type.password,
+                    type: FieldType.password,
                     controller: password,
                     label: "Password",
                     hintText: "Enter password here",

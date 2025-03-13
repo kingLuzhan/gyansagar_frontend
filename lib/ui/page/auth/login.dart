@@ -155,14 +155,14 @@ class _LoginPageState extends State<LoginPage> {
                       child: value
                           ? PTextField(
                         key: ValueKey(1),
-                        type: Type.email,
+                        type: FieldType.email, // Changed from Type.email to FieldType.email
                         controller: email,
                         label: "Email ID",
                         hintText: "Enter your email id",
                       ).hP16
                           : PTextField(
                         key: ValueKey(2),
-                        type: Type.phone,
+                        type: FieldType.phone, // Changed from Type.phone to FieldType.phone
                         controller: mobile,
                         label: "Mobile No.",
                         hintText: "Enter your mobile no",
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                 valueListenable: passwordVisibility,
                 builder: (context, value, child) {
                   return PTextField(
-                      type: Type.password,
+                      type: FieldType.password, // Changed from Type.password to FieldType.password
                       controller: password,
                       label: "Password",
                       hintText: "Enter password here",

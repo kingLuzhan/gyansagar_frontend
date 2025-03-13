@@ -7,33 +7,37 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class PollWidget extends StatelessWidget {
-  const PollWidget(
-      {Key key, this.model, this.loader, this.hideFinishButton = true})
-      : super(key: key);
+  const PollWidget({
+    Key? key,
+    required this.model,
+    required this.loader,
+    this.hideFinishButton = true,
+  }) : super(key: key);
   final PollModel model;
   final CustomLoader loader;
   final bool hideFinishButton;
 
   Widget _secondaryButton(BuildContext context,
-      {String label, Function onPressed, bool isLoading = false}) {
+      {required String label, required VoidCallback onPressed, bool isLoading = false}) {
     final theme = Theme.of(context);
     return OutlinedButton(
       onPressed: isLoading ? null : onPressed,
-      textColor: Theme.of(context).primaryColor,
-      highlightedBorderColor: Theme.of(context).primaryColor,
-      borderSide: BorderSide(color: Theme.of(context).primaryColor),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Theme.of(context).primaryColor,
+        side: BorderSide(color: Theme.of(context).primaryColor),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      ),
       child: isLoading
           ? SizedBox(
-              height: 25,
-              width: 25,
-              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-            )
+        height: 25,
+        width: 25,
+        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      )
           : Text(
-              label,
-              style: theme.textTheme.labelLarge.copyWith(
-                  color: PColors.primary, fontWeight: FontWeight.bold),
-            ),
+        label,
+        style: theme.textTheme.labelLarge?.copyWith(
+            color: PColors.primary, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
@@ -42,40 +46,33 @@ class PollWidget extends StatelessWidget {
       margin: EdgeInsets.only(top: 5),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: model.selection.choice == e
+        decoration: model.selection?.choice == e
             ? AppTheme.outlineSucess(context)
-                .copyWith(color: PColors.green.withOpacity(.3))
+            .copyWith(color: PColors.green.withOpacity(.3))
             : model.isMyVote(
-                    Provider.of<HomeState>(
-                      context,
-                    ).userId,
-                    e)
-                ? AppTheme.outlineSucess(context)
-                    .copyWith(color: PColors.green.withOpacity(.3))
-                : model.endTime.isAfter(DateTime.now())
-                    ? AppTheme.outlinePrimary(context)
-                    : AppTheme.outline(context),
+            Provider.of<HomeState>(context).userId, e)
+            ? AppTheme.outlineSucess(context)
+            .copyWith(color: PColors.green.withOpacity(.3))
+            : model.endTime.isAfter(DateTime.now())
+            ? AppTheme.outlinePrimary(context)
+            : AppTheme.outline(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(e).extended,
-            Text(model.percent(e).toStringAsFixed(1) + "%"),
+            Text('${model.percent(e).toStringAsFixed(1)}%'),
           ],
         ),
       ).ripple(() {
         final state = Provider.of<HomeState>(context, listen: false);
 
-        /// Teacher cannot vote
-        /// If user already submitted his vote and api is calling
-        /// If poll is expired then student cannot cast his vote
         if (state.isTeacher ||
-            model.selection.loading ||
+            model.selection?.loading == true ||
             model.endTime.isBefore(DateTime.now())) {
           return;
         }
 
-        //Restrict user to vote more then 1 time
         final userId = Provider.of<HomeState>(context, listen: false).userId;
         if (model.isVoted(userId)) {
           print("Already voted");
@@ -87,8 +84,7 @@ class PollWidget extends StatelessWidget {
     );
   }
 
-  void submitVote(context, String answer) {
-    ///Restrict user to tap repeatatively to submit vote
+  void submitVote(BuildContext context, String answer) {
     final state = Provider.of<HomeState>(context, listen: false);
     if (state.isBusy) {
       return;
@@ -113,7 +109,6 @@ class PollWidget extends StatelessWidget {
               if (context.watch<HomeState>().isTeacher)
                 TileActionWidget(
                   list: ["End Poll", "Delete"],
-                  // End poll method
                   onCustomIconPressed: () async {
                     loader.showLoader(context);
                     await context.read<HomeState>().expirePoll(model.id);
@@ -124,6 +119,7 @@ class PollWidget extends StatelessWidget {
                     await context.read<HomeState>().deletePoll(model.id);
                     loader.hideLoader();
                   },
+                  onEdit: () {},
                 )
               else
                 SizedBox(width: 16)
@@ -132,23 +128,18 @@ class PollWidget extends StatelessWidget {
           SizedBox(height: 10),
           Column(
               children: model.options.map((e) {
-            return _option(context, e).hP16;
-          }).toList()),
-
-          /// Restrict user to vote If
-          /// He is a teacher
-          /// He is already Voted
-          /// Poll is exired
+                return _option(context, e).hP16;
+              }).toList()),
           if (!state.isTeacher &&
               !model.isVoted(state.userId) &&
-              model.selection.isSelected &&
+              model.selection?.isSelected == true &&
               !model.endTime.isBefore(DateTime.now())) ...[
             SizedBox(height: 10),
             _secondaryButton(context,
-                isLoading: model.selection.loading,
+                isLoading: model.selection?.loading == true,
                 label: "Submit", onPressed: () {
-              submitVote(context, model.selection.choice);
-            })
+                  submitVote(context, model.selection?.choice ?? '');
+                })
           ],
           SizedBox(height: 16)
         ],

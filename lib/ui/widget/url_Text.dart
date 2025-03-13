@@ -2,24 +2,29 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/helper/utility.dart';
 
-// import 'package:flutter_twitter_clone/helper/utility.dart';
 class UrlText extends StatelessWidget {
   final String text;
   final TextStyle style;
   final TextStyle urlStyle;
   final Function(String) onHashTagPressed;
 
-  UrlText({this.text, this.style, this.urlStyle, this.onHashTagPressed});
+  UrlText({
+    Key? key,
+    required this.text,
+    required this.style,
+    required this.urlStyle,
+    required this.onHashTagPressed,
+  }) : super(key: key);
 
   List<InlineSpan> getTextSpans() {
-    List<InlineSpan> widgets = List<InlineSpan>();
+    List<InlineSpan> widgets = [];
     RegExp reg = RegExp(
         r"([#])\w+| [@]\w+|(https?|ftp|file|#)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]*");
     Iterable<Match> _matches = reg.allMatches(text);
-    List<_ResultMatch> resultMatches = List<_ResultMatch>();
+    List<_ResultMatch> resultMatches = [];
     int start = 0;
     for (Match match in _matches) {
-      if (match.group(0).isNotEmpty) {
+      if (match.group(0)!.isNotEmpty) {
         if (start != match.start) {
           _ResultMatch result1 = _ResultMatch();
           result1.isUrl = false;
@@ -29,7 +34,7 @@ class UrlText extends StatelessWidget {
 
         _ResultMatch result2 = _ResultMatch();
         result2.isUrl = true;
-        result2.text = match.group(0);
+        result2.text = match.group(0)!;
         resultMatches.add(result2);
         start = match.end;
       }
@@ -45,12 +50,11 @@ class UrlText extends StatelessWidget {
         widgets.add(_LinkTextSpan(
             onHashTagPressed: onHashTagPressed,
             text: result.text,
-            style:
-                urlStyle != null ? urlStyle : TextStyle(color: Colors.blue)));
+            style: urlStyle));
       } else {
         widgets.add(TextSpan(
             text: result.text,
-            style: style != null ? style : TextStyle(color: Colors.black)));
+            style: style));
       }
     }
     return widgets;
@@ -66,22 +70,22 @@ class UrlText extends StatelessWidget {
 
 class _LinkTextSpan extends TextSpan {
   final Function(String) onHashTagPressed;
-  _LinkTextSpan({TextStyle style, String text, this.onHashTagPressed})
+  _LinkTextSpan({TextStyle? style, required String text, required this.onHashTagPressed})
       : super(
-            style: style,
-            text: text,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                if ((text.substring(0, 1).contains("#") ||
-                        text.substring(0, 1).contains("#"))) {
-                  onHashTagPressed(text);
-                } else {
-                  Utility.launchOnWeb(text);
-                }
-              });
+      style: style,
+      text: text,
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          if ((text.substring(0, 1).contains("#") ||
+              text.substring(0, 1).contains("@"))) {
+            onHashTagPressed(text);
+          } else {
+            Utility.launchOnWeb(text);
+          }
+        });
 }
 
 class _ResultMatch {
-  bool isUrl;
-  String text;
+  late bool isUrl;
+  late String text;
 }

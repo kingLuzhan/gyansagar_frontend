@@ -59,25 +59,25 @@ extension PaddingHelper on Widget {
 
 extension Extented on Widget {
   Expanded get extended => Expanded(
-        child: this,
-      );
+    child: this,
+  );
 }
 
 extension CornerRadius on Widget {
   ClipRRect get circular => ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(1000)),
-        child: this,
-      );
+    borderRadius: BorderRadius.all(Radius.circular(1000)),
+    child: this,
+  );
   ClipRRect cornerRadius(double value) => ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(value)),
-        child: this,
-      );
+    borderRadius: BorderRadius.all(Radius.circular(value)),
+    child: this,
+  );
 }
 
 extension OnPressed on Widget {
   Widget ripple(Function onPressed,
-          {BorderRadiusGeometry borderRadius =
-              const BorderRadius.all(Radius.circular(5))}) =>
+      {BorderRadiusGeometry borderRadius =
+      const BorderRadius.all(Radius.circular(5))}) =>
       Stack(
         children: <Widget>[
           this,
@@ -86,11 +86,13 @@ extension OnPressed on Widget {
             right: 0,
             top: 0,
             bottom: 0,
-            child: FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            child: TextButton(
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: borderRadius),
+                ),
                 onPressed: () {
                   onPressed();
-                                },
+                },
                 child: Container()),
           )
         ],
@@ -99,25 +101,25 @@ extension OnPressed on Widget {
 
 extension ExAlignment on Widget {
   Widget get alignTopCenter => Align(
-        child: this,
-        alignment: Alignment.topCenter,
-      );
+    child: this,
+    alignment: Alignment.topCenter,
+  );
   Widget get alignCenter => Align(
-        child: this,
-        alignment: Alignment.center,
-      );
+    child: this,
+    alignment: Alignment.center,
+  );
   Widget get alignBottomCenter => Align(
-        child: this,
-        alignment: Alignment.bottomCenter,
-      );
+    child: this,
+    alignment: Alignment.bottomCenter,
+  );
   Widget get alignBottomLeft => Align(
-        child: this,
-        alignment: Alignment.bottomLeft,
-      );
+    child: this,
+    alignment: Alignment.bottomLeft,
+  );
   Widget get alignCenterRight => Align(
-        child: this,
-        alignment: Alignment.centerRight,
-      );
+    child: this,
+    alignment: Alignment.centerRight,
+  );
 }
 
 extension StringHelper on String {

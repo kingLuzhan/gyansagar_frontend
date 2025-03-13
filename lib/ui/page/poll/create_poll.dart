@@ -7,8 +7,9 @@ import 'package:gyansagar_frontend/ui/widget/form/p_textfield.dart';
 import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
+
 class CreatePoll extends StatefulWidget {
-  CreatePoll({Key key}) : super(key: key);
+  CreatePoll({Key? key}) : super(key: key);
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
@@ -24,11 +25,12 @@ class CreatePoll extends StatefulWidget {
 }
 
 class _CreateBatchState extends State<CreatePoll> {
-  TextEditingController _description;
-  TextEditingController _question;
+  late TextEditingController _description;
+  late TextEditingController _question;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     _description = TextEditingController();
@@ -44,7 +46,7 @@ class _CreateBatchState extends State<CreatePoll> {
   }
 
   Widget _secondaryButton(BuildContext context,
-      {String label, Function onPressed}) {
+      {required String label, required VoidCallback onPressed}) {
     final theme = Theme.of(context);
     return OutlinedButton.icon(
         onPressed: onPressed,
@@ -52,7 +54,7 @@ class _CreateBatchState extends State<CreatePoll> {
         label: Text(
           label,
           style: theme.textTheme.labelLarge
-              .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
+              ?.copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -61,53 +63,51 @@ class _CreateBatchState extends State<CreatePoll> {
         style: Theme.of(context)
             .textTheme
             .bodyLarge
-            .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
+            ?.copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
-  Widget _day(String text,
-      {Function onPressed, Widget child}) {
+  Widget _day(String text, {required VoidCallback onPressed, Widget? child}) {
     final theme = Theme.of(context);
     return Container(
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: AppTheme.outline(context),
-      child: child != null
-          ? child
-          : Row(
+      child: child ?? Row(
+        children: <Widget>[
+          Text(text),
+          Spacer(),
+          SizedBox(
+            height: 50,
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              alignment: Alignment.center,
               children: <Widget>[
-                Text(text),
-                Spacer(),
-                SizedBox(
-                  height: 50,
-                  child: Stack(
-                    clipBehavior: Clip.hardEdge, alignment: Alignment.center,
-                    children: <Widget>[
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            width: 15,
-                            child: Icon(Icons.arrow_drop_up, size: 30).pB(10),
-                          )),
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            width: 15,
-                            child: Icon(Icons.arrow_drop_down, size: 30).pT(10),
-                          ))
-                    ],
-                  ),
-                ),
-                SizedBox(width: 4)
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      width: 15,
+                      child: Icon(Icons.arrow_drop_up, size: 30).pB(10),
+                    )),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      width: 15,
+                      child: Icon(Icons.arrow_drop_down, size: 30).pT(10),
+                    ))
               ],
             ),
+          ),
+          SizedBox(width: 4)
+        ],
+      ),
     ).ripple(onPressed);
   }
 
   Future<String> getTime(BuildContext context) async {
     final time =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (time == null) {
-      return null;
+      return "";
     }
     TimeOfDay selectedTime = time;
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
@@ -117,20 +117,20 @@ class _CreateBatchState extends State<CreatePoll> {
     return formattedTime;
   }
 
-  Future<DateTime> getDate() async {
-    return await showDatePicker(
+  Future<DateTime> getDate(BuildContext context) async {
+    final date = await showDatePicker(
       context: context,
       initialDate: DateTime.now().add(Duration(days: 2)),
       firstDate: DateTime.now().add(Duration(days: 1)),
       lastDate: DateTime.now().add(Duration(days: 30)),
     );
+    return date ?? DateTime.now();
   }
 
   void createPoll() async {
-    FocusManager.instance.primaryFocus.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
     final state = context.read<PollState>();
-    // validate batch name and batch description
-    final isTrue = _formKey.currentState.validate();
+    final isTrue = _formKey.currentState?.validate() ?? false;
 
     if (!isTrue) {
       return;
@@ -139,12 +139,11 @@ class _CreateBatchState extends State<CreatePoll> {
 
     final newPoll = await state.createPoll(_question.text);
     isLoading.value = false;
-    // Alert.sucess(context,
-    //     message: "Poll created sucessfully!!", title: "Message");
+
     final homeState = context.read<HomeState>();
     homeState.getPollList();
     Navigator.pop(context);
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,8 +163,8 @@ class _CreateBatchState extends State<CreatePoll> {
                   controller: _question,
                   label: "Poll question",
                   hintText: "Enter question",
-                  maxLines: null,
-                  height: null,
+                  maxLines: 0,
+                  height: 0.0,
                 ),
                 SizedBox(height: 15),
                 _title(context, "Poll Expire time"),
@@ -177,11 +176,12 @@ class _CreateBatchState extends State<CreatePoll> {
                   child: Container(
                     width: AppTheme.fullWidth(context) - 32,
                     child: DropdownButtonHideUnderline(
-                      child: new DropdownButton<String>(
+                      child: DropdownButton<String>(
                         icon: SizedBox(
                             height: 50,
                             child: Stack(
-                              clipBehavior: Clip.hardEdge, alignment: Alignment.center,
+                              clipBehavior: Clip.hardEdge,
+                              alignment: Alignment.center,
                               children: <Widget>[
                                 Align(
                                     alignment: Alignment.centerRight,
@@ -194,14 +194,12 @@ class _CreateBatchState extends State<CreatePoll> {
                                     alignment: Alignment.centerRight,
                                     child: SizedBox(
                                       width: 15,
-                                      child:
-                                          Icon(Icons.arrow_drop_down, size: 30)
-                                              .pT(10),
+                                      child: Icon(Icons.arrow_drop_down, size: 30)
+                                          .pT(10),
                                     ))
                               ],
                             )),
                         isExpanded: true,
-                        underline: SizedBox(),
                         value: context.watch<PollState>().pollExpiry,
                         items: <String>[
                           '12 Hours',
@@ -210,13 +208,13 @@ class _CreateBatchState extends State<CreatePoll> {
                           '48 Hours',
                           "60 Hours",
                         ].map((String value) {
-                          return new DropdownMenuItem<String>(
+                          return DropdownMenuItem<String>(
                             value: value,
-                            child: new Text(value),
+                            child: Text(value),
                           );
                         }).toList(),
                         onChanged: (val) {
-                          context.read<PollState>().setPollExpiry = val;
+                          context.read<PollState>().setPollExpiry = val!;
                         },
                       ),
                     ),
@@ -229,10 +227,10 @@ class _CreateBatchState extends State<CreatePoll> {
                   builder: (context, state, child) {
                     return Column(
                         children: Iterable.generate(state.pollOptions.length,
-                            (index) {
-                      return PollOption(
-                          index: index, value: state.pollOptions[index]);
-                    }).toList());
+                                (index) {
+                              return PollOption(
+                                  index: index, value: state.pollOptions[index]);
+                            }).toList());
                   },
                 ),
                 _secondaryButton(context, label: "Add option", onPressed: () {

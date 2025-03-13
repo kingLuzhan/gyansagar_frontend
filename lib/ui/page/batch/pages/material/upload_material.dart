@@ -186,19 +186,19 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                     Form(
                       key: _formKey,
                       child: PTextField(
-                        type: Type.text,
+                        type: FieldType.text, // Changed from Type.text to FieldType.text
                         controller: _title,
                         label: "Title",
                         hintText: "Enter title here",
                       ),
                     ),
                     PTextField(
-                      type: Type.text,
+                      type: FieldType.text, // Changed from Type.text to FieldType.text
                       controller: _description,
                       label: "Description",
                       hintText: "Enter here",
                       maxLines: null,
-                      height: null,
+                      height: 70, // Provide a non-null value
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     const SizedBox(height: 20),
@@ -226,7 +226,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
               ),
               _titleText(context, "Add Link").vP16,
               PTextField(
-                type: Type.text,
+                type: FieldType.text, // Changed from Type.text to FieldType.text
                 controller: _link,
                 hintText: "Paste link here",
                 onSubmit: (val) {},
@@ -255,41 +255,44 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
               ).ripple(pickFile),
               Consumer<BatchMaterialState>(
                 builder: (context, state, child) {
-                  return SizedBox(
-                    height: 65,
-                    width: AppTheme.fullWidth(context),
-                    child: Column(
-                      children: <Widget>[
-                        Row(children: <Widget>[
-                          SizedBox(
-                            width: 50,
-                            child: Image.asset(
-                              Images.getFileTypeIcon(state.file.path.split(".").last),
-                              height: 30,
+                  if (state.file != null) {
+                    return SizedBox(
+                      height: 65,
+                      width: AppTheme.fullWidth(context),
+                      child: Column(
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            SizedBox(
+                              width: 50,
+                              child: Image.asset(
+                                Images.getFileTypeIcon(state.file!.path.split(".").last),
+                                height: 30,
+                              ),
+                            ),
+                            Text(state.file!.path.split("/").last),
+                            Spacer(),
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(Icons.cancel),
+                              onPressed: () {
+                                state.removeFile();
+                              },
+                            ),
+                          ]),
+                          Container(
+                            height: 5,
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            width: AppTheme.fullWidth(context),
+                            decoration: BoxDecoration(
+                              color: const Color(0xff0CC476),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          Text(state.file.path.split("/").last),
-                          Spacer(),
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: Icon(Icons.cancel),
-                            onPressed: () {
-                              state.removeFile();
-                            },
-                          ),
-                        ]),
-                        Container(
-                          height: 5,
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          width: AppTheme.fullWidth(context),
-                          decoration: BoxDecoration(
-                            color: const Color(0xff0CC476),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ).vP8;
+                        ],
+                      ),
+                    ).vP8;
+                  }
+                  return SizedBox();
                 },
               ),
               Consumer<BatchMaterialState>(
@@ -297,7 +300,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                   return PFlatButton(
                     label: state.isEditMode ? "Update" : "Create",
                     isLoading: isLoading,
-                    onPressed: saveMaterial,  // Ensure onPressed is provided
+                    onPressed: saveMaterial,
                   ).p16;
                 },
               ),

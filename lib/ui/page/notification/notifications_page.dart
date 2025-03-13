@@ -8,13 +8,13 @@ import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key key}) : super(key: key);
+  const NotificationPage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (_) => ChangeNotifierProvider<NotificationState>(
-              create: (_) => NotificationState(),
-              builder: (_, child) => NotificationPage(),
-            ));
+          create: (_) => NotificationState(),
+          builder: (_, child) => NotificationPage(),
+        ));
   }
 
   @override
@@ -25,7 +25,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<NotificationState>(context, listen: false).getNotifications();
+    Provider.of<NotificationState>(context, listen: false).fetchNotifications();
   }
 
   Widget _notificationTile(NotificationModel model) {
@@ -35,11 +35,11 @@ class _NotificationPageState extends State<NotificationPage> {
         child: ListTile(
           title: Text(model.title,
               style:
-                  Theme.of(context).textTheme.bodyLarge.copyWith(fontSize: 14)),
+              Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14)),
           trailing: Text(
               Utility.getPassedTime(model.createdAt.toIso8601String()),
               style:
-                  Theme.of(context).textTheme.titleMedium.copyWith(fontSize: 12)),
+              Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 12)),
         ));
   }
 
@@ -57,7 +57,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   itemBuilder: (context, index) {
                     return _notificationTile(state.notifications[index]);
                   });
-            if (!(state.notifications.isNotEmpty))
+            if (state.notifications.isEmpty)
               return Center(
                 child: Container(
                   height: 100,
@@ -70,13 +70,11 @@ class _NotificationPageState extends State<NotificationPage> {
                     children: <Widget>[
                       Text(
                         "You have no notification",
-                        style: Theme.of(context).textTheme.titleLarge.copyWith(
-                              color: PColors.gray,
-                            ),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: PColors.gray,
+                        ),
                       ),
                       SizedBox(height: 10),
-                      // Text("Ask your teacher to add you in a batch!!",
-                      //     style: Theme.of(context).textTheme.bodyText1),
                     ],
                   ),
                 ),

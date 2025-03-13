@@ -9,16 +9,17 @@ class UsernameWidget extends StatefulWidget {
   final Color backGroundColor;
   final String avatarUrl;
   final TextStyle textStyle;
-  final File fileImage;
-  UsernameWidget(
-      {Key key,
-      this.name,
-      this.radius,
-      this.backGroundColor = Colors.white,
-      this.textStyle = const TextStyle(color: Colors.black),
-      this.avatarUrl,
-      this.fileImage})
-      : super(key: key);
+  final File? fileImage;
+
+  UsernameWidget({
+    Key? key,
+    required this.name,
+    required this.radius,
+    this.backGroundColor = Colors.white,
+    this.textStyle = const TextStyle(color: Colors.black),
+    required this.avatarUrl,
+    this.fileImage,
+  }) : super(key: key);
 
   @override
   _UsernameWidgetState createState() => _UsernameWidgetState();
@@ -33,8 +34,7 @@ class _UsernameWidgetState extends State<UsernameWidget> {
       var splitname = name.split(' ').toList();
       if (splitname.length == 1) {
         return splitname[0].substring(0, 1);
-      } 
-      else if (splitname.length > 1) {
+      } else if (splitname.length > 1) {
         return splitname[0].substring(0, 1).toUpperCase() +
             ' ' +
             splitname[1].substring(0, 1).toUpperCase();
@@ -76,23 +76,21 @@ class _UsernameWidgetState extends State<UsernameWidget> {
 
   Widget _getImageFromFile() {
     return Image.file(
-      widget.fileImage,
+      widget.fileImage!,
       fit: BoxFit.cover,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // print("Emoty file");
-      // print("Image Url from API:- ${widget.avatarUrl}");
     return Container(
       child: AspectRatio(
         aspectRatio: 1,
         child: widget.fileImage != null
             ? _getImageFromFile()
             : widget.avatarUrl.isEmpty
-                ? _getNameImage()
-                : _getProfilePic(),
+            ? _getNameImage()
+            : _getProfilePic(),
       ),
     );
   }

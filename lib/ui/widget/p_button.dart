@@ -25,13 +25,14 @@ class PFlatButton extends StatelessWidget {
       child: ValueListenableBuilder<bool>(
         valueListenable: isLoading,
         builder: (context, loading, child) {
-          return FlatButton(
-            disabledColor: Theme.of(context).disabledColor,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            color: !isColored ? null : color ?? Theme.of(context).primaryColor,
-            splashColor: Theme.of(context).colorScheme.surface,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+          return TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: !isColored ? null : color ?? Theme.of(context).primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              disabledForegroundColor: Theme.of(context).disabledColor,
+            ),
             onPressed: loading ? null : onPressed,
             child: loading
                 ? SizedBox(
@@ -39,12 +40,11 @@ class PFlatButton extends StatelessWidget {
               width: 15,
               child: FittedBox(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(
-                      color ?? Theme.of(context).primaryColor),
+                  valueColor: AlwaysStoppedAnimation(color ?? Theme.of(context).primaryColor),
                 ),
               ),
             )
-                : child,
+                : child!,
           );
         },
         child: Text(

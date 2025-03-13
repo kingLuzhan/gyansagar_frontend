@@ -167,7 +167,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
               valueListenable: passwordVisibility,
               builder: (context, value, child) {
                 return PTextField(
-                    type: Type.password,
+                    type: FieldType.password, // Changed from Type.password to FieldType.password
                     controller: password,
                     label: "New password",
                     hintText: "Enter new password",
@@ -186,7 +186,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
               valueListenable: confirmPasswordVisibility,
               builder: (context, value, child) {
                 return PTextField(
-                    type: Type.password,
+                    type: FieldType.password, // Changed from Type.password to FieldType.password
                     controller: confirmPassword,
                     label: "Confirm password",
                     hintText: "Enter confirm password here",

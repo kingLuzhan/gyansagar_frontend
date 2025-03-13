@@ -4,7 +4,11 @@ import 'package:gyansagar_frontend/ui/widget/form/p_textfield.dart';
 import 'package:provider/provider.dart';
 
 class PollOption extends StatefulWidget {
-  const PollOption({Key key, this.index, this.value}) : super(key: key);
+  const PollOption({
+    Key? key,
+    required this.index,
+    required this.value,
+  }) : super(key: key);
   final int index;
   final String value;
 
@@ -13,7 +17,8 @@ class PollOption extends StatefulWidget {
 }
 
 class _PollOptionState extends State<PollOption> {
-  TextEditingController controller;
+  late TextEditingController controller;
+
   @override
   void initState() {
     super.initState();
@@ -45,23 +50,23 @@ class _PollOptionState extends State<PollOption> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8.0), // Provide non-null values
       child: PTextField(
         type: Type.text,
         controller: controller,
         hintText: "Enter option ${widget.index}",
-        maxLines: null,
-        height: null,
+        maxLines: 0,
+        height: 8.0,
         suffixIcon: widget.index < 2
             ? null
             : IconButton(
-                icon: Icon(Icons.cancel),
-                onPressed: () {
-                  controller.removeListener(writeData);
-                  Provider.of<PollState>(context, listen: false)
-                      .removePollOption(widget.index);
-                },
-              ),
+          icon: Icon(Icons.cancel),
+          onPressed: () {
+            controller.removeListener(writeData);
+            Provider.of<PollState>(context, listen: false)
+                .removePollOption(widget.index);
+          },
+        ),
       ),
     );
   }

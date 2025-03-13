@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/ui/widget/form/validator.dart';
 
-enum Type {
+enum FieldType {
   name,
   email,
   phone,
@@ -30,7 +30,7 @@ class PTextField extends StatelessWidget {
 
   final TextEditingController? controller;
   final String? label, hintText;
-  final Type type;
+  final FieldType type;
   final int maxLines;
   final double height;
   final Widget? suffixIcon;
@@ -68,9 +68,9 @@ class PTextField extends StatelessWidget {
               hintText: hintText,
               suffixIcon: suffixIcon,
             ),
-            textInputAction: (type == Type.password ||
-                type == Type.reset ||
-                type == Type.confirmPassword)
+            textInputAction: (type == FieldType.password ||
+                type == FieldType.reset ||
+                type == FieldType.confirmPassword)
                 ? TextInputAction.done
                 : TextInputAction.next,
             validator: (value) => PValidator.buildValidators(context, type)(value),
@@ -100,18 +100,18 @@ class PTextField extends StatelessWidget {
     );
   }
 
-  TextInputType getKeyboardType(Type choice) {
+  TextInputType getKeyboardType(FieldType choice) {
     switch (choice) {
-      case Type.name:
+      case FieldType.name:
         return TextInputType.text;
-      case Type.email:
+      case FieldType.email:
         return TextInputType.emailAddress;
-      case Type.password:
-      case Type.confirmPassword:
+      case FieldType.password:
+      case FieldType.confirmPassword:
         return TextInputType.visiblePassword;
-      case Type.phone:
+      case FieldType.phone:
         return TextInputType.phone;
-      case Type.reset:
+      case FieldType.reset:
         return TextInputType.emailAddress;
       default:
         return TextInputType.text;

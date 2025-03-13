@@ -51,6 +51,36 @@ class HomeState extends BaseState {
     }
   }
 
+  Future<void> savePollSelection(PollModel poll) async {
+    try {
+      final repo = GetIt.instance.get<BatchRepository>();
+      await repo.savePollSelection(poll);
+      notifyListeners();
+    } catch (error) {
+      log("savePollSelection error", error: error, name: runtimeType.toString());
+    }
+  }
+
+  Future<void> expirePoll(String pollId) async {
+    try {
+      final repo = GetIt.instance.get<BatchRepository>();
+      await repo.expirePoll(pollId);
+      notifyListeners();
+    } catch (error) {
+      log("expirePoll error", error: error, name: runtimeType.toString());
+    }
+  }
+
+  Future<void> deletePoll(String pollId) async {
+    try {
+      final repo = GetIt.instance.get<BatchRepository>();
+      await repo.deletePoll(pollId);
+      notifyListeners();
+    } catch (error) {
+      log("deletePoll error", error: error, name: runtimeType.toString());
+    }
+  }
+
   Future<void> castVoteOnPoll(PollModel poll, String vote) async {
     if (isTeacher) {
       print("Teacher can't cast vote");

@@ -151,6 +151,9 @@ class AnnouncementWidget extends StatelessWidget {
                   list: actions,
                   onDelete: () => deleteAnnouncement(context, model.id),
                   onEdit: () => onAnnouncementEdit(model),
+                  onCustomIconPressed: () {
+                    // Custom action, if needed
+                  },
                 ),
               ),
             )

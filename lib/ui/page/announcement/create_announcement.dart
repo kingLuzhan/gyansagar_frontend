@@ -188,82 +188,109 @@ class _CreateBatchState extends State<CreateAnnouncement> {
     return Scaffold(
         key: scaffoldKey,
         appBar: CustomAppBar("Create Announcement"),
-    body: Container(
-    padding: EdgeInsets.only(left: 16, right: 16),
-    child: SingleChildScrollView(
-    child: Form(
-    key: _formKey,
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-    SizedBox(height: 16),
-    PTextField(
-    type: Type.text,
-    controller: _title,
-    label: "Title",
-    hintText: "Enter title here",
-    ),
-    PTextField(
-    type: Type.text,
-    controller: _description,
-    label: "Description",
-    hintText: "Enter here",
-    maxLines: null,
-    height: null,
-    padding: EdgeInsets.symmetric(vertical: 16)),
-    SizedBox(height: 10),
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-    _titleText(context, "All Batch"),
+        body: Container(
+          padding: EdgeInsets.only(left: 16, right: 16),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 16),
+                  PTextField(
+                    type: FieldType.text, // Changed from Type.text to FieldType.text
+                    controller: _title,
+                    label: "Title",
+                    hintText: "Enter title here",
+                    maxLines: 1, // Provide a non-null value
+                    height: 70, // Provide a non-null value
+                  ),
+                  PTextField(
+                    type: FieldType.text, // Changed from Type.text to FieldType.text
+                    controller: _description,
+                    label: "Description",
+                    hintText: "Enter here",
+                    maxLines: null,
+                    height: 70, // Provide a non-null value
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _titleText(context, "All Batch"),
 
-    /// Hide Pick Batch button if
-    /// If announcement is created from batch detail screen
-    /// If announcement is in edit mode
-    if (widget.selectedBatch == null &&
-    !context.watch<AnnouncementState>().isEditMode)
-    _secondaryButton(context,
-    label: "Pick Batch", onPressed: displayBatchList),
-    ],
-    ),
-    ValueListenableBuilder<List<BatchModel>>(
-    valueListenable: batchList,
-    builder: (context, listenableList, child) {
-    return Wrap(
-    children: listenableList
-        .where((element) => element.isSelected)
-        .map((e) => Padding(
-    padding: EdgeInsets.only(right: 4, top: 4),
-    child: PChip(label: e.name)))
-        .toList());
-    }),
-    SizedBox(height: 10),
-    Consumer<AnnouncementState>(
-    builder: (context, state, child) {
-    return Stack(
-    children: [
-    Container(
-    width: AppTheme.fullWidth(context) - 32,
-    height: 230,
-    margin: EdgeInsets.symmetric(vertical: 16),
-    decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(10),
-    image: state.imagefile != null
-    ? DecorationImage(
-    image: FileImage(state.imagefile!),
-    fit: BoxFit.cover,
-    )
-        : null,
-    ),
-    ),
-    if (state.imagefile != null)
-    Positioned(
-    top: 15,
-    right: 0,
-    child: Container(
-    color: Theme.of(context).disabledColor,
-    child: IconButton(
-    onPressed: () {},
-    icon: Icon(Icons.cancel_outlined,
-    color: Theme.of(context)
-    .colorScheme
+                      /// Hide Pick Batch button if
+                      /// If announcement is created from batch detail screen
+                      /// If announcement is in edit mode
+                      if (widget.selectedBatch == null &&
+                          !context.watch<AnnouncementState>().isEditMode)
+                        _secondaryButton(context,
+                            label: "Pick Batch", onPressed: displayBatchList),
+                    ],
+                  ),
+                  ValueListenableBuilder<List<BatchModel>>(
+                      valueListenable: batchList,
+                      builder: (context, listenableList, child) {
+                        return Wrap(
+                            children: listenableList
+                                .where((element) => element.isSelected)
+                                .map((e) => Padding(
+                                padding: EdgeInsets.only(right: 4, top: 4),
+                                child: PChip(label: e.name)))
+                                .toList());
+                      }),
+                  SizedBox(height: 10),
+                  Consumer<AnnouncementState>(
+                    builder: (context, state, child) {
+                      return Stack(
+                        children: [
+                          Container(
+                            width: AppTheme.fullWidth(context) - 32,
+                            height: 230,
+                            margin: EdgeInsets.symmetric(vertical: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: state.imagefile != null
+                                  ? DecorationImage(
+                                image: FileImage(state.imagefile!),
+                                fit: BoxFit.cover,
+                              )
+                                  : null,
+                            ),
+                          ),
+                          if (state.imagefile != null)
+                            Positioned(
+                              top: 15,
+                              right: 0,
+                              child: Container(
+                                color: Theme.of(context).disabledColor,
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.cancel_outlined,
+                                      color: Theme.of(context).disabledColor),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  Consumer<AnnouncementState>(
+                    builder: (context, state, child) {
+                      return PFlatButton(
+                        label: state.isEditMode ? "Update" : "Create",
+                        isLoading: isLoading,
+                        onPressed: createAnnouncement,
+                      ).p16;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
+}
