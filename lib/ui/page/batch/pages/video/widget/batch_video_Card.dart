@@ -16,10 +16,10 @@ import 'package:provider/provider.dart';
 
 class BatchVideoCard extends StatelessWidget {
   const BatchVideoCard(
-      {Key key,
-      this.model,
-      this.loader,
-      this.actions = const ["Edit", "Delete"]})
+      {Key? key,
+        required this.model,
+        required this.loader,
+        this.actions = const ["Edit", "Delete"]})
       : super(key: key);
 
   final VideoModel model;
@@ -37,47 +37,50 @@ class BatchVideoCard extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           color: Color(0xffeaeaea),
-          child: url == null
+          child: url.isEmpty
               ? Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(Images.videoPlay),
-                          fit: BoxFit.cover)),
-                )
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(Images.videoPlay),
+                    fit: BoxFit.cover)),
+          )
               : Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(30),
-                    color: Color(0xffffffff),
-                  ),
-                  child: Center(child: Icon(Icons.play_arrow)),
-                ),
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(30),
+              color: Color(0xffffffff),
+            ),
+            child: Center(child: Icon(Icons.play_arrow)),
+          ),
         ),
       );
     }
 
     return // Picture
-        ClipRRect(
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-      child: Image.network(
-        url != null ? url : "",
-        fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child,
-            ImageChunkEvent loadingProgress) {
-          return Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes
-                  : null,
-            ),
-          );
-        },
-      ),
-    );
+      ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+        child: Image.network(
+          url,
+          fit: BoxFit.cover,
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+        ),
+      );
   }
 
   void deleteVideo(BuildContext context, String id) async {
@@ -86,14 +89,14 @@ class BatchVideoCard extends StatelessWidget {
         title: "Message",
         barrierDismissible: true,
         onCancel: () {}, onYes: () async {
-      loader.showLoader(context);
-      final isDeleted = await context.read<VideoState>().deleteVideo(id);
-      await context.read<BatchDetailState>().getBatchTimeLine();
-      if (isDeleted) {
-        Utility.displaySnackbar(context, msg: "Video Deleted");
-      }
-      loader.hideLoader();
-    });
+          loader.showLoader(context);
+          final isDeleted = await context.read<VideoState>().deleteVideo(id);
+          await context.read<BatchDetailState>().getBatchTimeLine();
+          if (isDeleted) {
+            Utility.displaySnackbar(context, msg: "Video Deleted");
+          }
+          loader.hideLoader();
+        });
   }
 
   void editVideo(BuildContext context, VideoModel model) {
@@ -121,50 +124,49 @@ class BatchVideoCard extends StatelessWidget {
           ),
           Expanded(
               child: InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  VideoPlayerPage2.getRoute(model.video, title: model.title));
-                        },
-            child: Padding(
-              padding:
+                onTap: () {
+                  Navigator.push(context,
+                      VideoPlayerPage2.getRoute(model.videoUrl, title: model.title));
+                },
+                child: Padding(
+                  padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    model.title,
-                    style: Theme.of(context).textTheme.titleSmall,
-                    maxLines: 3,
-                  ),
-                  // Text(model.description,style: Theme.of(context).textTheme.bodyText2,maxLines: 2, ),
-                  Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      PChip(
-                        backgroundColor: PColors.randomColor(model.subject),
-                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                      Text(
+                        model.title,
+                        style: Theme.of(context).textTheme.titleSmall,
+                        maxLines: 3,
+                      ),
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          PChip(
+                            backgroundColor: PColors.randomColor(model.subject),
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
-                        borderColor: Colors.transparent,
-                        label: model.subject ?? "N/A",
-                      ),
-                      Text(
-                        Utility.toDMformate(model.createdAt),
-                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Theme.of(context).disabledColor),
+                            borderColor: Colors.transparent,
+                            label: model.subject,
+                          ),
+                          Text(
+                            Utility.toDMformat(DateTime.parse(model.createdAt)),
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                color: Theme.of(context).disabledColor),
+                          )
+                        ],
                       )
                     ],
-                  )
-                ],
-              ),
-            ),
-          )),
+                  ),
+                ),
+              )),
           if (context.watch<HomeState>().isTeacher)
             TileActionWidget(
               list: actions,

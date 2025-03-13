@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/helper/images.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
+import 'package:gyansagar_frontend/model/batch_model.dart'; // Import BatchModel
+import 'package:gyansagar_frontend/model/create_announcement_model.dart'; // Import AnnouncementModel
 import 'package:gyansagar_frontend/states/home_state.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 import 'package:gyansagar_frontend/ui/page/announcement/create_announcement.dart';
@@ -17,9 +19,9 @@ import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
 
 class TeacherHomePage extends StatefulWidget {
-  const TeacherHomePage({Key key}) : super(key: key);
+  const TeacherHomePage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
-    return MaterialPageRoute(builder: (_) => TeacherHomePage());
+    return MaterialPageRoute(builder: (_) => const TeacherHomePage());
   }
 
   @override
@@ -29,13 +31,13 @@ class TeacherHomePage extends StatefulWidget {
 class _TeacherHomePageState extends State<TeacherHomePage>
     with TickerProviderStateMixin {
   double _angle = 0;
-  AnimationController _controller;
+  late AnimationController _controller;
   bool isOpened = false;
-  AnimationController _animationController;
-  Animation<double> _animateIcon;
-  CustomLoader loader;
+  late AnimationController _animationController;
+  late Animation<double> _animateIcon;
+  late CustomLoader loader;
   Curve _curve = Curves.easeOut;
-  Animation<double> _translateButton;
+  late Animation<double> _translateButton;
   ValueNotifier<bool> showFabButton = ValueNotifier<bool>(false);
 
   @override
@@ -44,7 +46,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
     setupAnimations();
     loader = CustomLoader();
     context.read<HomeState>().getBatchList();
-    context.read<HomeState>().getAnnouncementList();
+    context.read<HomeState>().fetchAnnouncementList();
     context.read<HomeState>().getPollList();
   }
 
@@ -72,10 +74,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
         vsync: this, duration: Duration(milliseconds: 2000));
     _controller.repeat();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-          ..addListener(() {
-            setState(() {});
-          });
+    AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+      ..addListener(() {
+        setState(() {});
+      });
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _translateButton = Tween<double>(
@@ -129,7 +131,15 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             translateButton: _translateButton,
             onPressed: () {
               animate();
-              Navigator.push(context, CreateBatch.getRoute());
+              Navigator.push(context, CreateBatch.getRoute(model: BatchModel(
+                id: '',
+                name: '',
+                description: '',
+                classes: [],
+                subject: '',
+                students: [],
+                studentModel: [],
+              )));
             },
           ),
           FabButton(
@@ -139,7 +149,20 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             animationValue: 1,
             onPressed: () {
               animate();
-              Navigator.push(context, CreateAnnouncement.getRoute());
+              Navigator.push(context, CreateAnnouncement.getRoute(
+                batch: BatchModel(
+                  id: '',
+                  name: '',
+                  description: '',
+                  classes: [],
+                  subject: '',
+                  students: [],
+                  studentModel: [],
+                ),
+                onAnnouncementCreated: () {
+                  context.read<HomeState>().fetchAnnouncementList();
+                },
+              ));
             },
           ),
         ],
@@ -161,22 +184,24 @@ class _TeacherHomePageState extends State<TeacherHomePage>
     return HomeScaffold<HomeState>(
       floatingButtons: _floatingActionButtonColumn(),
       floatingActionButton: _floatingActionButton(),
+      showFabButton: showFabButton,
+      slivers: [],
       onNotificationTap: () {
-        print("Notoficaion");
+        print("Notification");
       },
       builder: (context, state, child) {
         return CustomScrollView(
           slivers: <Widget>[
-            FutureBuilder(
+            FutureBuilder<ActorModel?>(
               future: state.getUser(),
-              builder: (context, AsyncSnapshot<ActorModel> snapShot) {
+              builder: (context, AsyncSnapshot<ActorModel?> snapShot) {
                 if (snapShot.hasData) {
                   return SliverToBoxAdapter(
-                    child: Text("Hi, ${snapShot.data.name}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                .copyWith(fontSize: 22))
+                    child: Text("Hi, ${snapShot.data!.name}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontSize: 22))
                         .hP16
                         .pT(10),
                   );
@@ -204,9 +229,9 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
-                                  .copyWith(
-                                    color: PColors.gray,
-                                  )),
+                                  ?.copyWith(
+                                color: PColors.gray,
+                              )),
                           SizedBox(height: 10),
                           Text("Tap on below fab button to create new",
                               style: Theme.of(context).textTheme.bodyLarge),
@@ -239,7 +264,6 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                   ],
                 ),
               ),
-            ...[
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -250,8 +274,8 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == 0)
+                    (context, index) {
+                  if (index == 0) {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,17 +286,14 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                             Navigator.push(
                                 context, ViewAllPollPage.getRoute());
                           },
-                          textColor: Theme.of(context).primaryColor,
-                          highlightedBorderColor:
-                              Theme.of(context).primaryColor,
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Text("View All"),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Theme.of(context).primaryColor),
+                          ),
+                          child: Text("View All", style: TextStyle(color: Theme.of(context).primaryColor)),
                         ).hP16
                       ],
                     );
+                  }
                   return PollWidget(
                       model: state.polls[index - 1], loader: loader);
                 },
@@ -282,14 +303,14 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             SliverToBoxAdapter(
               child: Divider(),
             ),
-          ],
             if (state.announcementList.isNotEmpty)
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index == 0)
+                      (context, index) {
+                    if (index == 0) {
                       return _title(
                           "${state.announcementList.length} Announcement");
+                    }
                     return AnnouncementWidget(
                       state.announcementList[index - 1],
                       loader: loader,
@@ -297,9 +318,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                         Navigator.push(
                           context,
                           CreateAnnouncement.getEditRoute(
+                            batch: state.batchList.firstWhere((batch) => batch.id == model.batches.first),
                             announcementModel: model,
                             onAnnouncementCreated: () {
-                              context.read<HomeState>().getAnnouncementList();
+                              context.read<HomeState>().fetchAnnouncementList();
                             },
                           ),
                         );

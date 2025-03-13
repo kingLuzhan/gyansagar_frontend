@@ -4,14 +4,15 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:flutter/services.dart';
 
 class QuizSolutionPage extends StatelessWidget {
-  const QuizSolutionPage({Key key, this.model}) : super(key: key);
+  const QuizSolutionPage({Key? key, required this.model}) : super(key: key);
   final QuizDetailModel model;
 
   static MaterialPageRoute getRoute(QuizDetailModel model) {
     return MaterialPageRoute(
-        builder: (_) => QuizSolutionPage(
-              model: model,
-            ));
+      builder: (_) => QuizSolutionPage(
+        model: model,
+      ),
+    );
   }
 
   Widget _questionTile(BuildContext context, Question model) {
@@ -30,11 +31,11 @@ class QuizSolutionPage extends StatelessWidget {
             width: AppTheme.fullWidth(context),
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             color: correct ? PColors.green.withOpacity(.3) : PColors.red.withOpacity(.3),
-            child: Text(model.statement, style: Theme.of(context).textTheme.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+            child: Text(model.statement, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
           ),
           SizedBox(height: 12),
           Text("Your Answer", style: Theme.of(context).textTheme.titleSmall).hP16,
-          Text(model.selectedAnswer, style: Theme.of(context).textTheme.titleMedium).hP16,
+          Text(model.selectedAnswer ?? '', style: Theme.of(context).textTheme.titleMedium).hP16,
           if (!correct) ...[
             SizedBox(height: 8),
             Divider(
@@ -63,7 +64,7 @@ class QuizSolutionPage extends StatelessWidget {
             width: AppTheme.fullWidth(context),
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             color: Theme.of(context).primaryColor,
-            child: Text(model.statement, style: Theme.of(context).textTheme.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+            child: Text(model.statement, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
           ),
           SizedBox(height: 12),
           Text("Unanswered", style: Theme.of(context).textTheme.titleSmall).hP16,
@@ -88,7 +89,7 @@ class QuizSolutionPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: PColors.pink,
         iconTheme: IconThemeData(color: PColors.white),
-        title: Text("Solution", style: Theme.of(context).textTheme.headlineSmall.copyWith(color: Colors.white)),
+        title: Text("Solution", style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
         centerTitle: true, systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Container(

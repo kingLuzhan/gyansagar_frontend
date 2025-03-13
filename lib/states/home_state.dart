@@ -106,4 +106,19 @@ class HomeState extends BaseState {
       log("fetchAnnouncementList error", error: error, name: runtimeType.toString());
     }
   }
+
+  Future<bool> deleteAnnouncement(String announcementId) async {
+    try {
+      final repo = GetIt.instance.get<BatchRepository>();
+      var isDeleted = await repo.deleteById(Constants.deleteAnnouncement(announcementId));
+      if (isDeleted) {
+        announcementList.removeWhere((element) => element.id == announcementId);
+      }
+      notifyListeners();
+      return isDeleted;
+    } catch (error) {
+      log("deleteAnnouncement error", error: error, name: runtimeType.toString());
+      return false;
+    }
+  }
 }

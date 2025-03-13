@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class TileActionWidget extends StatelessWidget {
   const TileActionWidget(
-      {Key key,
-      this.onDelete,
-      this.onEdit,
-      this.onCustomIconPressed,
-      this.list = const ["Edit", "Delete"]})
+      {Key? key,
+        required this.onDelete,
+        required this.onEdit,
+        required this.onCustomIconPressed,
+        this.list = const ["Edit", "Delete"]})
       : super(key: key);
   final Function onDelete;
   final Function onEdit;
@@ -22,7 +22,6 @@ class TileActionWidget extends StatelessWidget {
             onDelete();
             break;
           case "Edit":
-            print("Edit");
             onEdit();
             break;
           default:

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/helper/images.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
@@ -14,9 +13,9 @@ import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
 
 class StudentHomePage extends StatefulWidget {
-  const StudentHomePage({Key key}) : super(key: key);
+  const StudentHomePage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
-    return MaterialPageRoute(builder: (_) => StudentHomePage());
+    return MaterialPageRoute(builder: (_) => const StudentHomePage());
   }
 
   @override
@@ -25,11 +24,11 @@ class StudentHomePage extends StatefulWidget {
 
 class _StudentHomePageState extends State<StudentHomePage>
     with TickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
   bool isOpened = false;
-  AnimationController _animationController;
+  late AnimationController _animationController;
   Curve _curve = Curves.easeOut;
-  Animation<double> _translateButton;
+  late Animation<double> _translateButton;
   bool showFabButton = false;
   double _angle = 0;
 
@@ -38,7 +37,7 @@ class _StudentHomePageState extends State<StudentHomePage>
     super.initState();
     setupAnimations();
     Provider.of<HomeState>(context, listen: false).getBatchList();
-    Provider.of<HomeState>(context, listen: false).getAnnouncementList();
+    Provider.of<HomeState>(context, listen: false).fetchAnnouncementList();
     Provider.of<HomeState>(context, listen: false).getPollList();
   }
 
@@ -67,10 +66,10 @@ class _StudentHomePageState extends State<StudentHomePage>
         vsync: this, duration: Duration(milliseconds: 2000));
     _controller.repeat();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-          ..addListener(() {
-            setState(() {});
-          });
+    AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+      ..addListener(() {
+        setState(() {});
+      });
     _translateButton = Tween<double>(
       begin: 100,
       end: 0,
@@ -91,7 +90,7 @@ class _StudentHomePageState extends State<StudentHomePage>
       tooltip: 'Toggle',
       child: Transform.rotate(
         angle: _angle,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           size: 30,
         ),
@@ -101,7 +100,7 @@ class _StudentHomePageState extends State<StudentHomePage>
 
   Widget _floatingActionButtonColumn() {
     return AnimatedOpacity(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       opacity: showFabButton ? 1 : 0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -122,9 +121,9 @@ class _StudentHomePageState extends State<StudentHomePage>
   }
 
   Widget _smallFabButton(String icon,
-      {Function onPressed, double animationValue, String text = ''}) {
+      {required Function onPressed, required double animationValue, String text = ''}) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Transform(
         transform: Matrix4.translationValues(
           _translateButton.value * animationValue,
@@ -134,16 +133,16 @@ class _StudentHomePageState extends State<StudentHomePage>
         child: Material(
           elevation: 4,
           color: Colors.transparent,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
                 topRight: Radius.circular(40)),
           ),
           child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20),
                     topRight: Radius.circular(40)),
@@ -152,7 +151,7 @@ class _StudentHomePageState extends State<StudentHomePage>
               child: Row(
                 children: <Widget>[
                   Image.asset(icon, height: 20),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(text,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -160,7 +159,7 @@ class _StudentHomePageState extends State<StudentHomePage>
                 ],
               )).ripple(
             onPressed,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomLeft: Radius.circular(20),
               topRight: Radius.circular(40),
@@ -173,7 +172,7 @@ class _StudentHomePageState extends State<StudentHomePage>
 
   Widget _title(String text) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 16,
         left: 16,
       ),
@@ -184,8 +183,10 @@ class _StudentHomePageState extends State<StudentHomePage>
   @override
   Widget build(BuildContext context) {
     return HomeScaffold<HomeState>(
-      // floatingButtons: _floatingActionButtonColumn(),
-      // floatingActionButton: _floatingActionButton(),
+      floatingButtons: _floatingActionButtonColumn(),
+      floatingActionButton: _floatingActionButton(),
+      showFabButton: ValueNotifier<bool>(showFabButton),
+      slivers: [],
       onNotificationTap: () {
         Navigator.push(context, NotificationPage.getRoute());
       },
@@ -196,22 +197,22 @@ class _StudentHomePageState extends State<StudentHomePage>
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    FutureBuilder(
+                    FutureBuilder<ActorModel?>(
                         future: state.getUser(),
-                        builder: (context, AsyncSnapshot<ActorModel> snapShot) {
+                        builder: (context, AsyncSnapshot<ActorModel?> snapShot) {
                           if (snapShot.hasData) {
-                            return PTitleTextBold("Hi, ${snapShot.data.name}")
+                            return PTitleTextBold("Hi, ${snapShot.data!.name}")
                                 .hP16
                                 .pT(10);
                           } else {
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
                         }),
                     _title("My Batches"),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Container(
                         height: 100,
-                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: AppTheme.outline(context),
                         width: AppTheme.fullWidth(context),
                         alignment: Alignment.center,
@@ -222,10 +223,10 @@ class _StudentHomePageState extends State<StudentHomePage>
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge
-                                    .copyWith(
-                                      color: PColors.gray,
-                                    )),
-                            SizedBox(height: 10),
+                                    ?.copyWith(
+                                  color: PColors.gray,
+                                )),
+                            const SizedBox(height: 10),
                             Text("Ask your teacher to add you in a batch!!",
                                 style: Theme.of(context).textTheme.bodyLarge),
                           ],
@@ -239,7 +240,7 @@ class _StudentHomePageState extends State<StudentHomePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _title("${state.batchList.length} Batches"),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Container(
                       height: 150,
                       width: AppTheme.fullWidth(context),
@@ -254,14 +255,13 @@ class _StudentHomePageState extends State<StudentHomePage>
                         },
                       ),
                     ),
-                    SizedBox(height: 10)
+                    const SizedBox(height: 10)
                   ],
                 ),
               ),
-            ...[
             SliverToBoxAdapter(
               child: Column(
-                children: [
+                children: const [
                   SizedBox(height: 16),
                   Divider(),
                 ],
@@ -269,8 +269,8 @@ class _StudentHomePageState extends State<StudentHomePage>
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == 0)
+                    (context, index) {
+                  if (index == 0) {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -281,31 +281,27 @@ class _StudentHomePageState extends State<StudentHomePage>
                             Navigator.push(
                                 context, ViewAllPollPage.getRoute());
                           },
-                          textColor: Theme.of(context).primaryColor,
-                          highlightedBorderColor:
-                              Theme.of(context).primaryColor,
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Text("View All"),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Theme.of(context).primaryColor),
+                          ),
+                          child: Text("View All", style: TextStyle(color: Theme.of(context).primaryColor)),
                         ).hP16
                       ],
                     );
+                  }
                   return PollWidget(
                       model: state.polls[index - 1], hideFinishButton: false);
                 },
                 childCount: state.polls.length + 1,
               ),
             ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: Divider(),
             ),
-          ],
             if (state.announcementList.isNotEmpty)
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+                      (context, index) {
                     if (index == 0) return _title("Announcement");
                     return AnnouncementWidget(
                         state.announcementList[index - 1]);

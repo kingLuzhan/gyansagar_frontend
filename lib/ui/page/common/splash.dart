@@ -4,9 +4,10 @@ import 'package:gyansagar_frontend/ui/page/home/home_page_student.dart';
 import 'package:gyansagar_frontend/ui/page/home/home_page_teacher.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:get_it/get_it.dart';
+import 'package:gyansagar_frontend/helper/shared_preference_helper.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key key}) : super(key: key);
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -21,15 +22,15 @@ class _SplashPageState extends State<SplashPage> {
 
   void doAutoLogin() async {
     final getIt = GetIt.instance;
-    final prefs = getIt<SharedPrefrenceHelper>();
+    final prefs = getIt<SharedPreferenceHelper>();
     final accessToken = await prefs.getAccessToken();
     print("***************** Auto Login ***********************");
     final isStudent = await prefs.isStudent();
     Navigator.of(context).pushAndRemoveUntil(
       isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
-      (_) => false,
+          (_) => false,
     );
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(AppConfig.of(context).config.appIcon,
+            Image.asset(AppConfig.of(context)!.config.appIcon,
                 width: AppTheme.fullWidth(context) * .7),
             // Image.asset(Images.logoText, height: 70),
           ],

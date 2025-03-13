@@ -16,31 +16,50 @@ import 'package:gyansagar_frontend/ui/widget/form/p_textfield.dart';
 import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 import 'package:gyansagar_frontend/ui/widget/p_chiip.dart';
 import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
+
 class AddVideoPage extends StatefulWidget {
   final String subject;
   final VideoState state;
   final VideoModel videoModel;
   const AddVideoPage({
-    Key key,
-    this.subject,
-    this.state,
-    this.videoModel,
+    Key? key,
+    required this.subject,
+    required this.state,
+    required this.videoModel,
   }) : super(key: key);
+
   static MaterialPageRoute getRoute(
-      {String subject, String batchId, VideoState state}) {
+      {required String subject, required String batchId, required VideoState state}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<VideoState>(
         create: (context) => VideoState(
           subject: subject,
           batchId: batchId,
+          videoModel: VideoModel(
+            id: '',
+            title: '',
+            description: '',
+            subject: subject,
+            videoUrl: '',
+            thumbnailUrl: '',
+            batchId: batchId,
+          ),
         ),
-        child: AddVideoPage(subject: subject, state: state),
+        child: AddVideoPage(subject: subject, state: state, videoModel: VideoModel(
+          id: '',
+          title: '',
+          description: '',
+          subject: subject,
+          videoUrl: '',
+          thumbnailUrl: '',
+          batchId: batchId,
+        )),
       ),
     );
   }
 
   static MaterialPageRoute getEditRoute(VideoModel videoModel,
-      {VideoState state}) {
+      {required VideoState state}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<VideoState>(
         create: (context) => VideoState(
@@ -60,18 +79,17 @@ class AddVideoPage extends StatefulWidget {
 }
 
 class _AddVideoPageState extends State<AddVideoPage> {
-  TextEditingController _description;
-  TextEditingController _title;
+  late TextEditingController _description;
+  late TextEditingController _title;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   @override
   void initState() {
     _description =
         TextEditingController(text: widget.videoModel.description ?? "");
     _title = TextEditingController(text: widget.videoModel.title ?? "");
-    // batchList.value = Provider.of<HomeState>(context).batchList;
     super.initState();
   }
 
@@ -87,11 +105,11 @@ class _AddVideoPageState extends State<AddVideoPage> {
         style: Theme.of(context)
             .textTheme
             .bodyLarge
-            .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
+            ?.copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
   Widget _secondaryButton(BuildContext context,
-      {String label, Function onPressed}) {
+      {required String label, required VoidCallback onPressed}) {
     final theme = Theme.of(context);
     return OutlinedButton.icon(
         onPressed: onPressed,
@@ -99,7 +117,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
         label: Text(
           label,
           style: theme.textTheme.labelLarge
-              .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
+              ?.copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -118,20 +136,22 @@ class _AddVideoPageState extends State<AddVideoPage> {
   }
 
   void pickFile() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['mp4', 'avi', "flv", "mkv", "mov"],
     );
-    PlatformFile file = result.files.first;
-    final state = Provider.of<VideoState>(context, listen: false);
-    state.setFile = File(file.path);
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      final state = Provider.of<VideoState>(context, listen: false);
+      state.setFile = File(file.path!);
     }
+  }
 
   void saveVideo() async {
     final state = context.read<VideoState>();
     // validate batch name and batch description
-    final isTrue = _formKey.currentState.validate();
-    FocusManager.instance.primaryFocus.unfocus();
+    final isTrue = _formKey.currentState?.validate() ?? false;
+    FocusManager.instance.primaryFocus?.unfocus();
     if (!isTrue) {
       return;
     }
@@ -145,20 +165,19 @@ class _AddVideoPageState extends State<AddVideoPage> {
     final isOk = await state.addVideo(_title.text, _description.text);
     isLoading.value = false;
     if (isOk) {
-      String message = "Video added sucessfully!!";
+      String message = "Video added successfully!!";
       if (state.isEditMode) {
-        message = "Video updated sucessfully!!";
+        message = "Video updated successfully!!";
       }
       widget.state.getVideosList();
-      Alert.sucess(context, message: message, title: "Message", onPressed: () {
+      Alert.success(context, message: message, title: "Message", onPressed: () {
         Navigator.pop(context);
       });
     } else {
-      Alert.sucess(context,
-          message: "Some error occured. Please try again in some time!!",
+      Alert.success(context,
+          message: "Some error occurred. Please try again in some time!!",
           title: "Message",
           height: 170);
-      // Navigator.pop(context);
     }
   }
 
@@ -193,7 +212,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                         PTextField(
                             type: Type.optional,
                             controller: _description,
-                            label: "Description1",
+                            label: "Description",
                             hintText: "Enter here",
                             maxLines: null,
                             height: null,
@@ -212,7 +231,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                               child: PChip(
                                 label: widget.subject,
                                 backgroundColor:
-                                    PColors.randomColor(widget.subject),
+                                PColors.randomColor(widget.subject),
                                 borderColor: Colors.transparent,
                                 style: TextStyle(color: Colors.white),
                               ),
@@ -242,66 +261,71 @@ class _AddVideoPageState extends State<AddVideoPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                .copyWith(fontWeight: FontWeight.bold)),
+                                ?.copyWith(fontWeight: FontWeight.bold)),
                         Image.asset(Images.uploadVideo, height: 25).vP16,
                         Text("File should be mp4,mov,avi",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                .copyWith(fontSize: 12, color: PColors.gray)),
+                                ?.copyWith(fontSize: 12, color: PColors.gray)),
                       ],
                     ),
                   ).ripple(pickFile),
                   Consumer<VideoState>(
                     builder: (context, state, child) {
-                      return SizedBox(
-                        height: 65,
-                        width: AppTheme.fullWidth(context),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(height: 10),
-                            Row(children: <Widget>[
-                              SizedBox(
-                                  width: 50,
-                                  child: Image.asset(
-                                    Images.getfiletypeIcon(
-                                        state.file.path.split(".").last),
-                                    height: 30,
-                                  )),
-                              Text(
-                                state.file.path.split("/").last,
-                                maxLines: 2,
-                              ).extended,
-                              IconButton(
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    state.removeFile();
-                                  })
-                            ]),
-                            Container(
-                              height: 5,
-                              margin: EdgeInsets.symmetric(horizontal: 16),
-                              width: AppTheme.fullWidth(context),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff0CC476),
-                                  borderRadius: BorderRadius.circular(20)),
-                            )
-                          ],
-                        ),
-                      ).vP8;
-                                          return SizedBox();
+                      if (state.file != null) {
+                        return SizedBox(
+                          height: 65,
+                          width: AppTheme.fullWidth(context),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(height: 10),
+                              Row(children: <Widget>[
+                                SizedBox(
+                                    width: 50,
+                                    child: Image.asset(
+                                      Images.getFileTypeIcon(
+                                          state.file!.path.split(".").last),
+                                      height: 30,
+                                    )),
+                                Text(
+                                  state.file!.path.split("/").last,
+                                  maxLines: 2,
+                                ).extended,
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(Icons.cancel),
+                                    onPressed: () {
+                                      state.removeFile();
+                                    })
+                              ]),
+                              Container(
+                                height: 5,
+                                margin: EdgeInsets.symmetric(horizontal: 16),
+                                width: AppTheme.fullWidth(context),
+                                decoration: BoxDecoration(
+                                    color: Color(0xff0CC476),
+                                    borderRadius: BorderRadius.circular(20)),
+                              )
+                            ],
+                          ),
+                        ).vP8;
+                      }
+                      return SizedBox();
                     },
                   ),
                   SizedBox(height: 20),
                   Consumer<VideoState>(
                     builder: (context, state, child) {
-                      return SizedBox(
+                      if (state.thumbnailUrl != null) {
+                        return SizedBox(
                           height: 284,
                           child: ThumbnailPreview(
-                            title: state.yTitle,
-                            url: state.thumbnailUrl,
-                          ));
+                            title: state.yTitle!,
+                            url: state.thumbnailUrl!,
+                          ),
+                        );
+                      }
                       return SizedBox();
                     },
                   ),

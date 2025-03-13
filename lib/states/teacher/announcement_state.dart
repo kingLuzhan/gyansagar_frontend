@@ -130,11 +130,12 @@ class AnnouncementState extends BaseState {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      bool result = (await repo.uploadFile(imagefile ?? docfile!, id, endpoint: endpoint)) ?? false;
+      bool result = await repo.uploadFile(imagefile ?? docfile!, id, endpoint: endpoint);
       isBusy = false;
       return result;
     }, label: "Upload Image");
   }
+
 
   void onAnnouncementDeleted(AnnouncementModel model) {
     batchAnnouncementList.removeWhere((element) => element.id == model.id);

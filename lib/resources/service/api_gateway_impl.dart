@@ -62,38 +62,29 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<bool> uploadFile(File file, String id, {String? endpoint}) async {
     try {
-      // Get the access token
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer " + token};
 
-      // Prepare the file upload data
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path),
         "id": id,
       });
 
-      // Use the provided endpoint or a default one
       final uploadEndpoint = endpoint ?? Constants.defaultUploadEndpoint;
-
-      // Make the POST request to upload the file
       var response = await _dioClient.post(
         uploadEndpoint,
         data: formData,
         options: Options(headers: header),
       );
 
-      // Check the response status code
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
+      return response.statusCode == 200;
     } catch (e) {
-      // Handle any errors
       print("File upload error: $e");
       return false;
     }
   }
+
+
 
   @override
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) {

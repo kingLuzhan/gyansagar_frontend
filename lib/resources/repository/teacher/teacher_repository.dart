@@ -9,38 +9,38 @@ import 'package:gyansagar_frontend/resources/service/api_gateway.dart';
 import 'package:gyansagar_frontend/resources/service/session/session.dart';
 
 class TeacherRepository {
-  final ApiGateway gatway;
+  final ApiGateway gateway;
   final SessionService sessionService;
   final SharedPreferenceHelper pref;
 
-  TeacherRepository(this.gatway, this.sessionService, this.pref);
+  TeacherRepository(this.gateway, this.sessionService, this.pref);
 
   Future<List<String>> getSubjectList() async {
-    return gatway.getSubjectList();
+    return gateway.getSubjectList();
   }
 
   Future<List<ActorModel>> getStudentList() async {
-    return gatway.getStudentList();
+    return gateway.getStudentList();
   }
 
   Future<bool> createPoll(PollModel model) async {
-    return gatway.createPoll(model);
+    return gateway.createPoll(model);
   }
 
   Future<bool> expirePollById(String pollId) {
-    return gatway.expirePollById(pollId);
+    return gateway.expirePollById(pollId);
   }
 
   Future<VideoModel> addVideo(VideoModel model, {bool isEdit = false}) {
-    return gatway.addVideo(model, isEdit: isEdit);
+    return gateway.addVideo(model, isEdit: isEdit);
   }
 
   Future<bool> uploadFile(File file, String id, {String endpoint = ''}) async {
-    bool result = await gatway.uploadFile(file, id, endpoint: endpoint);
+    bool result = await gateway.uploadFile(file, id, endpoint: endpoint);
     return result;
   }
 
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) {
-    return gatway.uploadMaterial(model, isEdit: isEdit);
+    return gateway.uploadMaterial(model, isEdit: isEdit);
   }
 }

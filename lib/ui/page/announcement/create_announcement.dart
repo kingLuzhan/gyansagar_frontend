@@ -34,7 +34,7 @@ class CreateAnnouncement extends StatefulWidget {
   }) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<AnnouncementState>(
-        create: (context) => AnnouncementState(),
+        create: (context) => AnnouncementState(batchId: batch.id),
         child: CreateAnnouncement(
           selectedBatch: batch,
           onAnnouncementCreated: onAnnouncementCreated,
@@ -186,179 +186,84 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      appBar: CustomAppBar("Create Announcement"),
-      body: Container(
-        padding: EdgeInsets.only(left: 16, right: 16),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 16),
-                PTextField(
-                  type: Type.text,
-                  controller: _title,
-                  label: "Title",
-                  hintText: "Enter title here",
-                ),
-                PTextField(
-                    type: Type.text,
-                    controller: _description,
-                    label: "Description",
-                    hintText: "Enter here",
-                    maxLines: null,
-                    height: null,
-                    padding: EdgeInsets.symmetric(vertical: 16)),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _titleText(context, "All Batch"),
+        key: scaffoldKey,
+        appBar: CustomAppBar("Create Announcement"),
+    body: Container(
+    padding: EdgeInsets.only(left: 16, right: 16),
+    child: SingleChildScrollView(
+    child: Form(
+    key: _formKey,
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+    SizedBox(height: 16),
+    PTextField(
+    type: Type.text,
+    controller: _title,
+    label: "Title",
+    hintText: "Enter title here",
+    ),
+    PTextField(
+    type: Type.text,
+    controller: _description,
+    label: "Description",
+    hintText: "Enter here",
+    maxLines: null,
+    height: null,
+    padding: EdgeInsets.symmetric(vertical: 16)),
+    SizedBox(height: 10),
+    Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: <Widget>[
+    _titleText(context, "All Batch"),
 
-                    /// Hide Pick Batch button if
-                    /// If announcement is created from batch detail screen
-                    /// If announcement is in edit mode
-                    if (widget.selectedBatch == null &&
-                        !context.watch<AnnouncementState>().isEditMode)
-                      _secondaryButton(context,
-                          label: "Pick Batch", onPressed: displayBatchList),
-                  ],
-                ),
-                ValueListenableBuilder<List<BatchModel>>(
-                    valueListenable: batchList,
-                    builder: (context, listenableList, child) {
-                      return Wrap(
-                          children: listenableList
-                              .where((element) => element.isSelected)
-                              .map((e) => Padding(
-                              padding: EdgeInsets.only(right: 4, top: 4),
-                              child: PChip(label: e.name)))
-                              .toList());
-                    }),
-                SizedBox(height: 10),
-                Consumer<AnnouncementState>(
-                  builder: (context, state, child) {
-                    return Stack(
-                      children: [
-                        Container(
-                          width: AppTheme.fullWidth(context) - 32,
-                          height: 230,
-                          margin: EdgeInsets.symmetric(vertical: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: state.imagefile != null
-                                ? DecorationImage(
-                              image: FileImage(state.imagefile!),
-                              fit: BoxFit.cover,
-                            )
-                                : null,
-                          ),
-                        ),
-                        if (state.imagefile != null)
-                          Positioned(
-                            top: 15,
-                            right: 0,
-                            child: Container(
-                              color: Theme.of(context).disabledColor,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.cancel_outlined,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
-                              ).ripple(() {
-                                state.removeAnnouncementImage();
-                              }),
-                            ).circular,
-                          ),
-                      ],
-                    );
-                  },
-                ),
-                SizedBox(height: 10),
-                Text("---------- OR ----------",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontSize: 12, color: PColors.gray))
-                    .alignCenter,
-                SizedBox(height: 10),
-                Container(
-                  width: AppTheme.fullWidth(context) - 32,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: AppTheme.outline(context),
-                  child: Column(
-                    children: <Widget>[
-                      Text("Browse file",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold)),
-                      Image.asset(Images.uploadVideo, height: 25).vP16,
-                      Text("File should be PDF, DOCX, Sheet, Image",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontSize: 12, color: PColors.gray))
-                    ],
-                  ),
-                ).ripple(pickFile),
-                Consumer<AnnouncementState>(
-                  builder: (context, state, child) {
-                    if (state.docfile != null) {
-                      return SizedBox(
-                        height: 65,
-                        width: AppTheme.fullWidth(context),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                SizedBox(
-                                    width: 50,
-                                    child: Image.asset(
-                                      Images.getFileTypeIcon(
-                                          state.docfile!.path.split(".").last),
-                                      height: 30,
-                                    )),
-                                Text(state.docfile!.path.split("/").last)
-                                    .extended,
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    icon: Icon(Icons.cancel),
-                                    onPressed: state.removeAnnouncementDoc)
-                              ],
-                            ),
-                            Container(
-                              height: 5,
-                              margin: EdgeInsets.symmetric(horizontal: 16),
-                              width: AppTheme.fullWidth(context),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff0CC476),
-                                  borderRadius: BorderRadius.circular(20)),
-                            )
-                          ],
-                        ),
-                      ).vP8;
-                    }
-                    return SizedBox();
-                  },
-                ),
-                SizedBox(height: 40),
-                PFlatButton(
-                  label: context.watch<AnnouncementState>().isEditMode
-                      ? "Update"
-                      : "Create",
-                  isLoading: isLoading,
-                  onPressed: createAnnouncement,
-                ),
-                SizedBox(height: 16),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+    /// Hide Pick Batch button if
+    /// If announcement is created from batch detail screen
+    /// If announcement is in edit mode
+    if (widget.selectedBatch == null &&
+    !context.watch<AnnouncementState>().isEditMode)
+    _secondaryButton(context,
+    label: "Pick Batch", onPressed: displayBatchList),
+    ],
+    ),
+    ValueListenableBuilder<List<BatchModel>>(
+    valueListenable: batchList,
+    builder: (context, listenableList, child) {
+    return Wrap(
+    children: listenableList
+        .where((element) => element.isSelected)
+        .map((e) => Padding(
+    padding: EdgeInsets.only(right: 4, top: 4),
+    child: PChip(label: e.name)))
+        .toList());
+    }),
+    SizedBox(height: 10),
+    Consumer<AnnouncementState>(
+    builder: (context, state, child) {
+    return Stack(
+    children: [
+    Container(
+    width: AppTheme.fullWidth(context) - 32,
+    height: 230,
+    margin: EdgeInsets.symmetric(vertical: 16),
+    decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10),
+    image: state.imagefile != null
+    ? DecorationImage(
+    image: FileImage(state.imagefile!),
+    fit: BoxFit.cover,
+    )
+        : null,
+    ),
+    ),
+    if (state.imagefile != null)
+    Positioned(
+    top: 15,
+    right: 0,
+    child: Container(
+    color: Theme.of(context).disabledColor,
+    child: IconButton(
+    onPressed: () {},
+    icon: Icon(Icons.cancel_outlined,
+    color: Theme.of(context)
+    .colorScheme

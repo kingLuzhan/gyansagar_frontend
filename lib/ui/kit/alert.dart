@@ -8,7 +8,7 @@ class Alert {
       {required String message,
         required String title,
         double height = 150,
-        required Function onPressed}) async {
+        required VoidCallback onPressed}) async {
     final theme = Theme.of(context);
     await showDialog(
       context: context,
@@ -65,8 +65,8 @@ class Alert {
   static void yesOrNo(BuildContext context,
       {required String message,
         required String title,
-        required Function onYes,
-        required Function onCancel,
+        required VoidCallback onYes,
+        required VoidCallback onCancel,
         bool barrierDismissible = true}) async {
     await showDialog(
       context: context,
@@ -133,7 +133,7 @@ class Alert {
   static void dialog(BuildContext context,
       {required String title,
         required Widget child,
-        required Function onPressed,
+        required VoidCallback onPressed,
         Color titleBackGround = PColors.orange,
         String buttonText = "Ok",
         bool enableCrossButton = true}) async {
@@ -193,6 +193,7 @@ class Alert {
                   PFlatButton(
                     label: buttonText,
                     onPressed: onPressed,
+                    isLoading: false, // Provide a default value or pass a required argument
                   ).hP16
                 ],
               ),

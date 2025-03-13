@@ -149,12 +149,11 @@ class _StartQuizPageState extends State<StartQuizPage> {
       decoration: AppTheme.decoration(context),
       child: OverflowBar(
         alignment: MainAxisAlignment.spaceEvenly,
-        buttonHeight: 45,
         children: [
           Container(
             decoration: AppTheme.outlinePrimary(context),
             width: AppTheme.fullWidth(context) * .45,
-            child: FlatButton(
+            child: TextButton(
               onPressed: () {
                 _pageController.previousPage(
                   duration: Duration(milliseconds: 300),
@@ -173,7 +172,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
           Container(
             decoration: AppTheme.outlinePrimary(context),
             width: AppTheme.fullWidth(context) * .45,
-            child: FlatButton(
+            child: TextButton(
               onPressed: () {
                 _pageController.nextPage(
                   duration: Duration(milliseconds: 300),
@@ -291,7 +290,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
               decoration: isTimerEnd ? AppTheme.outline(context) : AppTheme.outlinePrimary(context),
               margin: EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
-              child: FlatButton(
+              child: TextButton(
                 onPressed: isTimerEnd
                     ? null
                     : () {
@@ -372,7 +371,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
       body: Consumer<QuizState>(
         builder: (context, state, child) {
           if (state.isBusy) {
-            return PLoader();
+            return Center(child: CircularProgressIndicator());
           }
           if (!(state.quizModel.questions.isNotEmpty)) {
             return noQuiz();

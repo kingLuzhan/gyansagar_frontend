@@ -13,11 +13,11 @@ import 'package:provider/provider.dart';
 
 class AnnouncementWidget extends StatelessWidget {
   const AnnouncementWidget(this.model,
-      {Key key,
-      this.loader,
-      this.onAnnouncementDeleted,
-      this.onAnnouncementEdit,
-      this.actions = const ["Edit", "Delete"]})
+      {Key? key,
+        required this.loader,
+        required this.onAnnouncementDeleted,
+        required this.onAnnouncementEdit,
+        this.actions = const ["Edit", "Delete"]})
       : super(key: key);
   final AnnouncementModel model;
   final CustomLoader loader;
@@ -27,19 +27,19 @@ class AnnouncementWidget extends StatelessWidget {
 
   void deleteAnnouncement(BuildContext context, String id) async {
     Alert.yesOrNo(context,
-        message: "Are you sure, you want to delete this annoucement ?",
+        message: "Are you sure, you want to delete this announcement?",
         title: "Message",
         barrierDismissible: true,
         onCancel: () {}, onYes: () async {
-      loader.showLoader(context);
-      final isDeleted = await Provider.of<HomeState>(context, listen: false)
-          .deleteAnnouncement(id);
-      if (isDeleted) {
-        Utility.displaySnackbar(context, msg: "Annoucement Deleted");
-        await onAnnouncementDeleted(model);
-      }
-      loader.hideLoader();
-    });
+          loader.showLoader(context);
+          final isDeleted = await Provider.of<HomeState>(context, listen: false)
+              .deleteAnnouncement(id);
+          if (isDeleted) {
+            Utility.displaySnackbar(context, msg: "Announcement Deleted");
+            await onAnnouncementDeleted(model);
+          }
+          loader.hideLoader();
+        });
   }
 
   @override
@@ -74,8 +74,8 @@ class AnnouncementWidget extends StatelessWidget {
                     Container(
                       color: Theme.of(context).colorScheme.onPrimary,
                       padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 16) +
-                              EdgeInsets.only(right: isTeacher ? 10 : 0),
+                      EdgeInsets.symmetric(vertical: 8, horizontal: 16) +
+                          EdgeInsets.only(right: isTeacher ? 10 : 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -90,8 +90,7 @@ class AnnouncementWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Image.asset(
-                                  Images.getfiletypeIcon(null,
-                                      path: model.file),
+                                  Images.getFileTypeIcon(model.file),
                                   height: 20),
                               SizedBox(width: 8),
                               RotatedBox(
@@ -112,9 +111,9 @@ class AnnouncementWidget extends StatelessWidget {
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium
-                                        .copyWith(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500),
+                                        ?.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ),
                                 Text(
@@ -122,9 +121,9 @@ class AnnouncementWidget extends StatelessWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
-                                      .copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500),
+                                      ?.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
@@ -138,7 +137,7 @@ class AnnouncementWidget extends StatelessWidget {
             ],
           ).ripple(() {
             Utility.launchOnWeb(model.file);
-                    }),
+          }),
           if (isTeacher)
             Positioned(
               top: 0,

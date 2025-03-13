@@ -9,9 +9,9 @@ class VideoPlayerPage2 extends StatefulWidget {
   final String path;
   final String title;
 
-  const VideoPlayerPage2({Key key, this.path, this.title}) : super(key: key);
+  const VideoPlayerPage2({Key? key, required this.path, required this.title}) : super(key: key);
 
-  static MaterialPageRoute getRoute(String path, {String title}) {
+  static MaterialPageRoute getRoute(String path, {required String title}) {
     return MaterialPageRoute(
       builder: (_) => VideoPlayerPage2(
         path: path,
@@ -25,10 +25,12 @@ class VideoPlayerPage2 extends StatefulWidget {
 }
 
 class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
-  BetterPlayerController _betterPlayerController;
-  StreamController<bool> _fileVideoStreamController =
-      StreamController.broadcast();
+  late BetterPlayerController _betterPlayerController;
+  final StreamController<bool> _fileVideoStreamController =
+  StreamController.broadcast();
   bool _fileVideoShown = false;
+
+  @override
   void initState() {
     super.initState();
     log("Now playing: ${widget.path}");
@@ -67,9 +69,6 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
       ),
       betterPlayerDataSource: dataSource,
     );
-    // _betterPlayerController.addEventsListener((event) {
-    //   print("Better player event: ${event.betterPlayerEventType}");
-    // });
     return _betterPlayerController;
   }
 
@@ -79,7 +78,7 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
       appBar: AppBar(
         title: Title(
           color: PColors.black,
-          child: Text(widget.title ?? "Document"),
+          child: Text(widget.title),
         ),
       ),
       body: ListView(children: [
@@ -98,7 +97,7 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
           );
         } else {
           return BetterPlayer(
-            controller: snapshot.data,
+            controller: snapshot.data!,
           );
         }
       },
