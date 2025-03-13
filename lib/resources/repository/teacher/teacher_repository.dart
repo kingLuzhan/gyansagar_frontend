@@ -36,8 +36,8 @@ class TeacherRepository {
   }
 
   Future<bool> uploadFile(File file, String id, {String endpoint = ''}) async {
-    bool? result = await gatway.uploadFile(file, id, endpoint: endpoint);
-    return result ?? false;
+    bool result = await gatway.uploadFile(file, id, endpoint: endpoint);
+    return result;
   }
 
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) {

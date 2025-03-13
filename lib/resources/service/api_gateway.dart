@@ -13,8 +13,7 @@ import 'package:gyansagar_frontend/model/video_model.dart';
 abstract class ApiGateway {
   Future<dynamic> getUser();
   Future<bool> createBatch(BatchModel model);
-  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model,
-      {bool isEdit});
+  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model, {bool isEdit});
   Future<VideoModel> addVideo(VideoModel model, {bool isEdit});
   Future<ActorModel> login(ActorModel model);
   Future<bool> register(ActorModel model);
@@ -32,14 +31,12 @@ abstract class ApiGateway {
   Future<List<String>> getSubjectList();
   Future<List<NotificationModel>> getStudentNotificationsList();
   Future<List<VideoModel>> getVideosList(String batchId);
-  Future<bool> uploadFile(File file, String id, {String endpoint});
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model,
-      {bool isEdit});
+  Future<bool> uploadFile(File file, String id, {String? endpoint});
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit});
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId);
   Future<List<AssignmentModel>> getAssignmentList(String batchId);
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId);
-  Future<QuizDetailModel> getAssignmentDetailList(
-      String batchId, String assignmentId);
+  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assignmentId);
   Future<PollModel> castVoteOnPoll(String pollId, String vote);
 }

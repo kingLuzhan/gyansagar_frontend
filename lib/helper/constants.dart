@@ -18,6 +18,8 @@ class Constants {
   static const String getAllStudentList = "get-all-student-list";
   static const String studentNotificationList = "student/my-notifications";
 
+  static const String defaultUploadEndpoint = 'upload'; // Add this line
+
   static const String studentBatch = student + "/my-batches";
   static const String studentAnnouncements = student + "/my-announcements";
   static const String studentPolls = student + "/my-polls";

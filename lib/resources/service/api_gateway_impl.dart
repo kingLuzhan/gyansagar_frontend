@@ -1,4 +1,4 @@
-
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:gyansagar_frontend/helper/constants.dart';
 import 'package:gyansagar_frontend/helper/shared_preference_helper.dart';
@@ -28,6 +28,7 @@ class ApiGatewayImpl implements ApiGateway {
     // TODO: implement getUser
     throw UnimplementedError();
   }
+
   @override
   Future<PollModel> castVoteOnPoll(String pollId, String vote) {
     // TODO: implement castVoteOnPoll
@@ -59,13 +60,43 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> uploadFile(File file, String id, {String endpoint}) {
-    // TODO: implement uploadFile
-    throw UnimplementedError();
+  Future<bool> uploadFile(File file, String id, {String? endpoint}) async {
+    try {
+      // Get the access token
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer " + token};
+
+      // Prepare the file upload data
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(file.path),
+        "id": id,
+      });
+
+      // Use the provided endpoint or a default one
+      final uploadEndpoint = endpoint ?? Constants.defaultUploadEndpoint;
+
+      // Make the POST request to upload the file
+      var response = await _dioClient.post(
+        uploadEndpoint,
+        data: formData,
+        options: Options(headers: header),
+      );
+
+      // Check the response status code
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      // Handle any errors
+      print("File upload error: $e");
+      return false;
+    }
   }
 
   @override
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit}) {
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) {
     // TODO: implement uploadMaterial
     throw UnimplementedError();
   }
@@ -75,6 +106,7 @@ class ApiGatewayImpl implements ApiGateway {
     // TODO: implement getBatchMaterialList
     throw UnimplementedError();
   }
+
   @override
   Future<bool> createBatch(BatchModel model) async {
     try {
@@ -216,7 +248,7 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<List<BatchModel>> getBatches() async {
     try {
-      var token = await pref.getAccessToken();
+      var token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer " + token};
       bool isStudent = await pref.isStudent();
       var response = await _dioClient.get(
@@ -378,7 +410,7 @@ class ApiGatewayImpl implements ApiGateway {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer " + token};
       final endpoint = isEdit
-          ? Constants.crudVideo(model.id)
+          ? Constants.crudVideo(model.id ?? '')
           : Constants.video;
       await _dioClient.post(endpoint,
           data: data, options: Options(headers: header));
