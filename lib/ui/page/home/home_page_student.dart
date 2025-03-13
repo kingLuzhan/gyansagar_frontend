@@ -38,7 +38,7 @@ class _StudentHomePageState extends State<StudentHomePage>
     super.initState();
     setupAnimations();
     Provider.of<HomeState>(context, listen: false).getBatchList();
-    Provider.of<HomeState>(context, listen: false).getAnnouncemantList();
+    Provider.of<HomeState>(context, listen: false).getAnnouncementList();
     Provider.of<HomeState>(context, listen: false).getPollList();
   }
 

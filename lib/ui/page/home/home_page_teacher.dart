@@ -44,7 +44,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
     setupAnimations();
     loader = CustomLoader();
     context.read<HomeState>().getBatchList();
-    context.read<HomeState>().getAnnouncemantList();
+    context.read<HomeState>().getAnnouncementList();
     context.read<HomeState>().getPollList();
   }
 
@@ -299,7 +299,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                           CreateAnnouncement.getEditRoute(
                             announcementModel: model,
                             onAnnouncementCreated: () {
-                              context.read<HomeState>().getAnnouncemantList();
+                              context.read<HomeState>().getAnnouncementList();
                             },
                           ),
                         );

@@ -65,7 +65,7 @@ class BatchRepository {
   }
 
   Future<List<AnnouncementModel>> getAnnouncementList() {
-    return gateway.getAnnouncemantList(); // Assuming API still has the typo
+    return gateway.getAnnouncementList(); // Assuming API still has the typo
   }
 
   Future<List<PollModel>> getPollList() {
@@ -85,7 +85,7 @@ class BatchRepository {
   }
 
   Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId) {
-    return gateway.getBatchAnnouncemantList(batchId); // Assuming API still has the typo
+    return gateway.getBatchAnnouncementList(batchId); // Assuming API still has the typo
   }
 
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId) {

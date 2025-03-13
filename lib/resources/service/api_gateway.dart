@@ -26,7 +26,7 @@ abstract class ApiGateway {
   Future<bool> deleteBatch(String batchId);
   Future<bool> createPoll(PollModel model);
   Future<bool> expirePollById(String pollId);
-  Future<List<AnnouncementModel>> getAnnouncemantList();
+  Future<List<AnnouncementModel>> getAnnouncementList();
   Future<List<PollModel>> getPollList();
   Future<List<ActorModel>> getStudentList();
   Future<List<String>> getSubjectList();
@@ -36,10 +36,10 @@ abstract class ApiGateway {
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model,
       {bool isEdit});
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
-  Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);
+  Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId);
   Future<List<AssignmentModel>> getAssignmentList(String batchId);
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId);
   Future<QuizDetailModel> getAssignmentDetailList(
-      String batchId, String assgnmentId);
+      String batchId, String assignmentId);
   Future<PollModel> castVoteOnPoll(String pollId, String vote);
 }

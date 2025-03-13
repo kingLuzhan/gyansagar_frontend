@@ -9,6 +9,8 @@ import 'package:gyansagar_frontend/model/notification_model.dart';
 import 'package:gyansagar_frontend/model/poll_model.dart';
 import 'package:gyansagar_frontend/model/subject.dart';
 import 'package:gyansagar_frontend/model/video_model.dart';
+import 'package:gyansagar_frontend/model/quiz_model.dart';
+import 'package:gyansagar_frontend/model/batch_material_model.dart';
 import 'package:gyansagar_frontend/resources/service/api_gateway.dart';
 import 'package:gyansagar_frontend/resources/service/dio_client.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
@@ -18,14 +20,61 @@ import 'package:get_it/get_it.dart';
 class ApiGatewayImpl implements ApiGateway {
   final DioClient _dioClient;
   final SharedPreferenceHelper pref;
-  ApiGatewayImpl(this._dioClient, {this.pref});
+
+  ApiGatewayImpl(this._dioClient, {required this.pref});
 
   @override
   Future getUser() {
     // TODO: implement getUser
     throw UnimplementedError();
   }
+  @override
+  Future<PollModel> castVoteOnPoll(String pollId, String vote) {
+    // TODO: implement castVoteOnPoll
+    throw UnimplementedError();
+  }
 
+  @override
+  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assignmentId) {
+    // TODO: implement getAssignmentDetailList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<AssignmentModel>> getAssignmentList(String batchId) {
+    // TODO: implement getAssignmentList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId) {
+    // TODO: implement getBatchAnnouncementList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<VideoModel>> getVideosList(String batchId) {
+    // TODO: implement getVideosList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> uploadFile(File file, String id, {String endpoint}) {
+    // TODO: implement uploadFile
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit}) {
+    // TODO: implement uploadMaterial
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId) {
+    // TODO: implement getBatchMaterialList
+    throw UnimplementedError();
+  }
   @override
   Future<bool> createBatch(BatchModel model) async {
     try {
@@ -225,7 +274,7 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<AnnouncementModel>> getAnnouncemantList() async {
+  Future<List<AnnouncementModel>> getAnnouncementList() async {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer " + token};
