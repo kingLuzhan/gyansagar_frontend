@@ -4,7 +4,6 @@ import 'package:gyansagar_frontend/ui/widget/form/p_textfield.dart';
 import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:gyansagar_frontend/ui/theme/theme.dart';
 
 class AllContactsPage extends StatefulWidget {
   const AllContactsPage({

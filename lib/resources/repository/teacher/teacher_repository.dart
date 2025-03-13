@@ -35,8 +35,9 @@ class TeacherRepository {
     return gatway.addVideo(model, isEdit: isEdit);
   }
 
-  Future<bool> uploadFile(File file, String id, {String endpoint = ''}) {
-    return gatway.uploadFile(file, id, endpoint: endpoint);
+  Future<bool> uploadFile(File file, String id, {String endpoint = ''}) async {
+    bool? result = await gatway.uploadFile(file, id, endpoint: endpoint);
+    return result ?? false;
   }
 
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) {

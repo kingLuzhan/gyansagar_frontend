@@ -100,7 +100,7 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
     templist = list
         .where((x) =>
     x.name.toLowerCase().contains(query.toLowerCase()) ||
-        x.mobile?.toLowerCase().contains(query.toLowerCase()) == true)
+        x.mobile.toLowerCase().contains(query.toLowerCase()) == true)
         .toList();
     return _result(context);
   }

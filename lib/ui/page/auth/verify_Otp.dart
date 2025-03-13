@@ -143,7 +143,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 20),
-            Image.asset(AppConfig.of(context)?.config?.appIcon ?? '', height: 150),
+            Image.asset(AppConfig.of(context)?.config.appIcon ?? '', height: 150),
             SizedBox(height: 10),
             Text(
               "Please enter OTP we’ve sent you on ${state.email ?? state.mobile}",

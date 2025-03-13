@@ -12,29 +12,30 @@ class SessionServiceImpl implements SessionService {
       this.pref,
       );
 
+  @override
   Future<void> saveSession(ActorModel session) async {
     await pref.saveUserProfile(session);
     await pref.setAccessToken(session.token);
     print("Session Save in local!!");
   }
 
-  Future<ActorModel?> loadSession() async {
-    try {
-      var session = await pref.getUserProfile();
-      return session;
-    } catch (_) {
-      return null;
+  @override
+  Future<ActorModel> loadSession() async {
+    var session = await pref.getUserProfile();
+    if (session == null) {
+      throw Exception("No session found");
     }
+    return session;
   }
 
+  @override
   Future<void> clearSession() async {
     await pref.clearPreferenceValues();
     print("Session clear");
   }
 
   @override
-  Future<T> refreshSessionOnUnauthorized<T>(
-      Future<T> Function() handler) async {
+  Future<T> refreshSessionOnUnauthorized<T>(Future<T> Function() handler) async {
     try {
       return await handler();
     } on ApiUnauthorizedException catch (_) {
