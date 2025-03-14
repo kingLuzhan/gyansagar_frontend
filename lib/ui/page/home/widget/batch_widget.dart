@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/model/batch_model.dart';
-import 'package:gyansagar_frontend/model/batch_time_slot_model.dart'; // Import BatchTimeSlotModel
+// Import BatchTimeSlotModel
 import 'package:gyansagar_frontend/ui/page/batch/batch_master_page.dart';
 import 'package:gyansagar_frontend/ui/page/home/student_list_preview.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';

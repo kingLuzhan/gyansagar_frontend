@@ -10,8 +10,9 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class StartQuizPage extends StatefulWidget {
-  StartQuizPage({Key? key, required this.model}) : super(key: key);
+  StartQuizPage({Key? key, required this.model, required this.batchId}) : super(key: key);
   final AssignmentModel model;
+  final String batchId;
 
   static MaterialPageRoute getRoute({required AssignmentModel model, required String batchId}) {
     return MaterialPageRoute(
@@ -19,7 +20,7 @@ class StartQuizPage extends StatefulWidget {
         create: (_) => QuizState(),
         child: ChangeNotifierProvider<QuizState>(
           create: (_) => QuizState(batchId: batchId),
-          child: StartQuizPage(model: model),
+          child: StartQuizPage(model: model, batchId: batchId),
           builder: (_, child) => child!,
         ),
       ),
@@ -35,7 +36,6 @@ class _StartQuizPageState extends State<StartQuizPage> {
   ValueNotifier<int> currentQuestion = ValueNotifier<int>(0);
   String? remainingTime;
   String? timeTaken;
-  // QuizDetailModel model;
   PageController _pageController = PageController();
   bool isQuizEnd = false;
 

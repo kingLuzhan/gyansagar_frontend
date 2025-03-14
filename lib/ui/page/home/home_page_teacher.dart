@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/helper/images.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
 import 'package:gyansagar_frontend/model/batch_model.dart'; // Import BatchModel
-import 'package:gyansagar_frontend/model/create_announcement_model.dart'; // Import AnnouncementModel
+// Import AnnouncementModel
 import 'package:gyansagar_frontend/states/home_state.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 import 'package:gyansagar_frontend/ui/page/announcement/create_announcement.dart';
@@ -34,10 +34,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
   late AnimationController _controller;
   bool isOpened = false;
   late AnimationController _animationController;
-  late Animation<double> _animateIcon;
   late CustomLoader loader;
   Curve _curve = Curves.easeOut;
   late Animation<double> _translateButton;
+  late Animation<double> _animateIcon;
   ValueNotifier<bool> showFabButton = ValueNotifier<bool>(false);
 
   @override
@@ -98,12 +98,9 @@ class _TeacherHomePageState extends State<TeacherHomePage>
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: animate,
       tooltip: 'Toggle',
-      child: Transform.rotate(
-        angle: _angle,
-        child: Icon(
-          Icons.add,
-          size: 30,
-        ),
+      child: AnimatedIcon(
+        icon: AnimatedIcons.add_event,
+        progress: _animateIcon,
       ),
     );
   }
@@ -325,6 +322,9 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                             },
                           ),
                         );
+                      },
+                      onAnnouncementDeleted: (model) async {
+                        context.read<HomeState>().fetchAnnouncementList();
                       },
                     );
                   },

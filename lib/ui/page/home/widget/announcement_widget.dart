@@ -8,7 +8,7 @@ import 'package:gyansagar_frontend/ui/kit/alert.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 import 'package:gyansagar_frontend/ui/page/batch/widget/tile_action_widget.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
-import 'package:gyansagar_frontend/ui/widget/url_Text.dart';
+import 'package:gyansagar_frontend/ui/widget/url_text.dart';
 import 'package:provider/provider.dart';
 
 class AnnouncementWidget extends StatelessWidget {
@@ -79,7 +79,17 @@ class AnnouncementWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          UrlText(text: model.description),
+                          UrlText(
+                            text: model.description,
+                            style: Theme.of(context).textTheme.bodyMedium!,
+                            urlStyle: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                            onHashTagPressed: (tag) {
+                              // Handle hashtag press
+                            },
+                          ),
                           SizedBox(height: 8),
                           if (model.image.isNotEmpty) ...[
                             CachedNetworkImage(

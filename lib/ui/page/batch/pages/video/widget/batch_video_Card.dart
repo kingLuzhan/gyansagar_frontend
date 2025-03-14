@@ -8,7 +8,7 @@ import 'package:gyansagar_frontend/states/teacher/video/video_state.dart';
 import 'package:gyansagar_frontend/ui/kit/alert.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 import 'package:gyansagar_frontend/ui/page/batch/pages/video/add_video_page.dart';
-import 'package:gyansagar_frontend/ui/page/batch/pages/video/video_player_pag2e.dart';
+import 'package:gyansagar_frontend/ui/page/batch/pages/video/video_player_pag2e.dart'; // Correct import
 import 'package:gyansagar_frontend/ui/page/batch/widget/tile_action_widget.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_chiip.dart';
@@ -126,7 +126,7 @@ class BatchVideoCard extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.push(context,
-                      VideoPlayerPage2.getRoute(model.videoUrl, title: model.title));
+                      VideoPlayerPage2.getRoute(model.videoUrl, title: model.title)); // Correct class name
                 },
                 child: Padding(
                   padding:
@@ -153,6 +153,8 @@ class BatchVideoCard extends StatelessWidget {
                             ),
                             borderColor: Colors.transparent,
                             label: model.subject,
+                            isCrossIcon: false,
+                            onDeleted: () {},
                           ),
                           Text(
                             Utility.toDMformat(DateTime.parse(model.createdAt)),
@@ -172,6 +174,7 @@ class BatchVideoCard extends StatelessWidget {
               list: actions,
               onDelete: () => deleteVideo(context, model.id),
               onEdit: () => editVideo(context, model),
+              onCustomIconPressed: () {},
             ),
         ],
       ),

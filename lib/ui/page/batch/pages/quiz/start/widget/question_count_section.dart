@@ -8,7 +8,7 @@ class QuestionCountSection extends StatelessWidget {
   const QuestionCountSection({Key? key, required this.isDisplayQuestion}) : super(key: key);
   final ValueNotifier<bool> isDisplayQuestion;
 
-  Widget _circularNo(context, int index, Question model) {
+  Widget _circularNo(BuildContext context, int index, Question model) {
     return Container(
       width: 40,
       height: 40,
@@ -39,13 +39,13 @@ class QuestionCountSection extends StatelessWidget {
           curve: Curves.decelerate,
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: !value ? 0 : 16),
           width: AppTheme.fullWidth(context),
-          decoration: AppTheme.decoration(context)?.copyWith(
+          decoration: AppTheme.decoration(context).copyWith(
             color: PColors.red.withOpacity(.1),
           ),
           child: !value
               ? SizedBox.shrink()
               : Consumer<QuizState>(
-            builder: (context, state, child) {
+            builder: (context, QuizState state, child) {
               return Wrap(
                 children: Iterable.generate(state.quizModel.questions.length, (index) {
                   return _circularNo(context, index, state.quizModel.questions[index]);

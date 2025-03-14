@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/config/config.dart';
 import 'package:gyansagar_frontend/states/auth/auth_state.dart';
-import 'package:gyansagar_frontend/states/home_state.dart';
 import 'package:gyansagar_frontend/ui/kit/alert.dart';
 import 'package:gyansagar_frontend/ui/page/auth/login.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';

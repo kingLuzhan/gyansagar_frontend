@@ -4,7 +4,7 @@ import 'package:gyansagar_frontend/states/teacher/video/video_state.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 import 'package:gyansagar_frontend/ui/page/batch/pages/video/widget/batch_video_Card.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
-import 'package:gyansagar_frontend/ui/widget/p_loader.dart';
+import 'package:gyansagar_frontend/ui/widget/p_loader.dart'; // Ensure this import
 import 'package:provider/provider.dart';
 
 class BatchVideosPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
       child: Consumer<VideoState>(
         builder: (context, state, child) {
           if (state.isBusy) {
-            return PLoader();
+            return Ploader();
           }
           if (state.list.isEmpty) {
             return Container(

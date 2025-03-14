@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/model/batch_model.dart';
-import 'package:gyansagar_frontend/states/quiz/quiz_state.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 import 'package:gyansagar_frontend/ui/page/batch/pages/quiz/quiz_list_page.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';

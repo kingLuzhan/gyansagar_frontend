@@ -11,6 +11,7 @@ import 'package:gyansagar_frontend/ui/page/poll/View_all_poll_page.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
+import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 
 class StudentHomePage extends StatefulWidget {
   const StudentHomePage({Key? key}) : super(key: key);
@@ -31,11 +32,13 @@ class _StudentHomePageState extends State<StudentHomePage>
   late Animation<double> _translateButton;
   bool showFabButton = false;
   double _angle = 0;
+  late CustomLoader loader;
 
   @override
   void initState() {
     super.initState();
     setupAnimations();
+    loader = CustomLoader();
     Provider.of<HomeState>(context, listen: false).getBatchList();
     Provider.of<HomeState>(context, listen: false).fetchAnnouncementList();
     Provider.of<HomeState>(context, listen: false).getPollList();
@@ -290,7 +293,9 @@ class _StudentHomePageState extends State<StudentHomePage>
                     );
                   }
                   return PollWidget(
-                      model: state.polls[index - 1], hideFinishButton: false);
+                      model: state.polls[index - 1],
+                      loader: loader,
+                      hideFinishButton: false);
                 },
                 childCount: state.polls.length + 1,
               ),
@@ -304,7 +309,15 @@ class _StudentHomePageState extends State<StudentHomePage>
                       (context, index) {
                     if (index == 0) return _title("Announcement");
                     return AnnouncementWidget(
-                        state.announcementList[index - 1]);
+                      state.announcementList[index - 1],
+                      loader: loader,
+                      onAnnouncementEdit: (model) {
+                        // Handle announcement edit
+                      },
+                      onAnnouncementDeleted: (model) async {
+                        context.read<HomeState>().fetchAnnouncementList();
+                      },
+                    );
                   },
                   childCount: state.announcementList.length + 1,
                 ),

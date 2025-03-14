@@ -8,6 +8,7 @@ class VideoModel {
   final String videoUrl;
   final String thumbnailUrl;
   final String batchId;
+  final String createdAt;
 
   VideoModel({
     required this.id,
@@ -17,6 +18,7 @@ class VideoModel {
     required this.videoUrl,
     required this.thumbnailUrl,
     required this.batchId,
+    required this.createdAt,
   });
 
   factory VideoModel.fromRawJson(String str) => VideoModel.fromJson(json.decode(str));
@@ -31,6 +33,7 @@ class VideoModel {
     videoUrl: json["videoUrl"] ?? "",
     thumbnailUrl: json["thumbnailUrl"] ?? "",
     batchId: json["batchId"] ?? "",
+    createdAt: json["createdAt"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +44,7 @@ class VideoModel {
     "videoUrl": videoUrl,
     "thumbnailUrl": thumbnailUrl,
     "batchId": batchId,
+    "createdAt": createdAt,
   };
 
   VideoModel copyWith({
@@ -51,6 +55,7 @@ class VideoModel {
     String? videoUrl,
     String? thumbnailUrl,
     String? batchId,
+    String? createdAt,
   }) {
     return VideoModel(
       id: id ?? this.id,
@@ -60,6 +65,7 @@ class VideoModel {
       videoUrl: videoUrl ?? this.videoUrl,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       batchId: batchId ?? this.batchId,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

@@ -255,44 +255,42 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
               ).ripple(pickFile),
               Consumer<BatchMaterialState>(
                 builder: (context, state, child) {
-                  if (state.file != null) {
-                    return SizedBox(
-                      height: 65,
-                      width: AppTheme.fullWidth(context),
-                      child: Column(
-                        children: <Widget>[
-                          Row(children: <Widget>[
-                            SizedBox(
-                              width: 50,
-                              child: Image.asset(
-                                Images.getFileTypeIcon(state.file!.path.split(".").last),
-                                height: 30,
-                              ),
-                            ),
-                            Text(state.file!.path.split("/").last),
-                            Spacer(),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: Icon(Icons.cancel),
-                              onPressed: () {
-                                state.removeFile();
-                              },
-                            ),
-                          ]),
-                          Container(
-                            height: 5,
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            width: AppTheme.fullWidth(context),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff0CC476),
-                              borderRadius: BorderRadius.circular(20),
+                  return SizedBox(
+                    height: 65,
+                    width: AppTheme.fullWidth(context),
+                    child: Column(
+                      children: <Widget>[
+                        Row(children: <Widget>[
+                          SizedBox(
+                            width: 50,
+                            child: Image.asset(
+                              Images.getFileTypeIcon(state.file.path.split(".").last),
+                              height: 30,
                             ),
                           ),
-                        ],
-                      ),
-                    ).vP8;
-                  }
-                  return SizedBox();
+                          Text(state.file.path.split("/").last),
+                          Spacer(),
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(Icons.cancel),
+                            onPressed: () {
+                              state.removeFile();
+                            },
+                          ),
+                        ]),
+                        Container(
+                          height: 5,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          width: AppTheme.fullWidth(context),
+                          decoration: BoxDecoration(
+                            color: const Color(0xff0CC476),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ).vP8;
+                                  return SizedBox();
                 },
               ),
               Consumer<BatchMaterialState>(
