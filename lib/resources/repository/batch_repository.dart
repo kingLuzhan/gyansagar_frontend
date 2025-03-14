@@ -103,4 +103,17 @@ class BatchRepository {
   Future<PollModel> castVoteOnPoll(String pollId, String vote) {
     return gateway.castVoteOnPoll(pollId, vote);
   }
+
+  // Add the missing methods
+  Future<void> savePollSelection(PollModel poll) async {
+    return gateway.savePollSelection(poll);
+  }
+
+  Future<void> expirePoll(String pollId) async {
+    return gateway.expirePoll(pollId);
+  }
+
+  Future<void> deletePoll(String pollId) async {
+    return gateway.deletePoll(pollId);
+  }
 }

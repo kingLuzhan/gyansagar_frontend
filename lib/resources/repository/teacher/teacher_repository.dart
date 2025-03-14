@@ -35,9 +35,15 @@ class TeacherRepository {
     return gateway.addVideo(model, isEdit: isEdit);
   }
 
-  Future<bool> uploadFile(File file, String id, {String endpoint = ''}) async {
-    bool result = await gateway.uploadFile(file, id, endpoint: endpoint);
-    return result;
+  Future<bool> uploadFile(File file, String id, {String? endpoint}) async {
+    try {
+      // Assuming the method in ApiGateway returns a boolean indicating success
+      bool success = await gateway.uploadFile(file, id, endpoint: endpoint);
+      return success;
+    } catch (error) {
+      // Handle error and return false
+      return false;
+    }
   }
 
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) {

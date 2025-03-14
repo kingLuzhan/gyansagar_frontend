@@ -39,4 +39,7 @@ abstract class ApiGateway {
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId);
   Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assignmentId);
   Future<PollModel> castVoteOnPoll(String pollId, String vote);
+  Future<void> savePollSelection(PollModel poll);
+  Future<void> expirePoll(String pollId);
+  Future<void> deletePoll(String pollId);
 }

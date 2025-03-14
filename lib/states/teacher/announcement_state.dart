@@ -136,7 +136,6 @@ class AnnouncementState extends BaseState {
     }, label: "Upload Image");
   }
 
-
   void onAnnouncementDeleted(AnnouncementModel model) {
     batchAnnouncementList.removeWhere((element) => element.id == model.id);
     notifyListeners();

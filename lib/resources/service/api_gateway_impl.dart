@@ -426,4 +426,65 @@ class ApiGatewayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<void> savePollSelection(PollModel poll) async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer " + token};
+      final endpoint = Constants.crudePoll(poll.id);
+
+      var response = await _dioClient.post(
+        endpoint,
+        data: poll.toJson(),
+        options: Options(headers: header),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to save poll selection');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<void> expirePoll(String pollId) async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer " + token};
+      final endpoint = Constants.crudePoll(pollId) + "/expire";
+
+      var response = await _dioClient.post(
+        endpoint,
+        options: Options(headers: header),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to expire poll');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<void> deletePoll(String pollId) async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer " + token};
+      final endpoint = Constants.crudePoll(pollId);
+
+      var response = await _dioClient.delete(
+        endpoint,
+        options: Options(headers: header),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete poll');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }

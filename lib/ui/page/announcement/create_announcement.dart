@@ -209,7 +209,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                     controller: _description,
                     label: "Description",
                     hintText: "Enter here",
-                    maxLines: null,
+                    maxLines: 10,
                     height: 70, // Provide a non-null value
                     padding: EdgeInsets.symmetric(vertical: 16),
                   ),
@@ -236,7 +236,13 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                                 .where((element) => element.isSelected)
                                 .map((e) => Padding(
                                 padding: EdgeInsets.only(right: 4, top: 4),
-                                child: PChip(label: e.name)))
+                                child: PChip(
+                                  label: e.name,
+                                  backgroundColor: Colors.blue, // Example color
+                                  isCrossIcon: true,
+                                  onDeleted: () {}, // Example callback
+                                  style: TextStyle(fontSize: 12), // Example style
+                                )))
                                 .toList());
                       }),
                   SizedBox(height: 10),

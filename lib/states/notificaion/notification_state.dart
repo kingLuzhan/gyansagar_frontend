@@ -6,10 +6,12 @@ class NotificationState extends ChangeNotifier {
   List<NotificationModel> notifications;
   bool _isLoading = false;
   String? _errorMessage;
+  final NotificationRepository _notificationRepository;
 
   NotificationState({
+    required NotificationRepository notificationRepository,
     this.notifications = const [],
-  });
+  }) : _notificationRepository = notificationRepository;
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
@@ -28,8 +30,7 @@ class NotificationState extends ChangeNotifier {
     setLoading(true);
     setError(null);
     try {
-      final repo = NotificationRepository();
-      notifications = await repo.getNotifications();
+      notifications = await _notificationRepository.getNotifications();
     } catch (error) {
       setError(error.toString());
     } finally {

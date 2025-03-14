@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:gyansagar_frontend/helper/enum.dart';
 
-part 'batch_timeline_model.freezed.dart';
-part 'batch_timeline_model.g.dart';
+part 'batch_timeline_model.freezed.dart'; // Ensure this part file is generated
+part 'batch_timeline_model.g.dart'; // Ensure this part file is generated
 
 @freezed
 class BatchTimeline with _$BatchTimeline {

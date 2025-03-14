@@ -102,4 +102,8 @@ class Constants {
   static String crudAssignment(String id) {
     return "$assignment/$id";
   }
+
+  static String deleteAnnouncement(String announcementId) {
+    return "$announcement/$announcementId";
+  }
 }

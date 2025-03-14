@@ -5,6 +5,7 @@ import 'package:gyansagar_frontend/model/video_model.dart';
 import 'package:gyansagar_frontend/model/batch_material_model.dart';
 import 'package:gyansagar_frontend/states/home_state.dart';
 import 'package:gyansagar_frontend/states/teacher/announcement_state.dart';
+import 'package:gyansagar_frontend/states/quiz/quiz_state.dart';
 import 'package:gyansagar_frontend/states/teacher/batch_detail_state.dart';
 import 'package:gyansagar_frontend/states/teacher/material/batch_material_state.dart';
 import 'package:gyansagar_frontend/states/teacher/video/video_state.dart';
