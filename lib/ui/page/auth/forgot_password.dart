@@ -11,11 +11,11 @@ import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-  ForgotPasswordPage({Key? key}) : super(key: key);
+  const ForgotPasswordPage({super.key});
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => ForgotPasswordPage(),
+      builder: (_) => const ForgotPasswordPage(),
     );
   }
 
@@ -52,7 +52,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Widget _title(String text) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 8,
         left: 16,
       ),
@@ -79,7 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Theme.of(context).dividerColor,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 5)
             ]),
       ),
@@ -90,11 +90,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.symmetric(vertical: 32) + const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
@@ -106,17 +106,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ValueListenableBuilder<bool>(
                 valueListenable: useMobile,
                 builder: (context, value, child) {
                   return customSwitcherWidget(
-                      duraton: Duration(milliseconds: 300),
+                      duraton: const Duration(milliseconds: 300),
                       child: value
                           ? PTextField(
-                        key: ValueKey(1),
+                        key: const ValueKey(1),
                         type: FieldType.email, // Changed from Type.email to FieldType.email
                         controller: email,
                         label: "Email ID",
@@ -124,7 +124,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         height: 70, // Provide a non-null value
                       ).hP16
                           : PTextField(
-                        key: ValueKey(2),
+                        key: const ValueKey(2),
                         type: FieldType.phone, // Changed from Type.phone to FieldType.phone
                         controller: mobile,
                         label: "Mobile No.",
@@ -151,7 +151,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     }),
                   );
                 }),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: PFlatButton(
@@ -163,7 +163,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 },
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -175,7 +175,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return AnimatedSwitcher(
       duration: duraton,
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(child: child, scale: animation);
+        return ScaleTransition(scale: animation, child: child);
       },
       child: child,
     );
@@ -223,7 +223,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final theme = Theme.of(context);
     return Scaffold(
       key: scaffoldKey,
-      body: Container(
+      body: SizedBox(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
           top: false,
@@ -236,7 +236,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 120),
+                      const SizedBox(height: 120),
                       _title("Forget password"),
                       _form(context),
                     ],

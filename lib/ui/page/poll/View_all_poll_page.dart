@@ -6,18 +6,18 @@ import 'package:provider/provider.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 
 class ViewAllPollPage extends StatelessWidget {
-  const ViewAllPollPage({Key? key}) : super(key: key);
+  const ViewAllPollPage({super.key});
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => ViewAllPollPage(),
+      builder: (_) => const ViewAllPollPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("All Polls"),
+      appBar: const CustomAppBar("All Polls"),
       body: Consumer<HomeState>(
         builder: (context, state, child) {
           return Container(

@@ -13,12 +13,11 @@ import 'package:provider/provider.dart';
 
 class AnnouncementWidget extends StatelessWidget {
   const AnnouncementWidget(this.model,
-      {Key? key,
+      {super.key,
         required this.loader,
         required this.onAnnouncementDeleted,
         required this.onAnnouncementEdit,
-        this.actions = const ["Edit", "Delete"]})
-      : super(key: key);
+        this.actions = const ["Edit", "Delete"]});
   final AnnouncementModel model;
   final CustomLoader loader;
   final List<String> actions;
@@ -48,7 +47,7 @@ class AnnouncementWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var isTeacher = context.watch<HomeState>().isTeacher;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: AppTheme.decoration(context)
           .copyWith(color: Theme.of(context).primaryColor),
       child: Stack(
@@ -76,7 +75,7 @@ class AnnouncementWidget extends StatelessWidget {
                     Container(
                       color: Theme.of(context).colorScheme.onPrimary,
                       padding:
-                      EdgeInsets.symmetric(vertical: 8, horizontal: 16) +
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16) +
                           EdgeInsets.only(right: isTeacher ? 10 : 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +83,7 @@ class AnnouncementWidget extends StatelessWidget {
                           UrlText(
                             text: model.description,
                             style: Theme.of(context).textTheme.bodyMedium!,
-                            urlStyle: TextStyle(
+                            urlStyle: const TextStyle(
                               color: Colors.blue,
                               decoration: TextDecoration.underline,
                             ),
@@ -92,11 +91,11 @@ class AnnouncementWidget extends StatelessWidget {
                               // Handle hashtag press
                             },
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           if (model.image.isNotEmpty) ...[
                             CachedNetworkImage(
                                 imageUrl: model.image, height: 120),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                           ],
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -104,8 +103,8 @@ class AnnouncementWidget extends StatelessWidget {
                               Image.asset(
                                   Images.getFileTypeIcon(model.file),
                                   height: 20),
-                              SizedBox(width: 8),
-                              RotatedBox(
+                              const SizedBox(width: 8),
+                              const RotatedBox(
                                 quarterTurns: 1,
                                 child: Icon(Icons.attach_file_outlined),
                               )

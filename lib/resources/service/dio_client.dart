@@ -6,12 +6,12 @@ import 'package:gyansagar_frontend/resources/exceptions/exceptions.dart';
 
 class DioClient {
   final Dio _dio;
-  final String? baseEndpoint; // Make nullable
+  final String? baseEndpoint;
   final bool logging;
 
   DioClient(
       this._dio, {
-        this.baseEndpoint, // Nullable to avoid null issues
+        this.baseEndpoint,
         this.logging = false,
       }) {
     if (logging) {
@@ -28,14 +28,14 @@ class DioClient {
 
   Future<Response<T>> get<T>(
       String endpoint, {
-        Options? options, // Make nullable
-        String? fullUrl, // Make nullable
-        Map<String, dynamic>? queryParameters, // Explicitly type
+        Options? options,
+        String? fullUrl,
+        Map<String, dynamic>? queryParameters,
       }) async {
     try {
       var isConnected = await hasInternetConnection();
       if (!isConnected) {
-        throw SocketException("Please check your internet connection");
+        throw const SocketException("Please check your internet connection");
       }
       return await _dio.get(
         fullUrl ?? '$baseEndpoint$endpoint',
@@ -50,7 +50,7 @@ class DioClient {
   Future<Response<T>> post<T>(
       String endpoint, {
         dynamic data,
-        Options? options, // Make nullable
+        Options? options,
       }) async {
     try {
       return await _dio.post(
@@ -66,7 +66,7 @@ class DioClient {
   Future<Response<T>> delete<T>(
       String endpoint, {
         dynamic data,
-        Options? options, // Make nullable
+        Options? options,
       }) async {
     try {
       return await _dio.delete(
@@ -81,18 +81,38 @@ class DioClient {
 
   Map<String, dynamic> getJsonBody<T>(Response<T> response) {
     try {
-      return response.data as Map<String, dynamic>;
-    } on Exception catch (e, stackTrace) {
-      debugPrint(stackTrace.toString());
+      // Log the response body
+      print('Response body: ${response.data}');
+
+      if (response.data is String) {
+        // Try to parse the string as JSON
+        return jsonDecode(response.data as String) as Map<String, dynamic>;
+      } else if (response.data is Map<String, dynamic>) {
+        return response.data as Map<String, dynamic>;
+      } else {
+        throw Exception('Unexpected response type');
+      }
+    } catch (e) {
+      print('Error parsing JSON body: $e');
       throw Exception('Bad body format');
     }
   }
 
   List<dynamic> getJsonBodyList<T>(Response<T> response) {
     try {
-      return response.data as List<dynamic>;
-    } on Exception catch (e, stackTrace) {
-      debugPrint(stackTrace.toString());
+      // Log the response body
+      print('Response body: ${response.data}');
+
+      if (response.data is String) {
+        // Try to parse the string as JSON
+        return jsonDecode(response.data as String) as List<dynamic>;
+      } else if (response.data is List<dynamic>) {
+        return response.data as List<dynamic>;
+      } else {
+        throw Exception('Unexpected response type');
+      }
+    } catch (e) {
+      print('Error parsing JSON body: $e');
       throw SchemeConsistencyException('Bad body format');
     }
   }

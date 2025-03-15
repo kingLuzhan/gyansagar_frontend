@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Ploader extends StatelessWidget {
   final double stroke;
 
-  const Ploader({Key? key, this.stroke = 4}) : super(key: key);
+  const Ploader({super.key, this.stroke = 4});
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -14,7 +14,7 @@ class Ploader extends StatelessWidget {
         valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
         strokeWidth: stroke,
       )
-          : CupertinoActivityIndicator(),
+          : const CupertinoActivityIndicator(),
     );
   }
 }
@@ -22,7 +22,7 @@ class Ploader extends StatelessWidget {
 class PCLoader extends StatelessWidget {
   final double stroke;
 
-  const PCLoader({Key? key, this.stroke = 1}) : super(key: key);
+  const PCLoader({super.key, this.stroke = 1});
   @override
   Widget build(BuildContext context) {
     return Container(

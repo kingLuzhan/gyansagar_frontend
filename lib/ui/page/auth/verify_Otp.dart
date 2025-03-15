@@ -9,7 +9,7 @@ import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 import 'package:provider/provider.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
-  VerifyOtpScreen({Key? key, required this.onSucess}) : super(key: key);
+  const VerifyOtpScreen({super.key, required this.onSucess});
   final Function onSucess;
   static MaterialPageRoute getRoute({required Function onSucess}) {
     return MaterialPageRoute(
@@ -55,7 +55,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
 
   Widget _title(String text) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 8,
         left: 16,
       ),
@@ -82,7 +82,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Theme.of(context).dividerColor,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 5)
             ]),
       ),
@@ -126,11 +126,11 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     final state = Provider.of<AuthState>(context, listen: false);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.symmetric(vertical: 32) + const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
@@ -142,9 +142,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Image.asset(AppConfig.of(context)?.config.appIcon ?? '', height: 150),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               "Please enter OTP we’ve sent you on ${state.email ?? state.mobile}",
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -152,13 +152,13 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               ),
               textAlign: TextAlign.center,
             ).hP16,
-            SizedBox(height: 10),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
+            const SizedBox(height: 10),
             Consumer<AuthState>(
               builder: (context, state, child) {
                 return Container(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: OTPTextField(
                     clearOTP: true,
                     onSubmitted: (val) {
@@ -168,7 +168,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 );
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: PFlatButton(
@@ -179,7 +179,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                     _submit(context);
                   },
                 )),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -191,7 +191,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: PColors.white,
-      body: Container(
+      body: SizedBox(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
           top: false,
@@ -204,7 +204,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 120),
+                      const SizedBox(height: 120),
                       _title("Verify OTP"),
                       _form(context),
                     ],

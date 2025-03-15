@@ -8,22 +8,22 @@ class UrlText extends StatelessWidget {
   final TextStyle urlStyle;
   final Function(String) onHashTagPressed;
 
-  UrlText({
-    Key? key,
+  const UrlText({
+    super.key,
     required this.text,
     required this.style,
     required this.urlStyle,
     required this.onHashTagPressed,
-  }) : super(key: key);
+  });
 
   List<InlineSpan> getTextSpans() {
     List<InlineSpan> widgets = [];
     RegExp reg = RegExp(
         r"([#])\w+| [@]\w+|(https?|ftp|file|#)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]*");
-    Iterable<Match> _matches = reg.allMatches(text);
+    Iterable<Match> matches = reg.allMatches(text);
     List<_ResultMatch> resultMatches = [];
     int start = 0;
-    for (Match match in _matches) {
+    for (Match match in matches) {
       if (match.group(0)!.isNotEmpty) {
         if (start != match.start) {
           _ResultMatch result1 = _ResultMatch();
@@ -70,10 +70,8 @@ class UrlText extends StatelessWidget {
 
 class _LinkTextSpan extends TextSpan {
   final Function(String) onHashTagPressed;
-  _LinkTextSpan({TextStyle? style, required String text, required this.onHashTagPressed})
+  _LinkTextSpan({super.style, required String super.text, required this.onHashTagPressed})
       : super(
-      style: style,
-      text: text,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           if ((text.substring(0, 1).contains("#") ||

@@ -6,7 +6,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 
 class QuizResultPage extends StatelessWidget {
-  const QuizResultPage({Key? key, required this.model, required this.timeTaken}) : super(key: key);
+  const QuizResultPage({super.key, required this.model, required this.timeTaken});
   final QuizDetailModel model;
   final String timeTaken;
 
@@ -40,18 +40,18 @@ class QuizResultPage extends StatelessWidget {
     final percent = correct * 100 / total;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffF7506A),
-        leading: SizedBox(),
+        backgroundColor: const Color(0xffF7506A),
+        leading: const SizedBox(),
         title: Text("Result", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 26),
+              const SizedBox(height: 26),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -67,12 +67,12 @@ class QuizResultPage extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(height: 26),
+              const SizedBox(height: 26),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _secondaryButton(context, Images.correct, "Correct", "$correct/$total"),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   _secondaryButton(context, Images.wrong, "Wrong", "$wrong/$total"),
                 ],
               ).vP8,
@@ -80,13 +80,13 @@ class QuizResultPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _secondaryButton(context, Images.skipped, "Skipped", "$skipped/$total"),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   _secondaryButton(context, Images.timer, "Time taken", timeTaken),
                 ],
               ).vP8,
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: AppTheme.outlinePrimary(context),
                 width: double.infinity,
                 alignment: Alignment.center,
@@ -97,7 +97,7 @@ class QuizResultPage extends StatelessWidget {
               ).ripple(() {
                 Navigator.push(context, QuizSolutionPage.getRoute(model));
               }),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               PFlatButton(
                 label: "Go to home",
                 onPressed: () {

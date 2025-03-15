@@ -9,12 +9,13 @@ import 'package:gyansagar_frontend/ui/page/common/splash.dart';
 void main() async {
   final config = Configs.devConfig();
 
-  setUpDependency(config);
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await setUpDependency(config);
   final configuredApp = AppConfig(
     config: config,
-    child: PensilApp(home: SplashPage()),
+    child: const GyansagarApp(home: SplashPage()),
   );
   runApp(configuredApp);
 }

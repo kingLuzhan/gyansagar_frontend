@@ -16,11 +16,10 @@ import 'package:provider/provider.dart';
 
 class BatchVideoCard extends StatelessWidget {
   const BatchVideoCard(
-      {Key? key,
+      {super.key,
         required this.model,
         required this.loader,
-        this.actions = const ["Edit", "Delete"]})
-      : super(key: key);
+        this.actions = const ["Edit", "Delete"]});
 
   final VideoModel model;
   final CustomLoader loader;
@@ -30,16 +29,16 @@ class BatchVideoCard extends StatelessWidget {
     // return empty widget if space has no pictures
     if (!(url.contains("jpg") || url.contains("png"))) {
       return ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(5),
           bottomLeft: Radius.circular(5),
         ),
         child: Container(
           alignment: Alignment.center,
-          color: Color(0xffeaeaea),
+          color: const Color(0xffeaeaea),
           child: url.isEmpty
               ? Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(Images.videoPlay),
                     fit: BoxFit.cover)),
@@ -50,9 +49,9 @@ class BatchVideoCard extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(),
               borderRadius: BorderRadius.circular(30),
-              color: Color(0xffffffff),
+              color: const Color(0xffffffff),
             ),
-            child: Center(child: Icon(Icons.play_arrow)),
+            child: const Center(child: Icon(Icons.play_arrow)),
           ),
         ),
       );
@@ -60,7 +59,7 @@ class BatchVideoCard extends StatelessWidget {
 
     return // Picture
       ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
         child: Image.network(
           url,
@@ -113,7 +112,7 @@ class BatchVideoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: AppTheme.decoration(context),
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       height: 100,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +139,7 @@ class BatchVideoCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleSmall,
                         maxLines: 3,
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[

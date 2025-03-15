@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:better_player/better_player.dart';
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
@@ -9,7 +9,7 @@ class VideoPlayerPage2 extends StatefulWidget {
   final String path;
   final String title;
 
-  const VideoPlayerPage2({Key? key, required this.path, required this.title}) : super(key: key);
+  const VideoPlayerPage2({super.key, required this.path, required this.title});
 
   static MaterialPageRoute getRoute(String path, {required String title}) {
     return MaterialPageRoute(
@@ -28,7 +28,7 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
   late BetterPlayerController _betterPlayerController;
   final StreamController<bool> _fileVideoStreamController =
   StreamController.broadcast();
-  bool _fileVideoShown = false;
+  final bool _fileVideoShown = false;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
       ),
     );
     _betterPlayerController = BetterPlayerController(
-      BetterPlayerConfiguration(
+      const BetterPlayerConfiguration(
         controlsConfiguration: BetterPlayerControlsConfiguration(
           enableProgressText: true,
           enablePlaybackSpeed: true,
@@ -55,7 +55,7 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
           showControlsOnInitialize: false,
         ),
         fit: BoxFit.contain,
-        startAt: const Duration(milliseconds: 1000),
+        startAt: Duration(milliseconds: 1000),
         looping: true,
         autoPlay: true,
         deviceOrientationsAfterFullScreen: [
@@ -92,7 +92,7 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
       future: _setupDefaultVideoData(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else {

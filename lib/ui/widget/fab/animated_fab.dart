@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AnimatedFabButton extends StatelessWidget {
   const AnimatedFabButton({
-    Key? key,
+    super.key,
     required this.showFabButton,
     required this.children,
-  }) : super(key: key);
+  });
 
   final ValueNotifier<bool> showFabButton;
   final List<Widget> children;
@@ -26,9 +26,9 @@ class AnimatedFabButton extends StatelessWidget {
         return AnimatedPositioned(
           bottom: 16 + 60.0,
           right: 25,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           child: AnimatedOpacity(
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             opacity: value ? 1 : 0,
             child: _floatingActionButtonColumn(),
           ),

@@ -96,7 +96,7 @@ class BatchTimeSlotModel extends Equatable {
   }
 
   String toShortDay() {
-    switch (this.day) {
+    switch (day) {
       case "Monday":
         return "Mon";
       case "Tuesday":

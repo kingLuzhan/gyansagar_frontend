@@ -9,10 +9,10 @@ class BatchTimeSlotWidget extends StatelessWidget {
   final int indexValue;
 
   const BatchTimeSlotWidget({
-    Key? key,
+    super.key,
     required this.model,
     required this.indexValue,
-  }) : super(key: key);
+  });
 
   Widget _addClass(BuildContext context) {
     final theme = Theme.of(context);
@@ -21,9 +21,9 @@ class BatchTimeSlotWidget extends StatelessWidget {
         Expanded(
             child: Container(
               height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: AppTheme.outline(context),
-              child: Container(
+              child: SizedBox(
                 width: (AppTheme.fullWidth(context) / 3) - 60,
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
@@ -37,18 +37,18 @@ class BatchTimeSlotWidget extends StatelessWidget {
                                 alignment: Alignment.centerRight,
                                 child: SizedBox(
                                   width: 15,
-                                  child: Icon(Icons.arrow_drop_up, size: 30).pB(10),
+                                  child: const Icon(Icons.arrow_drop_up, size: 30).pB(10),
                                 )),
                             Align(
                                 alignment: Alignment.centerRight,
                                 child: SizedBox(
                                   width: 15,
-                                  child: Icon(Icons.arrow_drop_down, size: 30).pT(10),
+                                  child: const Icon(Icons.arrow_drop_down, size: 30).pT(10),
                                 ))
                           ],
                         )),
                     isExpanded: true,
-                    underline: SizedBox(),
+                    underline: const SizedBox(),
                     value: model.day,
                     items: <String>['Mon', 'Tue', 'Wed', 'Thu', "Fri", "Sat", "Sun"]
                         .map((String value) {
@@ -69,7 +69,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
                 ),
               ),
             )),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Expanded(
           child: _day(context, model.startTime, isStartTime: true,
               onPressed: () async {
@@ -79,7 +79,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
                     .updateTimeSlots(model, indexValue);
               }),
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Expanded(
           child: _day(context, model.endTime, isStartTime: false,
               onPressed: () async {
@@ -89,7 +89,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
                     .updateTimeSlots(model, indexValue);
               }),
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         )
       ],
@@ -101,14 +101,12 @@ class BatchTimeSlotWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       height: 50,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: decoration(context, isStartTime),
-      child: child != null
-          ? child
-          : Row(
+      child: child ?? Row(
         children: <Widget>[
           Text(text),
-          Spacer(),
+          const Spacer(),
           SizedBox(
             height: 50,
             child: Stack(
@@ -119,18 +117,18 @@ class BatchTimeSlotWidget extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: SizedBox(
                       width: 15,
-                      child: Icon(Icons.arrow_drop_up, size: 30).pB(10),
+                      child: const Icon(Icons.arrow_drop_up, size: 30).pB(10),
                     )),
                 Align(
                     alignment: Alignment.centerRight,
                     child: SizedBox(
                       width: 15,
-                      child: Icon(Icons.arrow_drop_down, size: 30).pT(10),
+                      child: const Icon(Icons.arrow_drop_down, size: 30).pT(10),
                     ))
               ],
             ),
           ),
-          SizedBox(width: 4)
+          const SizedBox(width: 4)
         ],
       ),
     ).ripple(onPressed);

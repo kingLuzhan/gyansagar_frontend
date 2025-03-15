@@ -11,15 +11,15 @@ class UsernameWidget extends StatefulWidget {
   final TextStyle textStyle;
   final File? fileImage;
 
-  UsernameWidget({
-    Key? key,
+  const UsernameWidget({
+    super.key,
     required this.name,
     this.radius = 20.0, // Default value for radius
     this.backGroundColor = Colors.white,
     this.textStyle = const TextStyle(color: Colors.black),
     this.avatarUrl = '', // Default value for avatarUrl
     this.fileImage,
-  }) : super(key: key);
+  });
 
   @override
   _UsernameWidgetState createState() => _UsernameWidgetState();
@@ -35,15 +35,9 @@ class _UsernameWidgetState extends State<UsernameWidget> {
       if (splitname.length == 1) {
         return splitname[0].substring(0, 1);
       } else if (splitname.length > 1) {
-        return splitname[0].substring(0, 1).toUpperCase() +
-            ' ' +
-            splitname[1].substring(0, 1).toUpperCase();
+        return '${splitname[0].substring(0, 1).toUpperCase()} ${splitname[1].substring(0, 1).toUpperCase()}';
       } else if (splitname.length == 3) {
-        return splitname[0].substring(0, 1) +
-            ' ' +
-            splitname[1].substring(0, 1) +
-            ' ' +
-            splitname[2].substring(0, 1);
+        return '${splitname[0].substring(0, 1)} ${splitname[1].substring(0, 1)} ${splitname[2].substring(0, 1)}';
       } else {
         return '';
       }
@@ -56,7 +50,7 @@ class _UsernameWidgetState extends State<UsernameWidget> {
       fit: BoxFit.cover,
       imageUrl: path,
       placeholder: (context, string) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },

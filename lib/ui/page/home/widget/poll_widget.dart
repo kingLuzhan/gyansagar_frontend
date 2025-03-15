@@ -8,11 +8,11 @@ import 'package:provider/provider.dart';
 
 class PollWidget extends StatelessWidget {
   const PollWidget({
-    Key? key,
+    super.key,
     required this.model,
     required this.loader,
     this.hideFinishButton = true,
-  }) : super(key: key);
+  });
   final PollModel model;
   final CustomLoader loader;
   final bool hideFinishButton;
@@ -28,7 +28,7 @@ class PollWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
       child: isLoading
-          ? SizedBox(
+          ? const SizedBox(
         height: 25,
         width: 25,
         child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
@@ -43,9 +43,9 @@ class PollWidget extends StatelessWidget {
 
   Widget _option(BuildContext context, String e) {
     return Container(
-      margin: EdgeInsets.only(top: 5),
+      margin: const EdgeInsets.only(top: 5),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: model.selection?.choice == e
             ? AppTheme.outlineSucess(context)
             .copyWith(color: PColors.green.withOpacity(.3))
@@ -97,7 +97,7 @@ class PollWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = Provider.of<HomeState>(context, listen: false);
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: AppTheme.decoration(context),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -108,7 +108,7 @@ class PollWidget extends StatelessWidget {
               Text(model.question).pL(16).extended,
               if (context.watch<HomeState>().isTeacher)
                 TileActionWidget(
-                  list: ["End Poll", "Delete"],
+                  list: const ["End Poll", "Delete"],
                   onCustomIconPressed: () async {
                     loader.showLoader(context);
                     await context.read<HomeState>().expirePoll(model.id);
@@ -122,10 +122,10 @@ class PollWidget extends StatelessWidget {
                   onEdit: () {},
                 )
               else
-                SizedBox(width: 16)
+                const SizedBox(width: 16)
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Column(
               children: model.options.map((e) {
                 return _option(context, e).hP16;
@@ -134,14 +134,14 @@ class PollWidget extends StatelessWidget {
               !model.isVoted(state.userId) &&
               model.selection?.isSelected == true &&
               !model.endTime.isBefore(DateTime.now())) ...[
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _secondaryButton(context,
                 isLoading: model.selection?.loading == true,
                 label: "Submit", onPressed: () {
                   submitVote(context, model.selection?.choice ?? '');
                 })
           ],
-          SizedBox(height: 16)
+          const SizedBox(height: 16)
         ],
       ),
     );

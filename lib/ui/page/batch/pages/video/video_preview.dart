@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ThumbnailPreview extends StatelessWidget {
-  const ThumbnailPreview({Key? key, required this.title, required this.url}) : super(key: key);
+  const ThumbnailPreview({super.key, required this.title, required this.url});
   final String title;
   final String url;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: ValueKey(4),
-      padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
+      key: const ValueKey(4),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 20),
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -47,12 +47,12 @@ class ThumbnailPreview extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Text(
                   title,
                   softWrap: false,
                   overflow: TextOverflow.fade,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ],

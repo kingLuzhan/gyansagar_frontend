@@ -14,16 +14,16 @@ class AppTheme {
         primaryColor: PColors.primary,
         primaryColorLight: PColors.primaryLight,
         cardColor: PColors.cardColor,
-        iconTheme: IconThemeData(color: PColors.gray),
+        iconTheme: const IconThemeData(color: PColors.gray),
         // textTheme: TextThemes.lightTextTheme,
         appBarTheme: AppBarTheme(
           color: PColors.appBarColor,
           elevation: 1,
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: PColors.black,
-          ), systemOverlayStyle: SystemUiOverlayStyle.dark, toolbarTextStyle: TextTheme(
+          ), systemOverlayStyle: SystemUiOverlayStyle.dark, toolbarTextStyle: const TextTheme(
             titleLarge: TextStyle(color: PColors.black, fontSize: 20),
-          ).bodyMedium, titleTextStyle: TextTheme(
+          ).bodyMedium, titleTextStyle: const TextTheme(
             titleLarge: TextStyle(color: PColors.black, fontSize: 20),
           ).titleLarge,
         ), colorScheme: ThemeData.dark().colorScheme.copyWith(
@@ -54,7 +54,7 @@ class AppTheme {
   static BoxDecoration decoration(context) => BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Theme.of(context).colorScheme.onPrimary,
-            boxShadow: <BoxShadow>[
+            boxShadow: const <BoxShadow>[
               BoxShadow(
                   color: Color(0xffeaeaea),
                   blurRadius: 10,

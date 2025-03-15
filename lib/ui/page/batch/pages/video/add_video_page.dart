@@ -19,11 +19,11 @@ class AddVideoPage extends StatefulWidget {
   final VideoState state;
   final VideoModel videoModel;
   const AddVideoPage({
-    Key? key,
+    super.key,
     required this.subject,
     required this.state,
     required this.videoModel,
-  }) : super(key: key);
+  });
 
   static MaterialPageRoute getRoute(
       {required String subject, required String batchId, required VideoState state}) {
@@ -113,7 +113,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
     final theme = Theme.of(context);
     return OutlinedButton.icon(
         onPressed: onPressed,
-        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+        icon: const Icon(Icons.add_circle, color: PColors.primary, size: 17),
         label: Text(
           label,
           style: theme.textTheme.labelLarge
@@ -178,8 +178,8 @@ class _AddVideoPageState extends State<AddVideoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: Color(0xffeeeeee),
-        appBar: CustomAppBar("Add Video"),
+        backgroundColor: const Color(0xffeeeeee),
+        appBar: const CustomAppBar("Add Video"),
         body: Container(
           child: SingleChildScrollView(
             child: Form(
@@ -188,11 +188,11 @@ class _AddVideoPageState extends State<AddVideoPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    color: Color(0xfffafafa),
-                    padding: EdgeInsets.only(left: 16, right: 16),
+                    color: const Color(0xfffafafa),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         PTextField(
                           type: FieldType.text,
                           controller: _title,
@@ -201,7 +201,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                           maxLines: 1,
                           height: 70, // Provide a non-null value
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         PTextField(
                             type: FieldType.optional,
                             controller: _description,
@@ -209,8 +209,8 @@ class _AddVideoPageState extends State<AddVideoPage> {
                             hintText: "Enter here",
                             maxLines: 1,
                             height: 70, // Provide a non-null value
-                            padding: EdgeInsets.symmetric(vertical: 16)),
-                        SizedBox(height: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 16)),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -220,20 +220,20 @@ class _AddVideoPageState extends State<AddVideoPage> {
                         Row(
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(right: 4, top: 10),
+                              padding: const EdgeInsets.only(right: 4, top: 10),
                               child: PChip(
                                 label: widget.subject,
                                 backgroundColor:
                                 PColors.randomColor(widget.subject),
                                 borderColor: Colors.transparent,
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 isCrossIcon: false,
                                 onDeleted: () {},
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -247,8 +247,8 @@ class _AddVideoPageState extends State<AddVideoPage> {
                   ).p16,
                   Container(
                     width: AppTheme.fullWidth(context),
-                    margin: EdgeInsets.symmetric(horizontal: 16),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     decoration: AppTheme.outline(context),
                     child: Column(
                       children: <Widget>[
@@ -273,7 +273,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                         width: AppTheme.fullWidth(context),
                         child: Column(
                           children: <Widget>[
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(children: <Widget>[
                               SizedBox(
                                   width: 50,
@@ -288,26 +288,26 @@ class _AddVideoPageState extends State<AddVideoPage> {
                               ).extended,
                               IconButton(
                                   padding: EdgeInsets.zero,
-                                  icon: Icon(Icons.cancel),
+                                  icon: const Icon(Icons.cancel),
                                   onPressed: () {
                                     state.removeFile();
                                   })
                             ]),
                             Container(
                               height: 5,
-                              margin: EdgeInsets.symmetric(horizontal: 16),
+                              margin: const EdgeInsets.symmetric(horizontal: 16),
                               width: AppTheme.fullWidth(context),
                               decoration: BoxDecoration(
-                                  color: Color(0xff0CC476),
+                                  color: const Color(0xff0CC476),
                                   borderRadius: BorderRadius.circular(20)),
                             )
                           ],
                         ),
                       ).vP8;
-                                          return SizedBox();
+                                          return const SizedBox();
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Consumer<VideoState>(
                     builder: (context, state, child) {
                       return SizedBox(
@@ -317,7 +317,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                           url: state.thumbnailUrl,
                         ),
                       );
-                                          return SizedBox();
+                                          return const SizedBox();
                     },
                   ),
                   SizedBox(
@@ -333,7 +333,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                       ).p16;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

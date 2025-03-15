@@ -18,7 +18,7 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
       )
     ];
   }
@@ -49,8 +49,8 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
         return ListView.builder(
           itemCount: templist.length,
           itemBuilder: (context, index) => Container(
-            margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Theme.of(context).cardColor,
@@ -58,7 +58,7 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
             child: ListTile(
               title: Text(
                 templist[index].name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                 ),
@@ -66,7 +66,7 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
               ),
               subtitle: Text(templist[index].mobile ?? "N/A"),
               trailing: isSelected(templist[index], listenableList)
-                  ? Icon(Icons.check_box)
+                  ? const Icon(Icons.check_box)
                   : null,
               onTap: () {
                 var model = templist[index];

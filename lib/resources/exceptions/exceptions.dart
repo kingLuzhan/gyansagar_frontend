@@ -66,8 +66,7 @@ class UnauthorisedException extends HttpException {
 }
 
 class ResourceNotFoundException extends HttpException {
-  ResourceNotFoundException(String message, {Response<dynamic>? response})
-      : super(message);
+  ResourceNotFoundException(super.message, {Response<dynamic>? response});
 }
 
 class InvalidInputException extends HttpException {
@@ -75,10 +74,9 @@ class InvalidInputException extends HttpException {
 }
 
 class ApiUnauthorizedException extends HttpException {
-  ApiUnauthorizedException(String message) : super(message);
+  ApiUnauthorizedException(super.message);
 }
 
 class UnprocessableException extends HttpException {
-  UnprocessableException(String message, {Response<dynamic>? response})
-      : super(message);
+  UnprocessableException(super.message, {Response<dynamic>? response});
 }

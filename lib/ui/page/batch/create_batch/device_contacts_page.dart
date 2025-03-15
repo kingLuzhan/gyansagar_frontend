@@ -1,4 +1,5 @@
-import 'package:contacts_service/contacts_service.dart';
+import 'dart:typed_data';
+import 'package:fast_contacts/fast_contacts.dart';
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/ui/widget/form/p_textfield.dart';
 import 'package:gyansagar_frontend/ui/widget/p_button.dart';
@@ -7,9 +8,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 class AllContactsPage extends StatefulWidget {
   const AllContactsPage({
-    Key? key,
+    super.key,
     required this.selectedFromDeviceContact,
-  }) : super(key: key);
+  });
 
   final List<Contact> selectedFromDeviceContact;
 
@@ -30,7 +31,7 @@ class _AllContactsPageState extends State<AllContactsPage> {
   late List<Contact> _contacts;
   final List<Contact> _selectedContacts = [];
   late List<Contact> selectedFromDeviceContact;
-  bool _isUploading = false;
+  final bool _isUploading = false;
   late TextEditingController search;
 
   @override
@@ -62,7 +63,7 @@ class _AllContactsPageState extends State<AllContactsPage> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
             onPressed: () async {
               Navigator.pop(context, _selectedContacts);
             },
@@ -71,10 +72,10 @@ class _AllContactsPageState extends State<AllContactsPage> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 8,
           ),
-          child: _contacts != null
+          child: _contacts.isNotEmpty
               ? Column(
             children: [
               PTextField(
@@ -91,21 +92,22 @@ class _AllContactsPageState extends State<AllContactsPage> {
                 physics: const ClampingScrollPhysics(),
                 itemCount: _contacts.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final List<String> _contactsList = [];
+                  final List<String> contactsList = [];
 
-                  final Contact _contact = _contacts.elementAt(index);
-                  if (_contact.phones!.isNotEmpty) {
-                    _contact.phones!
-                        .map((i) => _contactsList.add(i.value ?? 'Null'))
+                  final Contact contact = _contacts.elementAt(index);
+                  if (contact.phones.isNotEmpty) {
+                    contact.phones
+                        .map((i) => contactsList.add(i.number))
                         .toList();
                   } else {
-                    _contactsList.add('Null');
+                    contactsList.add('Null');
                   }
 
                   bool isSelected = _selectedContacts.any((model) =>
-                  model.identifier == _contact.identifier &&
-                      model.phones!.map((e) => e.value).join() == _contact.phones!.map((e) => e.value).join() &&
-                      model.displayName == _contact.displayName);
+                  model.id == contact.id &&
+                      model.phones.map((e) => e.number).join() ==
+                          contact.phones.map((e) => e.number).join() &&
+                      model.displayName == contact.displayName);
 
                   return Card(
                     child: InkWell(
@@ -118,25 +120,33 @@ class _AllContactsPageState extends State<AllContactsPage> {
                             setState(() {
                               if (isSelected) {
                                 _selectedContacts.removeWhere((model) =>
-                                model.identifier ==
-                                    _contact.identifier);
+                                model.id == contact.id);
                                 print(
                                     "removed: list length ${_selectedContacts.length}");
                               } else {
-                                _selectedContacts.add(_contact);
-                                print("print");
+                                _selectedContacts.add(contact);
+                                print("added: list length ${_selectedContacts.length}");
                               }
                             });
                           },
-                          leading: (_contact.avatar != null &&
-                              _contact.avatar!.isNotEmpty)
-                              ? CircleAvatar(
-                              backgroundImage:
-                              MemoryImage(_contact.avatar!))
-                              : CircleAvatar(
-                              child: Text(_contact.initials())),
+                          leading: FutureBuilder<Uint8List?>(
+                            future: FastContacts.getContactImage(contact.id),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.done &&
+                                  snapshot.hasData &&
+                                  snapshot.data != null) {
+                                return CircleAvatar(
+                                  backgroundImage: MemoryImage(snapshot.data!),
+                                );
+                              } else {
+                                return CircleAvatar(
+                                  child: Text(contact.displayName.substring(0, 2).toUpperCase()),
+                                );
+                              }
+                            },
+                          ),
                           title: Text(
-                            _contact.displayName ?? "",
+                            contact.displayName,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
@@ -146,7 +156,9 @@ class _AllContactsPageState extends State<AllContactsPage> {
                                     : Colors.black),
                           ),
                           subtitle: Text(
-                            _contact.phones?.first.value ?? "N/A",
+                            contact.phones.isNotEmpty
+                                ? contact.phones.first.number
+                                : "N/A",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
@@ -172,43 +184,41 @@ class _AllContactsPageState extends State<AllContactsPage> {
   Future<void> _refreshContacts({bool initial = false}) async {
     PermissionStatus permissionStatus = await getContactPermission();
     if (permissionStatus == PermissionStatus.granted) {
-      final contacts = (await ContactsService.getContacts(
-          withThumbnails: false, orderByGivenName: true))
-          .toList();
+      final contacts = await FastContacts.getAllContacts();
 
       if (contacts.isNotEmpty) {
         /// Remove contacts having null contact or Display name
         contacts.removeWhere(
-                (element) => element.phones!.isEmpty || element.displayName == null);
+                (element) => element.phones.isEmpty || element.displayName == '');
 
         /// Apply search
         _contacts = searchTerm.isNotEmpty
             ? contacts.where((contact) {
-          return (contact.displayName ?? contact.givenName ?? "")
-              .toLowerCase()
-              .contains(searchTerm.toLowerCase()) ||
-              contact.phones!.any((element) => element.value!.contains(searchTerm));
+          return (contact.displayName.toLowerCase().contains(searchTerm.toLowerCase())) ||
+              contact.phones
+                  .any((element) => element.number.contains(searchTerm));
         }).toList()
             : contacts;
 
         /// Mark preselected contacts
-        if (initial &&
-            selectedFromDeviceContact.isNotEmpty) {
+        if (initial && selectedFromDeviceContact.isNotEmpty) {
           _selectedContacts.clear();
-          contacts.forEach((contact) {
-            selectedFromDeviceContact.forEach((model) {
-              var isAvailable = model.displayName!.toLowerCase() ==
-                  contact.displayName!.toLowerCase() &&
-                  model.phones!.map((e) => e.value).join() == contact.phones!.map((e) => e.value).join();
+          for (var contact in contacts) {
+            for (var model in selectedFromDeviceContact) {
+              var isAvailable = model.displayName.toLowerCase() ==
+                  contact.displayName.toLowerCase() &&
+                  model.phones.map((e) => e.number).join() ==
+                      contact.phones.map((e) => e.number).join();
               if (isAvailable) {
                 setState(() {
                   /// Check for duplicacy
-                  if (!_selectedContacts.contains(contact))
+                  if (!_selectedContacts.contains(contact)) {
                     _selectedContacts.add(contact);
+                  }
                 });
               }
-            });
-          });
+            }
+          }
         } else {
           print("Access");
         }
@@ -232,7 +242,7 @@ class _SearchDialog extends StatelessWidget {
       elevation: 0.0,
       backgroundColor: Colors.transparent,
       child: Container(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 20,
           bottom: 20,
           left: 100,
@@ -242,11 +252,11 @@ class _SearchDialog extends StatelessWidget {
           color: Colors.white,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 10.0,
-              offset: const Offset(0.0, 10.0),
+              offset: Offset(0.0, 10.0),
             ),
           ],
         ),

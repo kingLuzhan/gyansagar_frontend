@@ -10,8 +10,8 @@ class BatchWidget extends StatelessWidget {
   const BatchWidget(
       this.model, {
         this.isTeacher = true,
-        Key? key,
-      }) : super(key: key);
+        super.key,
+      });
   final BatchModel model;
   final bool isTeacher;
 
@@ -20,7 +20,7 @@ class BatchWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) * .7,
-      margin: EdgeInsets.only(left: 16),
+      margin: const EdgeInsets.only(left: 16),
       decoration: AppTheme.outline(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,19 +28,19 @@ class BatchWidget extends StatelessWidget {
           Text(model.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: (Theme.of(context).textTheme.titleLarge ?? TextStyle())
+              style: (Theme.of(context).textTheme.titleLarge ?? const TextStyle())
                   .copyWith(fontSize: 15, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           PChip(
             label: model.subject,
-            backgroundColor: Color(0xffF67619),
+            backgroundColor: const Color(0xffF67619),
             borderColor: Colors.transparent,
-            style: (theme.textTheme.bodyLarge ?? TextStyle()).copyWith(
+            style: (theme.textTheme.bodyLarge ?? const TextStyle()).copyWith(
                 fontSize: 14, color: theme.colorScheme.onSecondary),
             isCrossIcon: false, // Added isCrossIcon parameter
             onDeleted: () {}, // Added onDeleted parameter
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

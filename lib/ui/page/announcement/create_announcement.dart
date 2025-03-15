@@ -16,12 +16,12 @@ import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreateAnnouncement extends StatefulWidget {
-  CreateAnnouncement({
-    Key? key,
+  const CreateAnnouncement({
+    super.key,
     this.selectedBatch,
     this.announcementModel,
     required this.onAnnouncementCreated,
-  }) : super(key: key);
+  });
 
   final BatchModel? selectedBatch;
   final Function onAnnouncementCreated;
@@ -107,7 +107,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
     final theme = Theme.of(context);
     return OutlinedButton.icon(
         onPressed: onPressed as void Function()?,
-        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+        icon: const Icon(Icons.add_circle, color: PColors.primary, size: 17),
         label: Text(
           label,
           style: theme.textTheme.labelLarge
@@ -186,16 +186,16 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        appBar: CustomAppBar("Create Announcement"),
+        appBar: const CustomAppBar("Create Announcement"),
         body: Container(
-          padding: EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   PTextField(
                     type: FieldType.text, // Changed from Type.text to FieldType.text
                     controller: _title,
@@ -211,9 +211,9 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                     hintText: "Enter here",
                     maxLines: 10,
                     height: 70, // Provide a non-null value
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -235,17 +235,17 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                             children: listenableList
                                 .where((element) => element.isSelected)
                                 .map((e) => Padding(
-                                padding: EdgeInsets.only(right: 4, top: 4),
+                                padding: const EdgeInsets.only(right: 4, top: 4),
                                 child: PChip(
                                   label: e.name,
                                   backgroundColor: Colors.blue, // Example color
                                   isCrossIcon: true,
                                   onDeleted: () {}, // Example callback
-                                  style: TextStyle(fontSize: 12), // Example style
+                                  style: const TextStyle(fontSize: 12), // Example style
                                 )))
                                 .toList());
                       }),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Consumer<AnnouncementState>(
                     builder: (context, state, child) {
                       return Stack(
@@ -253,7 +253,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                           Container(
                             width: AppTheme.fullWidth(context) - 32,
                             height: 230,
-                            margin: EdgeInsets.symmetric(vertical: 16),
+                            margin: const EdgeInsets.symmetric(vertical: 16),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: state.imagefile != null
@@ -281,7 +281,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                       );
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Consumer<AnnouncementState>(
                     builder: (context, state, child) {
                       return PFlatButton(
@@ -291,7 +291,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                       ).p16;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

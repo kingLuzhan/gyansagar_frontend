@@ -11,13 +11,13 @@ class ImageViewer extends StatelessWidget {
     );
   }
 
-  const ImageViewer({Key? key, required this.path}) : super(key: key); // Marked 'key' as nullable and 'path' as required
+  const ImageViewer({super.key, required this.path}); // Marked 'key' as nullable and 'path' as required
   final String path;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(""),
+      appBar: const CustomAppBar(""),
       body: Container(
         child: Center(
           child: InteractiveViewer(

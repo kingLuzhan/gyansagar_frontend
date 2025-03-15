@@ -19,7 +19,7 @@ import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
 
 class TeacherHomePage extends StatefulWidget {
-  const TeacherHomePage({Key? key}) : super(key: key);
+  const TeacherHomePage({super.key});
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(builder: (_) => const TeacherHomePage());
   }
@@ -35,7 +35,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
   bool isOpened = false;
   late AnimationController _animationController;
   late CustomLoader loader;
-  Curve _curve = Curves.easeOut;
+  final Curve _curve = Curves.easeOut;
   late Animation<double> _translateButton;
   late Animation<double> _animateIcon;
   ValueNotifier<bool> showFabButton = ValueNotifier<bool>(false);
@@ -71,10 +71,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
 
   setupAnimations() {
     _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 2000));
+        vsync: this, duration: const Duration(milliseconds: 2000));
     _controller.repeat();
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+    AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
       ..addListener(() {
         setState(() {});
       });
@@ -107,7 +107,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
 
   Widget _floatingActionButtonColumn() {
     return AnimatedOpacity(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       opacity: showFabButton.value ? 1 : 0,
       child: Column(
         children: <Widget>[
@@ -169,7 +169,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
 
   Widget _title(String text) {
     return Padding(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 8,
           left: 16,
         ),
@@ -182,7 +182,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
       floatingButtons: _floatingActionButtonColumn(),
       floatingActionButton: _floatingActionButton(),
       showFabButton: showFabButton,
-      slivers: [],
+      slivers: const [],
       onNotificationTap: () {
         print("Notification");
       },
@@ -203,7 +203,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                         .pT(10),
                   );
                 } else {
-                  return SliverToBoxAdapter(child: SizedBox.shrink());
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
               },
             ),
@@ -212,10 +212,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                 delegate: SliverChildListDelegate(
                   [
                     _title("Batches"),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Container(
                       height: 100,
-                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: AppTheme.outline(context),
                       width: AppTheme.fullWidth(context),
                       alignment: Alignment.center,
@@ -229,13 +229,13 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                                   ?.copyWith(
                                 color: PColors.gray,
                               )),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text("Tap on below fab button to create new",
                               style: Theme.of(context).textTheme.bodyLarge),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20)
+                    const SizedBox(height: 20)
                   ],
                 ),
               ),
@@ -245,8 +245,8 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _title("You have ${state.batchList.length} Batches"),
-                    SizedBox(height: 5),
-                    Container(
+                    const SizedBox(height: 5),
+                    SizedBox(
                       height: 150,
                       width: AppTheme.fullWidth(context),
                       child: ListView.builder(
@@ -257,11 +257,11 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                         },
                       ),
                     ),
-                    SizedBox(height: 10)
+                    const SizedBox(height: 10)
                   ],
                 ),
               ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: Column(
                 children: [
                   SizedBox(height: 16),
@@ -297,7 +297,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                 childCount: state.polls.length + 1,
               ),
             ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: Divider(),
             ),
             if (state.announcementList.isNotEmpty)

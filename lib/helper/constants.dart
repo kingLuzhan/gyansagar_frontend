@@ -20,9 +20,9 @@ class Constants {
 
   static const String defaultUploadEndpoint = 'upload'; // Add this line
 
-  static const String studentBatch = student + "/my-batches";
-  static const String studentAnnouncements = student + "/my-announcements";
-  static const String studentPolls = student + "/my-polls";
+  static const String studentBatch = "$student/my-batches";
+  static const String studentAnnouncements = "$student/my-announcements";
+  static const String studentPolls = "$student/my-polls";
 
   static getMyBatches(bool isStudent) {
     return isStudent ? studentBatch : Constants.batch;

@@ -8,7 +8,7 @@ import 'package:gyansagar_frontend/ui/widget/p_loader.dart'; // Ensure this impo
 import 'package:provider/provider.dart';
 
 class BatchVideosPage extends StatefulWidget {
-  const BatchVideosPage({Key? key, required this.model, required this.loader}) : super(key: key);
+  const BatchVideosPage({super.key, required this.model, required this.loader});
   final BatchModel model;
   final CustomLoader loader;
   static MaterialPageRoute getRoute(BatchModel model, CustomLoader loader) {
@@ -32,12 +32,12 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
       child: Consumer<VideoState>(
         builder: (context, state, child) {
           if (state.isBusy) {
-            return Ploader();
+            return const Ploader();
           }
           if (state.list.isEmpty) {
             return Container(
               height: 100,
-              margin: EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               width: AppTheme.fullWidth(context),
               alignment: Alignment.center,
               child: Column(
@@ -48,7 +48,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: PColors.gray,
                       )),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("No video is uploaded yet for this batch!!",
                       style: Theme.of(context).textTheme.bodyLarge,
                       textAlign: TextAlign.center),
@@ -57,8 +57,8 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
             );
           }
           return ListView.builder(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             itemCount: state.list.length,
             itemBuilder: (_, index) {
               return BatchVideoCard(

@@ -5,14 +5,14 @@ import 'package:provider/provider.dart';
 
 class OTPTextField extends StatefulWidget {
   const OTPTextField({
-    Key? key,
+    super.key,
     required this.onSubmitted,
     this.clearOTP = false,
     this.otp1 = "",
     this.otp2 = "",
     this.otp3 = "",
     this.otp4 = "",
-  }) : super(key: key);
+  });
 
   final String otp1;
   final String otp2;
@@ -90,7 +90,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
     if (value.length == 1) {
       focusNode.requestFocus();
     }
-    if (value.length == 0) {
+    if (value.isEmpty) {
       FocusScope.of(context).previousFocus();
     }
   }
@@ -121,7 +121,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
               changeFocus(value, otp2FocusNode);
             },
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           CustomOTPTextField(
             controller: _otp2,
             focusNode: otp2FocusNode,
@@ -129,7 +129,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
               changeFocus(value, otp3FocusNode);
             },
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           CustomOTPTextField(
             controller: _otp3,
             focusNode: otp3FocusNode,
@@ -137,7 +137,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
               changeFocus(value, otp4FocusNode);
             },
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           CustomOTPTextField(
             controller: _otp4,
             focusNode: otp4FocusNode,
@@ -159,12 +159,12 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
 class CustomOTPTextField extends StatelessWidget {
   const CustomOTPTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.focusNode,
     required this.onChanged,
     this.textInputAction = TextInputAction.next,
-  }) : super(key: key);
+  });
 
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -183,7 +183,7 @@ class CustomOTPTextField extends StatelessWidget {
         cursorHeight: 20,
         keyboardType: TextInputType.phone,
         textInputAction: textInputAction,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           border: OutlineInputBorder(),
         ),
         inputFormatters: [

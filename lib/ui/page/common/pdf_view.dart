@@ -5,7 +5,7 @@ import 'package:gyansagar_frontend/helper/utility.dart';
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 
 class PdfViewPage extends StatefulWidget {
-  const PdfViewPage({Key? key, required this.path, required this.title}) : super(key: key);
+  const PdfViewPage({super.key, required this.path, required this.title});
   final String path;
   final String title;
 
@@ -40,7 +40,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
     } catch (error) {
       log(error.toString(), name: "PdfViwer");
       Utility.displaySnackbar(context, key: scaffoldKey, msg: "File not found on server");
-      Future.delayed(Duration(seconds: 1)).then((value) => Navigator.pop(context));
+      Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.pop(context));
     }
   }
 
@@ -61,7 +61,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
       ),
       body: Center(
         child: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : PDFViewer(
           document: document,
           zoomSteps: 1,
@@ -75,13 +75,13 @@ class _PdfViewPageState extends State<PdfViewPage> {
                 alignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.first_page),
+                    icon: const Icon(Icons.first_page),
                     onPressed: () {
                       jumpToPage(page: 0);
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       if (page != null && page > 1) {
                         animateToPage(page: page - 2);
@@ -89,7 +89,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.arrow_forward),
+                    icon: const Icon(Icons.arrow_forward),
                     onPressed: () {
                       if (page != null) {
                         animateToPage(page: page);
@@ -97,7 +97,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.last_page),
+                    icon: const Icon(Icons.last_page),
                     onPressed: () {
                       if (totalPages != null) {
                         jumpToPage(page: totalPages - 1);

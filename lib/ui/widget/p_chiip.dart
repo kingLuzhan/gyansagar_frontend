@@ -3,14 +3,14 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 
 class PChip extends StatelessWidget {
   const PChip({
-    Key? key,
+    super.key,
     required this.label,
     this.backgroundColor = Colors.white, // Default value
     this.isCrossIcon = false, // Default value
     this.onDeleted, // Optional parameter
     this.style, // Optional parameter
     this.borderColor = Colors.black54,
-  }) : super(key: key);
+  });
 
   final String label;
   final Color backgroundColor;
@@ -22,7 +22,7 @@ class PChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: AppTheme.outline(context).copyWith(
         borderRadius: BorderRadius.circular(30),
         color: backgroundColor,
@@ -30,10 +30,10 @@ class PChip extends StatelessWidget {
       ),
       child: Wrap(
         children: <Widget>[
-          Text(label, style: style ?? TextStyle()), // Default TextStyle if none provided
+          Text(label, style: style ?? const TextStyle()), // Default TextStyle if none provided
           if (isCrossIcon && onDeleted != null) ...[
-            SizedBox(width: 4),
-            Icon(Icons.cancel, size: 17).ripple(() => onDeleted!()),
+            const SizedBox(width: 4),
+            const Icon(Icons.cancel, size: 17).ripple(() => onDeleted!()),
           ],
         ],
       ),

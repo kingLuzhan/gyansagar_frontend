@@ -27,9 +27,9 @@ dependencies:
     sdk: flutter
   video_thumbnail: 0.5.3
   advance_pdf_viewer: ^2.0.0
-  better_player: ^0.0.80
+  better_player_plus: ^1.0.7
   cached_network_image: ^3.2.3
-  contacts_service: ^0.6.3
+  fast_contacts: ^4.0.0
   cupertino_icons: ^1.0.5
   dio: ^5.1.1
   equatable: ^2.0.5
@@ -42,7 +42,7 @@ dependencies:
   get_it: ^8.0.3
   google_sign_in: ^6.2.0
   image_picker: ^1.1.2
-  intl: ^0.20.2
+  intl: ^0.19.0
   permission_handler: ^11.4.0
   provider: ^6.1.2
   share_plus: ^10.1.4
@@ -59,6 +59,7 @@ dev_dependencies:
 
   build_runner: ^2.4.11
   json_serializable: ^6.9.0
+  flutter_lints: ^5.0.0
 
 flutter_icons:
   ios: true
@@ -91,9 +92,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - assets/images/icons/
-    - assets/images/logo/
+    - assets/
+    - assets/icons/
+    - assets/logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

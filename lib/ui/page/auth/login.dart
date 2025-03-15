@@ -16,11 +16,11 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => LoginPage(),
+      builder: (_) => const LoginPage(),
     );
   }
 
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Theme.of(context).dividerColor,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 5)
             ]),
       ),
@@ -128,11 +128,11 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: EdgeInsets.symmetric(vertical: 16) + EdgeInsets.only(top: 32),
+      margin: const EdgeInsets.symmetric(vertical: 16) + const EdgeInsets.only(top: 32),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
@@ -144,24 +144,24 @@ class _LoginPageState extends State<LoginPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ValueListenableBuilder<bool>(
                 valueListenable: useMobile,
                 builder: (context, value, child) {
                   return customSwitcherWidget(
-                      duraton: Duration(milliseconds: 300),
+                      duraton: const Duration(milliseconds: 300),
                       child: value
                           ? PTextField(
-                        key: ValueKey(1),
+                        key: const ValueKey(1),
                         type: FieldType.email, // Changed from Type.email to FieldType.email
                         controller: email,
                         label: "Email ID",
                         hintText: "Enter your email id",
                       ).hP16
                           : PTextField(
-                        key: ValueKey(2),
+                        key: const ValueKey(2),
                         type: FieldType.phone, // Changed from Type.phone to FieldType.phone
                         controller: mobile,
                         label: "Mobile No.",
@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(context, ForgotPasswordPage.getRoute());
               }),
             ),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: PFlatButton(
@@ -238,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
     return AnimatedSwitcher(
       duration: duraton,
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(child: child, scale: animation);
+        return ScaleTransition(scale: animation, child: child);
       },
       child: child,
     );
@@ -249,11 +249,11 @@ class _LoginPageState extends State<LoginPage> {
       child: Container(
         height: 50,
         width: AppTheme.fullWidth(context) - 32,
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onPrimary,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: <BoxShadow>[
+          boxShadow: const <BoxShadow>[
             BoxShadow(
               color: Color(0xffeaeaea),
               offset: Offset(4, 4),
@@ -264,9 +264,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Row(
           children: <Widget>[
             Image.asset("assets/images/google_icon.png", height: 30),
-            Spacer(),
-            Text("Continue with Google"),
-            Spacer(),
+            const Spacer(),
+            const Text("Continue with Google"),
+            const Spacer(),
           ],
         ),
       ).ripple(() async {
@@ -283,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     return Scaffold(
       key: scaffoldKey,
-      body: Container(
+      body: SizedBox(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
           top: false,
@@ -298,8 +298,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       _form(context),
                       _googleLogin(context),
-                      SizedBox(height: 10),
-                      SizedBox(
+                      const SizedBox(height: 10),
+                      const SizedBox(
                         width: 150,
                         child: Divider(
                           color: Colors.black,

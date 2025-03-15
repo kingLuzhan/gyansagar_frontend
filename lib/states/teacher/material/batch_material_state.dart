@@ -70,7 +70,7 @@ class BatchMaterialState extends BaseState {
   }
 
   Future<bool> upload(String id) async {
-    String endpoint = Constants.material + "/$id/upload";
+    String endpoint = "${Constants.material}/$id/upload";
     return (await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
@@ -102,7 +102,7 @@ class BatchMaterialState extends BaseState {
       notifyListeners();
       return isDeleted;
     } catch (error) {
-      log("deleteMaterial", error: error, name: this.runtimeType.toString());
+      log("deleteMaterial", error: error, name: runtimeType.toString());
       return false;
     }
   }

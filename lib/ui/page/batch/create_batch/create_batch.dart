@@ -1,4 +1,5 @@
-import 'package:contacts_service/contacts_service.dart';
+import 'dart:developer';
+import 'package:fast_contacts/fast_contacts.dart';
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
 import 'package:gyansagar_frontend/model/batch_model.dart';
@@ -15,12 +16,13 @@ import 'package:gyansagar_frontend/ui/widget/form/p_textfield.dart';
 import 'package:gyansagar_frontend/ui/widget/p_button.dart';
 import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CreateBatch extends StatefulWidget {
   const CreateBatch({
-    Key? key,
+    super.key,
     required this.model,
-  }) : super(key: key);
+  });
 
   final BatchModel model;
 
@@ -67,7 +69,7 @@ class _CreateBatchState extends State<CreateBatch> {
     return Consumer<CreateBatchStates>(
       builder: (context, state, child) {
         return state.availableSubjects.isEmpty
-            ? SizedBox.shrink()
+            ? const SizedBox.shrink()
             : SizedBox(
           width: AppTheme.fullWidth(context),
           child: Wrap(
@@ -75,9 +77,9 @@ class _CreateBatchState extends State<CreateBatch> {
                   .map(
                     (e) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8) +
-                      EdgeInsets.only(right: 8),
+                      const EdgeInsets.only(right: 8),
                   child: Container(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                         color: e.isSelected
@@ -118,7 +120,7 @@ class _CreateBatchState extends State<CreateBatch> {
     final theme = Theme.of(context);
     return OutlinedButton.icon(
         onPressed: onPressed,
-        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+        icon: const Icon(Icons.add_circle, color: PColors.primary, size: 17),
         label: Text(
           label,
           style: theme.textTheme.labelLarge!
@@ -140,11 +142,10 @@ class _CreateBatchState extends State<CreateBatch> {
   }
 
   void selectFromDeviceContact() async {
-    final contacts = await Navigator.push(
-        context, AllContactsPage.getRoute(deviceContact.value));
-    if (contacts != null && contacts is List<Contact>) {
+    await Provider.of<CreateBatchStates>(context, listen: false).fetchContacts();
+    if (deviceContact.value.isNotEmpty) {
       deviceContact.value.clear();
-      deviceContact.value = contacts;
+      deviceContact.value = await FastContacts.getAllContacts();
     }
   }
 
@@ -238,7 +239,7 @@ class _CreateBatchState extends State<CreateBatch> {
     final theme = Theme.of(context);
     return Scaffold(
       key: scaffoldKey,
-      appBar: CustomAppBar("Create Batch"),
+      appBar: const CustomAppBar("Create Batch"),
       body: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 16,

@@ -10,7 +10,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class StartQuizPage extends StatefulWidget {
-  StartQuizPage({Key? key, required this.model, required this.batchId}) : super(key: key);
+  const StartQuizPage({super.key, required this.model, required this.batchId});
   final AssignmentModel model;
   final String batchId;
 
@@ -60,7 +60,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
         children: [
           Row(
             children: [
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               ValueListenableBuilder<int>(
                 valueListenable: currentQuestion,
                 builder: (BuildContext context, int value, Widget? child) {
@@ -70,7 +70,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
                   );
                 },
               ),
-              Spacer(),
+              const Spacer(),
               SizedBox(
                 height: 45,
                 width: 45,
@@ -92,18 +92,18 @@ class _StartQuizPageState extends State<StartQuizPage> {
   Widget _question(Question model) {
     return Container(
       width: AppTheme.fullWidth(context),
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(model.statement),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Column(
               children: model.options.map((e) {
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   decoration: AppTheme.outline(context),
                   width: AppTheme.fullWidth(context) - 16,
                   child: Row(
@@ -122,7 +122,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 });
               }).toList(),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -156,7 +156,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
             child: TextButton(
               onPressed: () {
                 _pageController.previousPage(
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.linear,
                 );
               },
@@ -175,7 +175,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
             child: TextButton(
               onPressed: () {
                 _pageController.nextPage(
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.linear,
                 );
               },
@@ -196,7 +196,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
   Widget noQuiz() {
     return Container(
       height: 100,
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       width: AppTheme.fullWidth(context),
       alignment: Alignment.center,
       child: Column(
@@ -209,7 +209,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
               color: PColors.gray,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             "No Assignment is uploaded yet for this batch!!",
             style: Theme.of(context).textTheme.bodyLarge,
@@ -238,7 +238,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
       context,
       title: "Review",
       buttonText: "Submit Quiz",
-      titleBackGround: Color(0xffF7506A),
+      titleBackGround: const Color(0xffF7506A),
       enableCrossButton: !isQuizEnd,
       onPressed: () {
         Navigator.pop(context);
@@ -256,12 +256,12 @@ class _StartQuizPageState extends State<StartQuizPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(Images.timer, height: 20),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
                   timerText,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -270,12 +270,12 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
               "$unAnswered Unanswered questions",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Wrap(
               children: Iterable.generate(unAnswered, (index) {
                 return _circularNo(
@@ -285,10 +285,10 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 );
               }).toList(),
             ),
-            SizedBox(height: 42),
+            const SizedBox(height: 42),
             Container(
               decoration: isTimerEnd ? AppTheme.outline(context) : AppTheme.outlinePrimary(context),
-              margin: EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
               child: TextButton(
                 onPressed: isTimerEnd
@@ -305,7 +305,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 ),
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -316,7 +316,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
     return Container(
       width: 40,
       height: 40,
-      margin: EdgeInsets.only(right: 5),
+      margin: const EdgeInsets.only(right: 5),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
@@ -342,7 +342,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
         title: Row(
           children: [
             Image.asset(Images.timer, height: 20),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Consumer<QuizState>(builder: (context, state, child) {
               return Timer(
                 duration: state.quizModel.duration,
@@ -371,12 +371,12 @@ class _StartQuizPageState extends State<StartQuizPage> {
       body: Consumer<QuizState>(
         builder: (context, state, child) {
           if (state.isBusy) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (!(state.quizModel.questions.isNotEmpty)) {
             return noQuiz();
           }
-          return Container(
+          return SizedBox(
             height: AppTheme.fullHeight(context),
             child: Column(
               children: <Widget>[

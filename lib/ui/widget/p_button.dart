@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class PFlatButton extends StatelessWidget {
   const PFlatButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.label,
     required this.isLoading,
     this.color,
     this.isWraped = false,
     this.isColored = true,
-  }) : super(key: key);
+  });
 
   final VoidCallback onPressed;
   final String label;
@@ -20,7 +20,7 @@ class PFlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: isWraped ? null : double.infinity,
       child: ValueListenableBuilder<bool>(
         valueListenable: isLoading,
@@ -28,7 +28,7 @@ class PFlatButton extends StatelessWidget {
           return TextButton(
             style: TextButton.styleFrom(
               backgroundColor: !isColored ? null : color ?? Theme.of(context).primaryColor,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
               disabledForegroundColor: Theme.of(context).disabledColor,

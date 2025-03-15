@@ -22,10 +22,10 @@ import 'package:provider/provider.dart';
 
 class BatchDetailPage extends StatelessWidget {
   const BatchDetailPage({
-    Key? key,
+    super.key,
     required this.batchModel,
     required this.loader,
-  }) : super(key: key);
+  });
 
   final BatchModel batchModel;
   final CustomLoader loader;
@@ -48,7 +48,7 @@ class BatchDetailPage extends StatelessWidget {
   Widget _timing(BuildContext context, BatchTimeSlotModel model) {
     return Text(
       "${model.toShortDay()}  ${Utility.timeFrom24(model.startTime)} - ${Utility.timeFrom24(model.endTime)}",
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16) ?? TextStyle(fontSize: 16),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16) ?? const TextStyle(fontSize: 16),
     );
   }
 
@@ -112,11 +112,11 @@ class BatchDetailPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 19),
+                    const SizedBox(height: 19),
                     Row(
                       children: <Widget>[
                         Image.asset(Images.calender, width: 20),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         _title(context, "${batchModel.classes.length} Classes",
                             fontSize: 18),
                       ],
@@ -124,7 +124,7 @@ class BatchDetailPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 11),
+              const SizedBox(height: 11),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
@@ -137,17 +137,17 @@ class BatchDetailPage extends StatelessWidget {
                       .toList(),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Image.asset(Images.peopleBlack, width: 20),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     _title(context, "${batchModel.studentModel.length} Student",
                         fontSize: 18),
-                    Spacer(),
+                    const Spacer(),
                     SizedBox(
                       height: 30,
                       child: TextButton(
@@ -157,7 +157,7 @@ class BatchDetailPage extends StatelessWidget {
                               StudentListPage.getRoute(
                                   batchModel.studentModel));
                         },
-                        child: Text("View All"),
+                        child: const Text("View All"),
                       ),
                     )
                   ],
@@ -167,22 +167,23 @@ class BatchDetailPage extends StatelessWidget {
             ],
           ),
         ),
-        SliverToBoxAdapter(child: Divider(height: 1, thickness: 1)),
+        const SliverToBoxAdapter(child: Divider(height: 1, thickness: 1)),
         Consumer<AnnouncementState>(
           builder: (context, state, child) {
             if (state.isBusy) {
-              return SliverToBoxAdapter(child: PCLoader(stroke: 2));
+              return const SliverToBoxAdapter(child: PCLoader(stroke: 2));
             }
-            if (state.batchAnnouncementList.isNotEmpty)
+            if (state.batchAnnouncementList.isNotEmpty) {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                    if (index == 0)
+                    if (index == 0) {
                       return Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: _title(context, "Recent Announcement",
                             fontSize: 18),
                       );
+                    }
                     return AnnouncementWidget(
                       state.batchAnnouncementList[index - 1],
                       loader: loader,
@@ -210,8 +211,9 @@ class BatchDetailPage extends StatelessWidget {
                   childCount: state.batchAnnouncementList.length + 1,
                 ),
               );
+            }
 
-            return SliverToBoxAdapter();
+            return const SliverToBoxAdapter();
           },
         ),
         // Batch video, announcement, study material timeline
@@ -219,11 +221,12 @@ class BatchDetailPage extends StatelessWidget {
           if (state.timeLineList != null && state.timeLineList!.isNotEmpty) {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                if (index == 0)
+                if (index == 0) {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: _title(context, "Batch Timeline", fontSize: 18),
                   );
+                }
                 final model = state.timeLineList![index - 1];
                 if (model.datum is VideoModel) {
                   return Padding(
@@ -231,7 +234,7 @@ class BatchDetailPage extends StatelessWidget {
                     child: BatchVideoCard(
                       model: model.datum,
                       loader: loader,
-                      actions: ["Delete"],
+                      actions: const ["Delete"],
                     ),
                   );
                 }
@@ -240,7 +243,7 @@ class BatchDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: AnnouncementWidget(
                       model.datum,
-                      actions: ["Delete"],
+                      actions: const ["Delete"],
                       loader: loader,
                       onAnnouncementDeleted: (model) async {
                         await onAnnouncementDeleted(context, model);
@@ -270,19 +273,19 @@ class BatchDetailPage extends StatelessWidget {
                     child: BatchMaterialCard(
                       model: model.datum,
                       loader: loader,
-                      actions: ["Delete"],
+                      actions: const ["Delete"],
                     ),
                   );
                 }
                 print(
                     "Unknown item found on batch timeline\n Type: ${model.type}");
-                return SizedBox();
+                return const SizedBox();
               }, childCount: state.timeLineList!.length + 1),
             );
           }
-          return SliverToBoxAdapter();
+          return const SliverToBoxAdapter();
         }),
-        SliverToBoxAdapter(child: SizedBox(height: 70))
+        const SliverToBoxAdapter(child: SizedBox(height: 70))
       ],
     );
   }

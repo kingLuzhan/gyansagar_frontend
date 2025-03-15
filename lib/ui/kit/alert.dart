@@ -17,13 +17,13 @@ class Alert {
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             child: Container(
-              padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
               height: height,
               width: MediaQuery
                   .of(context)
                   .size
                   .width * .75,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
@@ -40,7 +40,7 @@ class Alert {
                           .titleLarge
                           ?.copyWith(
                           fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     message,
                     style: Theme
@@ -53,7 +53,7 @@ class Alert {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -89,12 +89,12 @@ class Alert {
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             child: Container(
-              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               width: MediaQuery
                   .of(context)
                   .size
                   .width * .75,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -109,7 +109,7 @@ class Alert {
                           .dense
                           .titleLarge
                           ?.copyWith(color: Colors.black)),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(message,
                       style: Theme
                           .of(context)
@@ -119,7 +119,7 @@ class Alert {
                           ?.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w400),
                       textAlign: TextAlign.center),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   OverflowBar(
                     alignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -128,24 +128,24 @@ class Alert {
                             Navigator.pop(context);
                             onCancel();
                           },
-                          child: Text("Cancel")),
-                      SizedBox(width: 12),
+                          child: const Text("Cancel")),
+                      const SizedBox(width: 12),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
                           onYes();
                         },
-                        child: Text("Confirm", textAlign: TextAlign.center),
                         style: ElevatedButton.styleFrom(
                           elevation: 1, backgroundColor: Theme
                             .of(context)
                             .primaryColor,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 6.0, horizontal: 20.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
+                        child: const Text("Confirm", textAlign: TextAlign.center),
                       ),
                     ],
                   )
@@ -174,12 +174,12 @@ class Alert {
             child: Wrap(
               children: [
                 Container(
-                  padding: EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 16),
                   width: MediaQuery
                       .of(context)
                       .size
                       .width,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
@@ -188,7 +188,7 @@ class Alert {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                           ),
                           width: MediaQuery
@@ -197,14 +197,14 @@ class Alert {
                               .width,
                           decoration: BoxDecoration(
                               color: titleBackGround,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10))),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
+                              SizedBox(
                                   width: MediaQuery
                                       .of(context)
                                       .size
@@ -226,7 +226,7 @@ class Alert {
                             ],
                           )),
                       child,
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       PFlatButton(

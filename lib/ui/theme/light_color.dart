@@ -11,7 +11,7 @@ class PColors {
   static const Color secondary = Color(0XFF0545FF);
 
   static const Color primary = Color(0XFF0084ff);
-  static const Color primaryLight = Color(0xFFfBCDFFF);
+  static const Color primaryLight = Color(0xfffbcdfff);
   static const Color background = Color(0XFFffffff);
   static const Color cardColor = Color(0XFFededed);
   static const Color surfaceColor = Color(0XFFf8f8f8);
@@ -31,17 +31,17 @@ class PColors {
 
   static Color randomColor(String text) {
     final colors = <Color>[
-      Color(0xffFF7878),
-      Color(0xffFFA959),
-      Color(0xff83DA2D),
-      Color(0xff1FE2D7),
-      Color(0xffC13E6B),
-      Color(0xffFF7878),
-      Color(0xff07B7A6),
-      Color(0xff1F7ACD),
-      Color(0xffBB78FF),
-      Color(0xffF14CD7),
-      Color(0xffFF5757),
+      const Color(0xffFF7878),
+      const Color(0xffFFA959),
+      const Color(0xff83DA2D),
+      const Color(0xff1FE2D7),
+      const Color(0xffC13E6B),
+      const Color(0xffFF7878),
+      const Color(0xff07B7A6),
+      const Color(0xff1F7ACD),
+      const Color(0xffBB78FF),
+      const Color(0xffF14CD7),
+      const Color(0xffFF5757),
     ];
     return colors[text.length %11];
       Random ran = Random.secure();

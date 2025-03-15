@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 
 class PollOption extends StatefulWidget {
   const PollOption({
-    Key? key,
+    super.key,
     required this.index,
     required this.value,
-  }) : super(key: key);
+  });
   final int index;
   final String value;
 
@@ -60,7 +60,7 @@ class _PollOptionState extends State<PollOption> {
         suffixIcon: widget.index < 2
             ? null
             : IconButton(
-          icon: Icon(Icons.cancel),
+          icon: const Icon(Icons.cancel),
           onPressed: () {
             controller.removeListener(writeData);
             Provider.of<PollState>(context, listen: false)

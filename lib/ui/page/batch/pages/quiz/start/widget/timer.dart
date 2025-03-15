@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Timer extends StatefulWidget {
-  Timer({
-    Key? key,
+  const Timer({
+    super.key,
     required this.duration,
     required this.onTimerComplete,
     required this.onTimerChanged,
     required this.timeTaken,
-  }) : super(key: key);
+  });
   final Function(String) onTimerComplete;
   final Function(String) timeTaken;
   final ValueChanged<String> onTimerChanged;
@@ -50,7 +50,7 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
     String antotimerText =
         '${anticlockTimer.inMinutes.remainder(60).toString()}:${anticlockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
     antotimerText = antotimerText.replaceAll("-", "");
-    widget.timeTaken(antotimerText + " min");
+    widget.timeTaken("$antotimerText min");
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText =
         '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
@@ -63,10 +63,10 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
 }
 
 class Countdown extends AnimatedWidget {
-  Countdown({
-    Key? key,
+  const Countdown({
+    super.key,
     required this.animation,
-  }) : super(key: key, listenable: animation);
+  }) : super(listenable: animation);
   final Animation<int> animation;
 
   @override

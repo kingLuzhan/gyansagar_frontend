@@ -14,11 +14,11 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
-  SignUp({Key? key}) : super(key: key);
+  const SignUp({super.key});
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => SignUp(),
+      builder: (_) => const SignUp(),
     );
   }
 
@@ -73,7 +73,7 @@ class _SignUpState extends State<SignUp> {
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Theme.of(context).dividerColor,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 5)
             ]),
       ),
@@ -84,11 +84,11 @@ class _SignUpState extends State<SignUp> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.symmetric(vertical: 32) + const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Color(0xffeaeaea),
             offset: Offset(0, -4),
@@ -100,9 +100,9 @@ class _SignUpState extends State<SignUp> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             PTextField(
               type: FieldType.text,
               controller: name,
@@ -115,14 +115,14 @@ class _SignUpState extends State<SignUp> {
               label: "Email",
               hintText: "Enter email here",
             ).hP16,
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             PTextField(
               type: FieldType.phone,
               controller: mobile,
               label: "Mobile",
               hintText: "Enter mobile here",
             ).hP16,
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ValueListenableBuilder<bool>(
               valueListenable: passwordVisibility,
               builder: (context, value, child) {
@@ -141,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                     )).hP16;
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: PFlatButton(
@@ -152,7 +152,7 @@ class _SignUpState extends State<SignUp> {
                     _submit(context);
                   },
                 )),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -206,7 +206,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: PColors.secondary,
-      body: Container(
+      body: SizedBox(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
           top: false,
@@ -245,7 +245,7 @@ class _SignUpState extends State<SignUp> {
                           }),
                         ],
                       ),
-                      SizedBox(width: 40)
+                      const SizedBox(width: 40)
                     ],
                   ),
                 ),

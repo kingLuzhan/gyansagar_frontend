@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 
 class HomeScaffold<T> extends StatelessWidget {
   const HomeScaffold({
-    Key? key,
+    super.key,
     required this.floatingActionButton,
     required this.floatingButtons,
     required this.showFabButton,
     required this.slivers,
     required this.onNotificationTap,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final Widget Function(BuildContext context, T value, Widget? child) builder;
   final Widget floatingActionButton;
@@ -43,17 +43,17 @@ class HomeScaffold<T> extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(AppConfig.of(context)!.config.appIcon),
         ),
-        title: Text(AppConfig.of(context)!.config.appName, style: TextStyle(color: PColors.black)),
+        title: Text(AppConfig.of(context)!.config.appName, style: const TextStyle(color: PColors.black)),
         actions: <Widget>[
           IconButton(
             onPressed: onNotificationTap,
-            icon: Icon(Icons.notifications_none),
+            icon: const Icon(Icons.notifications_none),
           ),
           IconButton(
             onPressed: () {
               deleteBatch(context);
             },
-            icon: Icon(Icons.login),
+            icon: const Icon(Icons.login),
           ),
         ],
       ),
@@ -68,7 +68,7 @@ class HomeScaffold<T> extends StatelessWidget {
           AnimatedPositioned(
             bottom: 16 + 60.0,
             right: 25,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             child: floatingButtons,
           ),
         ],

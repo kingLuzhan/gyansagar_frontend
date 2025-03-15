@@ -15,11 +15,10 @@ import 'package:provider/provider.dart';
 
 class BatchMaterialCard extends StatelessWidget {
   const BatchMaterialCard(
-      {Key? key,
+      {super.key,
         required this.loader,
         required this.model,
-        this.actions = const ["Edit", "Delete"]})
-      : super(key: key);
+        this.actions = const ["Edit", "Delete"]});
   final CustomLoader loader;
   final List<String> actions;
   final BatchMaterialModel model;
@@ -39,7 +38,7 @@ class BatchMaterialCard extends StatelessWidget {
             children: <Widget>[
               Container(
                 width: 5,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(left: BorderSide(color: PColors.blue, width: 6)),
                 ),
               ),

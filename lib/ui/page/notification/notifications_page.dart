@@ -13,7 +13,7 @@ import 'package:gyansagar_frontend/helper/shared_preference_helper.dart'; // Ens
 import 'package:dio/dio.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+  const NotificationPage({super.key});
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (_) => ChangeNotifierProvider<NotificationState>(
@@ -25,7 +25,7 @@ class NotificationPage extends StatefulWidget {
               ),
             ),
           ),
-          builder: (_, child) => NotificationPage(),
+          builder: (_, child) => const NotificationPage(),
         ));
   }
 
@@ -42,7 +42,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Widget _notificationTile(NotificationModel model) {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: AppTheme.decoration(context),
         child: ListTile(
           title: Text(model.title,
@@ -58,22 +58,23 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Notifications"),
+      appBar: const CustomAppBar("Notifications"),
       body: Container(
         child: Consumer<NotificationState>(
           builder: (context, state, child) {
-            if (state.isLoading) return Ploader();
-            if (state.notifications.isNotEmpty)
+            if (state.isLoading) return const Ploader();
+            if (state.notifications.isNotEmpty) {
               return ListView.builder(
                   itemCount: state.notifications.length,
                   itemBuilder: (context, index) {
                     return _notificationTile(state.notifications[index]);
                   });
-            if (state.notifications.isEmpty)
+            }
+            if (state.notifications.isEmpty) {
               return Center(
                 child: Container(
                   height: 100,
-                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: AppTheme.outline(context),
                   width: AppTheme.fullWidth(context),
                   alignment: Alignment.center,
@@ -86,12 +87,13 @@ class _NotificationPageState extends State<NotificationPage> {
                           color: PColors.gray,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
               );
-            return Ploader();
+            }
+            return const Ploader();
           },
         ),
       ),

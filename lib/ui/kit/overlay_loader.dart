@@ -20,7 +20,7 @@ class CustomLoader {
   _buildLoader() {
     _overlayEntry = OverlayEntry(
       builder: (context) {
-        return Container(
+        return SizedBox(
             height: AppTheme.fullHeight(context),
             width: AppTheme.fullWidth(context),
             child: buildLoader(context));
@@ -59,11 +59,11 @@ class CustomScreenLoader extends StatelessWidget {
   final double width;
 
   const CustomScreenLoader({
-    Key? key,
+    super.key,
     this.backgroundColor = const Color(0xfff8f8f8),
     this.height = 40,
     this.width = 40,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +75,8 @@ class CustomScreenLoader extends StatelessWidget {
         width: height,
         alignment: Alignment.center,
         child: Container(
-          padding: EdgeInsets.all(30),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(30),
+          decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Stack(
@@ -84,10 +84,10 @@ class CustomScreenLoader extends StatelessWidget {
             alignment: Alignment.center,
             children: <Widget>[
               Platform.isIOS
-                  ? CupertinoActivityIndicator(
+                  ? const CupertinoActivityIndicator(
                 radius: 45,
               )
-                  : CircularProgressIndicator(
+                  : const CircularProgressIndicator(
                 strokeWidth: 2,
               ),
               Center(

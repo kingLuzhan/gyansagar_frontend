@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PTitleText extends StatelessWidget {
-  const PTitleText(this.text, {Key? key}) : super(key: key);
+  const PTitleText(this.text, {super.key});
   final String text;
 
   @override
@@ -9,13 +9,13 @@ class PTitleText extends StatelessWidget {
     final headlineSmall = Theme.of(context).textTheme.headlineSmall;
     return Text(
       text,
-      style: headlineSmall?.copyWith(fontSize: 20) ?? TextStyle(fontSize: 20),
+      style: headlineSmall?.copyWith(fontSize: 20) ?? const TextStyle(fontSize: 20),
     );
   }
 }
 
 class PTitleTextBold extends StatelessWidget {
-  const PTitleTextBold(this.text, {Key? key}) : super(key: key);
+  const PTitleTextBold(this.text, {super.key});
   final String text;
 
   @override
@@ -23,7 +23,7 @@ class PTitleTextBold extends StatelessWidget {
     final titleLarge = Theme.of(context).textTheme.titleLarge;
     return Text(
       text,
-      style: titleLarge?.copyWith(fontSize: 20) ?? TextStyle(fontSize: 20),
+      style: titleLarge?.copyWith(fontSize: 20) ?? const TextStyle(fontSize: 20),
     );
   }
 }

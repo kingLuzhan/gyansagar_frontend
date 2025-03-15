@@ -4,7 +4,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:flutter/services.dart';
 
 class QuizSolutionPage extends StatelessWidget {
-  const QuizSolutionPage({Key? key, required this.model}) : super(key: key);
+  const QuizSolutionPage({super.key, required this.model});
   final QuizDetailModel model;
 
   static MaterialPageRoute getRoute(QuizDetailModel model) {
@@ -22,32 +22,32 @@ class QuizSolutionPage extends StatelessWidget {
       return _unAnswered(context, model);
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: correct ? AppTheme.outlineSucess(context) : AppTheme.outlineError(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: AppTheme.fullWidth(context),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             color: correct ? PColors.green.withOpacity(.3) : PColors.red.withOpacity(.3),
             child: Text(model.statement, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text("Your Answer", style: Theme.of(context).textTheme.titleSmall).hP16,
           Text(model.selectedAnswer ?? '', style: Theme.of(context).textTheme.titleMedium).hP16,
           if (!correct) ...[
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Divider(
               height: 12,
               color: unAnswered ? Theme.of(context).primaryColor : PColors.red.withOpacity(.3),
               thickness: 1,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text("Correct Answer", style: Theme.of(context).textTheme.titleSmall).hP16,
             Text(model.answer, style: Theme.of(context).textTheme.titleMedium).hP16,
           ],
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -55,29 +55,29 @@ class QuizSolutionPage extends StatelessWidget {
 
   Widget _unAnswered(BuildContext context, Question model) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: AppTheme.outlinePrimary(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: AppTheme.fullWidth(context),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             color: Theme.of(context).primaryColor,
             child: Text(model.statement, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text("Unanswered", style: Theme.of(context).textTheme.titleSmall).hP16,
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Divider(
             height: 12,
             color: Theme.of(context).primaryColor,
             thickness: 1,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text("Correct Answer", style: Theme.of(context).textTheme.titleSmall).hP16,
           Text(model.answer, style: Theme.of(context).textTheme.titleMedium).hP16,
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -88,7 +88,7 @@ class QuizSolutionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: PColors.pink,
-        iconTheme: IconThemeData(color: PColors.white),
+        iconTheme: const IconThemeData(color: PColors.white),
         title: Text("Solution", style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
         centerTitle: true, systemOverlayStyle: SystemUiOverlayStyle.light,
       ),

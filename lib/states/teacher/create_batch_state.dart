@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:fast_contacts/fast_contacts.dart';
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
 import 'package:gyansagar_frontend/model/batch_model.dart';
@@ -9,12 +9,14 @@ import 'package:gyansagar_frontend/resources/repository/batch_repository.dart';
 import 'package:gyansagar_frontend/resources/repository/teacher/teacher_repository.dart';
 import 'package:gyansagar_frontend/states/base_state.dart';
 import 'package:get_it/get_it.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CreateBatchStates extends BaseState {
   CreateBatchStates(BatchModel model) {
     setBatchToEdit(model);
   }
 
+  @override
   final getit = GetIt.instance;
   String batchName = "";
   String description = "";
@@ -70,9 +72,9 @@ class CreateBatchStates extends BaseState {
 
   set setSelectedSubjects(String name) {
     var model = availableSubjects.firstWhere((element) => element.name == name);
-    availableSubjects.forEach((element) {
+    for (var element in availableSubjects) {
       element.isSelected = false;
-    });
+    }
     model.isSelected = true;
     selectedSubjects = name;
     notifyListeners();
@@ -114,16 +116,36 @@ class CreateBatchStates extends BaseState {
     notifyListeners();
   }
 
+  Future<void> fetchContacts() async {
+    var status = await Permission.contacts.status;
+    if (!status.isGranted) {
+      status = await Permission.contacts.request();
+      if (!status.isGranted) {
+        // Handle the case where the user denied the permission
+        return;
+      }
+    }
+
+    try {
+      List<Contact> contacts = await FastContacts.getAllContacts();
+      setDeviceSelectedContacts(contacts);
+    } catch (e) {
+      // Handle error
+      print("Error fetching contacts: $e");
+    }
+  }
+
   void setDeviceSelectedContacts(List<Contact> list) {
     deviceSelectedContacts =
-        list.map((e) => e.phones?.first.value?.replaceAll(" ", "") ?? "").toList();
+        list.map((e) => e.phones.isNotEmpty ? e.phones.first.number.replaceAll(" ", "") : "").toList();
+    notifyListeners();
   }
 
   bool checkSlotsValidations() {
     bool allGood = true;
-    timeSlots.forEach((model) {
+    for (var model in timeSlots) {
       checkSlotsModel(model);
-    });
+    }
     notifyListeners();
     return timeSlots.every(
             (element) => element.isValidEndEntry && element.isValidStartEntry);
@@ -176,7 +198,7 @@ class CreateBatchStates extends BaseState {
       return model;
     } catch (error, strackTrace) {
       log("createBatch", error: error, stackTrace: strackTrace);
-      throw error;
+      rethrow;
     }
   }
 
@@ -190,11 +212,11 @@ class CreateBatchStates extends BaseState {
         final ids = studentsList.map((e) => e.mobile).toSet();
         studentsList.retainWhere((x) => ids.remove(x.mobile));
         if (selectedStudentsList.isNotEmpty) {
-          studentsList.forEach((student) {
+          for (var student in studentsList) {
             var isAvailable =
             selectedStudentsList.any((element) => student.id == element.id);
             student.isSelected = isAvailable;
-          });
+          }
         }
       }
 

@@ -1,4 +1,3 @@
-import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:gyansagar_frontend/config/config.dart';
@@ -16,9 +15,7 @@ import 'package:get_it/get_it.dart';
 final GetIt serviceLocator = GetIt.instance;
 
 Future<void> setUpDependency(Config config) async {
-  if (!serviceLocator.isRegistered<ContactsService>()) {
-    serviceLocator.registerSingleton<ContactsService>(ContactsService());
-  }
+  // Remove the registration of FlutterContactsService as it is not needed
 
   if (!serviceLocator.isRegistered<SharedPreferenceHelper>()) {
     await SharedPreferenceHelper.init(); // Initialize SharedPreferences before registering the singleton

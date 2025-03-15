@@ -12,7 +12,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class QuizListPage extends StatefulWidget {
-  const QuizListPage({Key? key, required this.loader}) : super(key: key);
+  const QuizListPage({super.key, required this.loader});
   final CustomLoader loader;
 
   @override
@@ -29,8 +29,8 @@ class _QuizListPageState extends State<QuizListPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Icon(Icons.list_alt).hP8.pT(4),
-            Container(
+            const Icon(Icons.list_alt).hP8.pT(4),
+            SizedBox(
               width: AppTheme.fullWidth(context) - 120,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +68,7 @@ class _QuizListPageState extends State<QuizListPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(Images.quiz, height: 30).p(12),
-                          Container(
+                          SizedBox(
                             width: AppTheme.fullWidth(context) - 138,
                             child: Text(model.title),
                           )
@@ -95,7 +95,7 @@ class _QuizListPageState extends State<QuizListPage> {
             }),
             if (Provider.of<HomeState>(context).isTeacher)
               TileActionWidget(
-                list: ["Delete"],
+                list: const ["Delete"],
                 onDelete: () => deleteQuiz(model.id),
                 onEdit: () {},
                 onCustomIconPressed: () {

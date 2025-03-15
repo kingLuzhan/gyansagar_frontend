@@ -5,7 +5,7 @@ import 'package:gyansagar_frontend/ui/widget/p_chiip.dart';
 import 'package:provider/provider.dart';
 
 class AddStudentsWidget extends StatelessWidget {
-  const AddStudentsWidget({Key? key, required this.controller}) : super(key: key);
+  const AddStudentsWidget({super.key, required this.controller});
   final TextEditingController controller;
 
   Widget _enterContactNo(BuildContext context) {
@@ -13,7 +13,7 @@ class AddStudentsWidget extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.phone,
       keyboardAppearance: Brightness.light,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
           border: InputBorder.none, hintText: "Enter contact no.."),
       onSubmitted: (contact) {
         Provider.of<CreateBatchStates>(context, listen: false)
@@ -26,7 +26,7 @@ class AddStudentsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+      padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
       width: AppTheme.fullWidth(context),
       decoration: AppTheme.outline(context),
       child: Consumer<CreateBatchStates>(
@@ -34,7 +34,7 @@ class AddStudentsWidget extends StatelessWidget {
           return Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: state.contactList.isEmpty
-                  ? <Widget>[SizedBox.shrink()]
+                  ? <Widget>[const SizedBox.shrink()]
                   : state.contactList
                   .map((e) => PChip(
                 label: e,

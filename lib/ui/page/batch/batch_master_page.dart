@@ -26,8 +26,7 @@ import 'package:gyansagar_frontend/ui/widget/fab/fab_button.dart';
 import 'package:provider/provider.dart';
 
 class BatchMasterDetailPage extends StatefulWidget {
-  BatchMasterDetailPage({Key? key, required this.model, required this.isTeacher})
-      : super(key: key);
+  const BatchMasterDetailPage({super.key, required this.model, required this.isTeacher});
   final BatchModel model;
   final bool isTeacher;
   static MaterialPageRoute getRoute(BatchModel model, {required bool isTeacher}) {
@@ -104,8 +103,8 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
   final ValueNotifier<int> currentPageNo = ValueNotifier<int>(0);
 
   final List<Choice> choices = [
-    Choice(title: 'Edit', index: 0),
-    Choice(title: 'Delete', index: 1),
+    const Choice(title: 'Edit', index: 0),
+    const Choice(title: 'Delete', index: 1),
   ];
 
   @override

@@ -11,19 +11,19 @@ class StudentListPage extends StatelessWidget {
     );
   }
 
-  const StudentListPage({Key? key, required this.list}) : super(key: key);
+  const StudentListPage({super.key, required this.list});
   final List<ActorModel> list;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Batch Students"),
+      appBar: const CustomAppBar("Batch Students"),
       body: Container(
           child: ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, index) => Container(
-              margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Theme.of(context).cardColor,
@@ -31,7 +31,7 @@ class StudentListPage extends StatelessWidget {
               child: ListTile(
                 title: Text(
                   list[index].name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
                   ),

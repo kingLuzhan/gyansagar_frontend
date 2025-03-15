@@ -9,13 +9,13 @@ import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreatePoll extends StatefulWidget {
-  CreatePoll({Key? key}) : super(key: key);
+  const CreatePoll({super.key});
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<PollState>(
         create: (context) => PollState(),
-        child: CreatePoll(),
+        child: const CreatePoll(),
       ),
     );
   }
@@ -50,7 +50,7 @@ class _CreateBatchState extends State<CreatePoll> {
     final theme = Theme.of(context);
     return OutlinedButton.icon(
         onPressed: onPressed,
-        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+        icon: const Icon(Icons.add_circle, color: PColors.primary, size: 17),
         label: Text(
           label,
           style: theme.textTheme.labelLarge
@@ -70,12 +70,12 @@ class _CreateBatchState extends State<CreatePoll> {
     final theme = Theme.of(context);
     return Container(
       height: 50,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: AppTheme.outline(context),
       child: child ?? Row(
         children: <Widget>[
           Text(text),
-          Spacer(),
+          const Spacer(),
           SizedBox(
             height: 50,
             child: Stack(
@@ -86,18 +86,18 @@ class _CreateBatchState extends State<CreatePoll> {
                     alignment: Alignment.centerRight,
                     child: SizedBox(
                       width: 15,
-                      child: Icon(Icons.arrow_drop_up, size: 30).pB(10),
+                      child: const Icon(Icons.arrow_drop_up, size: 30).pB(10),
                     )),
                 Align(
                     alignment: Alignment.centerRight,
                     child: SizedBox(
                       width: 15,
-                      child: Icon(Icons.arrow_drop_down, size: 30).pT(10),
+                      child: const Icon(Icons.arrow_drop_down, size: 30).pT(10),
                     ))
               ],
             ),
           ),
-          SizedBox(width: 4)
+          const SizedBox(width: 4)
         ],
       ),
     ).ripple(onPressed);
@@ -120,9 +120,9 @@ class _CreateBatchState extends State<CreatePoll> {
   Future<DateTime> getDate(BuildContext context) async {
     final date = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().add(Duration(days: 2)),
-      firstDate: DateTime.now().add(Duration(days: 1)),
-      lastDate: DateTime.now().add(Duration(days: 30)),
+      initialDate: DateTime.now().add(const Duration(days: 2)),
+      firstDate: DateTime.now().add(const Duration(days: 1)),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
     );
     return date ?? DateTime.now();
   }
@@ -149,9 +149,9 @@ class _CreateBatchState extends State<CreatePoll> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: CustomAppBar("Create Poll"),
+      appBar: const CustomAppBar("Create Poll"),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -166,14 +166,14 @@ class _CreateBatchState extends State<CreatePoll> {
                   maxLines: 0,
                   height: 0.0,
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 _title(context, "Poll Expire time"),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Container(
                   height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: AppTheme.outline(context),
-                  child: Container(
+                  child: SizedBox(
                     width: AppTheme.fullWidth(context) - 32,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -187,14 +187,14 @@ class _CreateBatchState extends State<CreatePoll> {
                                     alignment: Alignment.centerRight,
                                     child: SizedBox(
                                       width: 15,
-                                      child: Icon(Icons.arrow_drop_up, size: 30)
+                                      child: const Icon(Icons.arrow_drop_up, size: 30)
                                           .pB(10),
                                     )),
                                 Align(
                                     alignment: Alignment.centerRight,
                                     child: SizedBox(
                                       width: 15,
-                                      child: Icon(Icons.arrow_drop_down, size: 30)
+                                      child: const Icon(Icons.arrow_drop_down, size: 30)
                                           .pT(10),
                                     ))
                               ],
@@ -220,9 +220,9 @@ class _CreateBatchState extends State<CreatePoll> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 _title(context, "Options"),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Consumer<PollState>(
                   builder: (context, state, child) {
                     return Column(
@@ -236,7 +236,7 @@ class _CreateBatchState extends State<CreatePoll> {
                 _secondaryButton(context, label: "Add option", onPressed: () {
                   context.read<PollState>().addPollOptions();
                 }),
-                SizedBox(height: 150),
+                const SizedBox(height: 150),
                 PFlatButton(
                   label: "Create",
                   isLoading: isLoading,

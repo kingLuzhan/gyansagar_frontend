@@ -112,5 +112,5 @@ class ActorModel {
     lastLoginDate: DateTime.now(),
   );
 
-  bool get isStudent => this.role == Role.STUDENT.asString();
+  bool get isStudent => role == Role.STUDENT.asString();
 }

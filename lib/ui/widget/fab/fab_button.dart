@@ -3,13 +3,13 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 
 class FabButton extends StatelessWidget {
   const FabButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.icon,
     required this.animationValue,
     required this.text,
     required this.translateButton,
-  }) : super(key: key);
+  });
 
   final VoidCallback onPressed;
   final String icon;
@@ -20,7 +20,7 @@ class FabButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Transform(
         transform: Matrix4.translationValues(
           translateButton.value * animationValue,
@@ -30,16 +30,16 @@ class FabButton extends StatelessWidget {
         child: Material(
           elevation: 4,
           color: Colors.transparent,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
                 topRight: Radius.circular(40)),
           ),
           child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20),
                     topRight: Radius.circular(40)),
@@ -48,7 +48,7 @@ class FabButton extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Image.asset(icon, height: 20),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(text,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -56,7 +56,7 @@ class FabButton extends StatelessWidget {
                 ],
               )).ripple(
             onPressed,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomLeft: Radius.circular(20),
               topRight: Radius.circular(40),

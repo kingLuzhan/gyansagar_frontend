@@ -12,11 +12,11 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class UpdatePasswordPage extends StatefulWidget {
-  UpdatePasswordPage({Key? key}) : super(key: key);
+  const UpdatePasswordPage({super.key});
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => UpdatePasswordPage(),
+      builder: (_) => const UpdatePasswordPage(),
     );
   }
 
@@ -56,7 +56,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
 
   Widget _title(String text) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 8,
         left: 16,
       ),
@@ -83,7 +83,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Theme.of(context).dividerColor,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 5)
             ]),
       ),
@@ -144,11 +144,11 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.symmetric(vertical: 32) + const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
@@ -160,9 +160,9 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ValueListenableBuilder<bool>(
               valueListenable: passwordVisibility,
               builder: (context, value, child) {
@@ -181,7 +181,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                     )).hP16;
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ValueListenableBuilder<bool>(
               valueListenable: confirmPasswordVisibility,
               builder: (context, value, child) {
@@ -201,7 +201,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                     )).hP16;
               },
             ),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: PFlatButton(
@@ -224,7 +224,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
     final theme = Theme.of(context);
     return Scaffold(
       key: scaffoldKey,
-      body: Container(
+      body: SizedBox(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
           top: false,
@@ -237,10 +237,10 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 120),
+                      const SizedBox(height: 120),
                       _title("Update Password"),
                       _form(context),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                     ],
                   ),
                 ),

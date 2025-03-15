@@ -39,10 +39,10 @@ class Config {
 class AppConfig extends InheritedWidget {
   final Config config;
 
-  const AppConfig({
+  const AppConfig({super.key, 
     required this.config,
-    required Widget child,
-  }) : super(child: child);
+    required super.child,
+  });
 
   static AppConfig? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppConfig>();

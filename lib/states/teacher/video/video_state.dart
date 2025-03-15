@@ -45,7 +45,7 @@ class VideoState extends BaseState {
 
   void setUrl({required String videoUrl, required String title, required String thumbnailUrl}) {
     this.videoUrl = videoUrl;
-    this.yTitle = title;
+    yTitle = title;
     this.thumbnailUrl = thumbnailUrl;
     notifyListeners();
   }
@@ -80,7 +80,7 @@ class VideoState extends BaseState {
 
   /// Upload video file to server
   Future<bool> upload(String id) async {
-    String endpoint = Constants.video + "/$id/upload";
+    String endpoint = "${Constants.video}/$id/upload";
     return (await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
@@ -113,7 +113,7 @@ class VideoState extends BaseState {
       notifyListeners();
       return isDeleted;
     } catch (error) {
-      log("deleteVideo", error: error, name: this.runtimeType.toString());
+      log("deleteVideo", error: error, name: runtimeType.toString());
       return false;
     }
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/model/actor_model.dart';
 
 class StudentListPreview extends StatelessWidget {
-  const StudentListPreview({Key? key, required this.list}) : super(key: key);
+  const StudentListPreview({super.key, required this.list});
   final List<ActorModel> list;
 
   Positioned _wrapper(BuildContext context, {required Widget child, required int index}) {

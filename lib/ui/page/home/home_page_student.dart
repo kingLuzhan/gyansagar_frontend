@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
 
 class StudentHomePage extends StatefulWidget {
-  const StudentHomePage({Key? key}) : super(key: key);
+  const StudentHomePage({super.key});
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(builder: (_) => const StudentHomePage());
   }
@@ -28,7 +28,7 @@ class _StudentHomePageState extends State<StudentHomePage>
   late AnimationController _controller;
   bool isOpened = false;
   late AnimationController _animationController;
-  Curve _curve = Curves.easeOut;
+  final Curve _curve = Curves.easeOut;
   late Animation<double> _translateButton;
   bool showFabButton = false;
   double _angle = 0;
@@ -66,10 +66,10 @@ class _StudentHomePageState extends State<StudentHomePage>
 
   setupAnimations() {
     _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 2000));
+        vsync: this, duration: const Duration(milliseconds: 2000));
     _controller.repeat();
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+    AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
       ..addListener(() {
         setState(() {});
       });
@@ -189,7 +189,7 @@ class _StudentHomePageState extends State<StudentHomePage>
       floatingButtons: _floatingActionButtonColumn(),
       floatingActionButton: _floatingActionButton(),
       showFabButton: ValueNotifier<bool>(showFabButton),
-      slivers: [],
+      slivers: const [],
       onNotificationTap: () {
         Navigator.push(context, NotificationPage.getRoute());
       },
@@ -244,7 +244,7 @@ class _StudentHomePageState extends State<StudentHomePage>
                   children: [
                     _title("${state.batchList.length} Batches"),
                     const SizedBox(height: 5),
-                    Container(
+                    SizedBox(
                       height: 150,
                       width: AppTheme.fullWidth(context),
                       child: ListView.builder(
@@ -262,9 +262,9 @@ class _StudentHomePageState extends State<StudentHomePage>
                   ],
                 ),
               ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: Column(
-                children: const [
+                children: [
                   SizedBox(height: 16),
                   Divider(),
                 ],
@@ -278,7 +278,7 @@ class _StudentHomePageState extends State<StudentHomePage>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        PTitleText("Poll").hP16,
+                        const PTitleText("Poll").hP16,
                         OutlinedButton(
                           onPressed: () {
                             Navigator.push(

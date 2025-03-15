@@ -18,7 +18,7 @@ class BatchSearch extends SearchDelegate<BatchModel?> {
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
       )
     ];
   }
@@ -51,8 +51,8 @@ class BatchSearch extends SearchDelegate<BatchModel?> {
             itemBuilder: (context, index) {
               var model = templist[index];
               return  Container(
-                margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: Theme.of(context).cardColor,
@@ -60,7 +60,7 @@ class BatchSearch extends SearchDelegate<BatchModel?> {
                 child: ListTile(
                   title: Text(
                     model.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
@@ -68,7 +68,7 @@ class BatchSearch extends SearchDelegate<BatchModel?> {
                   ),
                   subtitle: Text(model.subject ?? "N/A"),
                   trailing: isSelected(model, listenableList)
-                      ? Icon(Icons.check_box)
+                      ? const Icon(Icons.check_box)
                       : null,
                   onTap: () {
                     var selected = listenableList

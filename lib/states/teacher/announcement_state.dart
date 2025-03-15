@@ -94,9 +94,7 @@ class AnnouncementState extends BaseState {
   }) async {
     try {
       var model = announcementModel.copyWith(
-        batches: batches == null
-            ? null
-            : batches.where((element) => element.isSelected).map((e) => e.id).toList(),
+        batches: batches?.where((element) => element.isSelected).map((e) => e.id).toList(),
         description: description,
         isForAll: false,
       );

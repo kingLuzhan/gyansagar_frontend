@@ -6,7 +6,7 @@ class WebViewPage extends StatefulWidget {
   final String link;
   final String title;
 
-  const WebViewPage({Key? key, required this.link, required this.title}) : super(key: key);
+  const WebViewPage({super.key, required this.link, required this.title});
 
   static MaterialPageRoute getRoute(String link, {String title = ""}) {
     return MaterialPageRoute(builder: (_) => WebViewPage(link: link, title: title));
@@ -45,7 +45,7 @@ class _WebViewExampleState extends State<WebViewPage> {
       body: Stack(
         children: <Widget>[
           WebViewWidget(controller: _controller),
-          if (loading) Center(child: Ploader()),
+          if (loading) const Center(child: Ploader()),
         ],
       ),
     );

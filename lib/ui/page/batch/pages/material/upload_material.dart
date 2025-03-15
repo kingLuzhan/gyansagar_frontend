@@ -18,11 +18,11 @@ class UploadMaterialPage extends StatefulWidget {
   final BatchMaterialState state;
   final BatchMaterialModel materialModel;
   const UploadMaterialPage({
-    Key? key,
+    super.key,
     required this.subject,
     required this.state,
     required this.materialModel,
-  }) : super(key: key);
+  });
 
   static MaterialPageRoute getRoute({
     required String subject,
@@ -176,7 +176,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: const Color(0xffeeeeee),
-      appBar: CustomAppBar("Upload Material"),
+      appBar: const CustomAppBar("Upload Material"),
       body: Container(
         child: SingleChildScrollView(
           child: Column(
@@ -274,10 +274,10 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                             ),
                           ),
                           Text(state.file.path.split("/").last),
-                          Spacer(),
+                          const Spacer(),
                           IconButton(
                             padding: EdgeInsets.zero,
-                            icon: Icon(Icons.cancel),
+                            icon: const Icon(Icons.cancel),
                             onPressed: () {
                               state.removeFile();
                             },
@@ -295,7 +295,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                       ],
                     ),
                   ).vP8;
-                                  return SizedBox();
+                                  return const SizedBox();
                 },
               ),
               Consumer<BatchMaterialState>(

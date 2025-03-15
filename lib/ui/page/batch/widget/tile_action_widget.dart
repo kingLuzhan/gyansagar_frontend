@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 class TileActionWidget extends StatelessWidget {
   const TileActionWidget(
-      {Key? key,
+      {super.key,
         required this.onDelete,
         required this.onEdit,
         required this.onCustomIconPressed,
-        this.list = const ["Edit", "Delete"]})
-      : super(key: key);
+        this.list = const ["Edit", "Delete"]});
   final Function onDelete;
   final Function onEdit;
   final Function onCustomIconPressed;
@@ -29,7 +28,7 @@ class TileActionWidget extends StatelessWidget {
         }
       },
       padding: EdgeInsets.zero,
-      offset: Offset(0, 0),
+      offset: const Offset(0, 0),
       color: Colors.white,
       itemBuilder: (BuildContext context) {
         return list.map((String choice) {

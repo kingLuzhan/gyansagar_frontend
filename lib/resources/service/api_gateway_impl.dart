@@ -63,7 +63,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> uploadFile(File file, String id, {String? endpoint}) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
 
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path),
@@ -103,7 +103,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       var endpoint = model.id == null
           ? Constants.batch
           : Constants.editBatchDetail(model.id);
@@ -111,7 +111,7 @@ class ApiGatewayImpl implements ApiGateway {
           data: data, options: Options(headers: header));
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -121,7 +121,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       final mapJson = model.toJson();
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final endpoint = isEdit
           ? Constants.crudAnnouncement(model.id)
           : Constants.announcement;
@@ -131,7 +131,7 @@ class ApiGatewayImpl implements ApiGateway {
       final data = AnnouncementModel.fromJson(map["announcement"]);
       return data;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -151,7 +151,7 @@ class ApiGatewayImpl implements ApiGateway {
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -169,7 +169,7 @@ class ApiGatewayImpl implements ApiGateway {
 
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -181,7 +181,7 @@ class ApiGatewayImpl implements ApiGateway {
       await _dioClient.post(Constants.forgotPassword, data: data);
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -198,7 +198,7 @@ class ApiGatewayImpl implements ApiGateway {
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -207,7 +207,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       data.removeWhere((key, value) => value == null);
       var response = await _dioClient.post(
         Constants.profile,
@@ -218,21 +218,21 @@ class ApiGatewayImpl implements ApiGateway {
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
   @override
   Future<ActorModel> loginWithGoogle(String token) async {
     try {
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       var response = await _dioClient.get(Constants.googleAuth,
           options: Options(headers: header));
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -240,7 +240,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<BatchModel>> getBatches() async {
     try {
       var token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       bool isStudent = await pref.isStudent();
       var response = await _dioClient.get(
         Constants.getMyBatches(isStudent),
@@ -250,7 +250,7 @@ class ApiGatewayImpl implements ApiGateway {
       final list = BatchResponseModel.fromJson(json);
       return list.batches;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -258,7 +258,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> deleteBatch(String typeAndId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
 
       await _dioClient.delete(
         typeAndId,
@@ -266,20 +266,21 @@ class ApiGatewayImpl implements ApiGateway {
       );
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
+  @override
   Future<bool> createPoll(PollModel model) async {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       await _dioClient.post(Constants.poll,
           data: data, options: Options(headers: header));
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -287,12 +288,12 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> expirePollById(String pollId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
-      await _dioClient.post(Constants.crudePoll(pollId) + "/end",
+      final header = {"Authorization": "Bearer $token"};
+      await _dioClient.post("${Constants.crudePoll(pollId)}/end",
           options: Options(headers: header));
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -300,7 +301,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<AnnouncementModel>> getAnnouncementList() async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       bool isStudent = await pref.isStudent();
 
       final response = await _dioClient.get(
@@ -310,7 +311,7 @@ class ApiGatewayImpl implements ApiGateway {
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -318,7 +319,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       bool isStudent = await pref.isStudent();
 
       final response = await _dioClient.get(
@@ -328,7 +329,7 @@ class ApiGatewayImpl implements ApiGateway {
       final model = BatchTimelineResponse.fromJson(json);
       return model.timeline;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -336,7 +337,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<PollModel>> getPollList() async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       String endpoint =
       await pref.isStudent() ? Constants.studentPolls : Constants.poll;
       final response =
@@ -345,7 +346,7 @@ class ApiGatewayImpl implements ApiGateway {
       final model = PollResponseModel.fromJson(json);
       return model.polls;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -353,14 +354,14 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<ActorModel>> getStudentList() async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final response = await _dioClient.get(Constants.getAllStudentList,
           options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = StudentResponseModel.fromJson(json);
       return model.students;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -368,14 +369,14 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<String>> getSubjectList() async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final response = await _dioClient.get(Constants.subjects,
           options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = SubjectResponseModel.fromJson(json);
       return model.subjects;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -383,14 +384,14 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<NotificationModel>> getStudentNotificationsList() async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final response = await _dioClient.get(Constants.studentNotificationList,
           options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = NotificationResponseModel.fromJson(json);
       return model.notifications;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -399,7 +400,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final endpoint = isEdit
           ? Constants.crudVideo(model.id ?? '')
           : Constants.video;
@@ -407,7 +408,7 @@ class ApiGatewayImpl implements ApiGateway {
           data: data, options: Options(headers: header));
       return model;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -415,7 +416,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> deleteVideo(String videoId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
 
       await _dioClient.delete(
         Constants.crudVideo(videoId),
@@ -423,7 +424,7 @@ class ApiGatewayImpl implements ApiGateway {
       );
       return true;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -431,7 +432,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<void> savePollSelection(PollModel poll) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final endpoint = Constants.crudePoll(poll.id);
 
       var response = await _dioClient.post(
@@ -444,7 +445,7 @@ class ApiGatewayImpl implements ApiGateway {
         throw Exception('Failed to save poll selection');
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -452,8 +453,8 @@ class ApiGatewayImpl implements ApiGateway {
   Future<void> expirePoll(String pollId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
-      final endpoint = Constants.crudePoll(pollId) + "/expire";
+      final header = {"Authorization": "Bearer $token"};
+      final endpoint = "${Constants.crudePoll(pollId)}/expire";
 
       var response = await _dioClient.post(
         endpoint,
@@ -464,7 +465,7 @@ class ApiGatewayImpl implements ApiGateway {
         throw Exception('Failed to expire poll');
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -472,7 +473,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<void> deletePoll(String pollId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
-      final header = {"Authorization": "Bearer " + token};
+      final header = {"Authorization": "Bearer $token"};
       final endpoint = Constants.crudePoll(pollId);
 
       var response = await _dioClient.delete(
@@ -484,7 +485,7 @@ class ApiGatewayImpl implements ApiGateway {
         throw Exception('Failed to delete poll');
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 }

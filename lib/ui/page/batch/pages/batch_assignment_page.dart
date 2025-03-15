@@ -9,10 +9,10 @@ import 'package:provider/provider.dart';
 
 class BatchAssignmentPage extends StatelessWidget {
   const BatchAssignmentPage({
-    Key? key,
+    super.key,
     required this.model,
     required this.loader,
-  }) : super(key: key);
+  });
 
   final BatchModel model;
   final CustomLoader loader;
@@ -25,7 +25,7 @@ class BatchAssignmentPage extends StatelessWidget {
   Widget noQuiz(BuildContext context) {
     return Container(
       height: 100,
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       width: AppTheme.fullWidth(context),
       alignment: Alignment.center,
       child: Column(
@@ -36,7 +36,7 @@ class BatchAssignmentPage extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: PColors.gray,
               )),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text("No Assignment is uploaded yet for this batch!!",
               style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center),
@@ -50,7 +50,7 @@ class BatchAssignmentPage extends StatelessWidget {
     return Consumer<QuizState>(
       builder: (context, state, child) {
         if (state.isBusy) {
-          return Ploader();
+          return const Ploader();
         }
         if (state.assignmentsList.isEmpty) {
           return noQuiz(context);
