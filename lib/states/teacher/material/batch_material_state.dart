@@ -71,12 +71,14 @@ class BatchMaterialState extends BaseState {
 
   Future<bool> upload(String id) async {
     String endpoint = Constants.material + "/$id/upload";
-    return await execute(() async {
+    return (await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      return await repo.uploadFile(file, id, endpoint: endpoint) ?? false;
-    }, label: "Upload File");
+      bool? result = await repo.uploadFile(file, id, endpoint: endpoint);
+      isBusy = false;
+      return result ?? false;  // Ensure that the result is not null
+    }, label: "Upload File")) ?? false;  // Ensure that the final return value is not null
   }
 
   Future getBatchMaterialList() async {

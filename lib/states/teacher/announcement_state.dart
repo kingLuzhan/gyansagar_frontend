@@ -126,14 +126,14 @@ class AnnouncementState extends BaseState {
         ? Constants.uploadImageInAnnouncement(id)
         : Constants.uploadDocInAnnouncement(id);
 
-    return await execute(() async {
+    return (await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      bool result = await repo.uploadFile(imagefile ?? docfile!, id, endpoint: endpoint);
+      bool? result = await repo.uploadFile(imagefile ?? docfile!, id, endpoint: endpoint);
       isBusy = false;
-      return result;
-    }, label: "Upload Image");
+      return result ?? false;  // Ensure that the result is not null
+    }, label: "Upload Image")) ?? false;  // Ensure that the final return value is not null
   }
 
   void onAnnouncementDeleted(AnnouncementModel model) {
