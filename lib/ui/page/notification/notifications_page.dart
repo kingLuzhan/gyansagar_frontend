@@ -6,13 +6,25 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_loader.dart';
 import 'package:gyansagar_frontend/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:gyansagar_frontend/resources/repository/notification_repository.dart';
+import 'package:gyansagar_frontend/resources/service/api_gateway_impl.dart';
+import 'package:gyansagar_frontend/resources/service/dio_client.dart'; // Ensure this is available for DioClient
+import 'package:gyansagar_frontend/helper/shared_preference_helper.dart'; // Ensure this is available for SharedPreferenceHelper
+import 'package:dio/dio.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (_) => ChangeNotifierProvider<NotificationState>(
-          create: (_) => NotificationState(),
+          create: (_) => NotificationState(
+            notificationRepository: NotificationRepository(
+              ApiGatewayImpl(
+                DioClient(Dio(), logging: true), // Provide Dio instance and other parameters
+                pref: SharedPreferenceHelper.instance, // Use the singleton instance
+              ),
+            ),
+          ),
           builder: (_, child) => NotificationPage(),
         ));
   }

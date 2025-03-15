@@ -162,10 +162,15 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
         Navigator.pop(context);
       });
     } else {
-      Alert.success(context, message: "Some error occurred. Please try again in some time!!", title: "Message", height: 170);
+      Alert.success(context,
+          message: "Some error occurred. Please try again in some time!!",
+          title: "Message",
+          height: 170,
+          onPressed: () {
+            Navigator.pop(context);
+          });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,7 +202,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                       controller: _description,
                       label: "Description",
                       hintText: "Enter here",
-                      maxLines: null,
+                      maxLines: 10,
                       height: 70, // Provide a non-null value
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),

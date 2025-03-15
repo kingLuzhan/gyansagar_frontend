@@ -14,10 +14,10 @@ class UsernameWidget extends StatefulWidget {
   UsernameWidget({
     Key? key,
     required this.name,
-    required this.radius,
+    this.radius = 20.0, // Default value for radius
     this.backGroundColor = Colors.white,
     this.textStyle = const TextStyle(color: Colors.black),
-    required this.avatarUrl,
+    this.avatarUrl = '', // Default value for avatarUrl
     this.fileImage,
   }) : super(key: key);
 

@@ -17,7 +17,7 @@ class StartQuizPage extends StatefulWidget {
   static MaterialPageRoute getRoute({required AssignmentModel model, required String batchId}) {
     return MaterialPageRoute(
       builder: (_) => Provider(
-        create: (_) => QuizState(),
+        create: (_) => QuizState(batchId: batchId),
         child: ChangeNotifierProvider<QuizState>(
           create: (_) => QuizState(batchId: batchId),
           child: StartQuizPage(model: model, batchId: batchId),

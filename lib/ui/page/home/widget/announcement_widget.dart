@@ -22,8 +22,8 @@ class AnnouncementWidget extends StatelessWidget {
   final AnnouncementModel model;
   final CustomLoader loader;
   final List<String> actions;
-  final Future Function(AnnouncementModel) onAnnouncementDeleted;
-  final Function(AnnouncementModel) onAnnouncementEdit;
+  final Future Function(AnnouncementModel)? onAnnouncementDeleted; // Optional parameter
+  final Function(AnnouncementModel)? onAnnouncementEdit; // Optional parameter
 
   void deleteAnnouncement(BuildContext context, String id) async {
     Alert.yesOrNo(context,
@@ -36,7 +36,9 @@ class AnnouncementWidget extends StatelessWidget {
               .deleteAnnouncement(id);
           if (isDeleted) {
             Utility.displaySnackbar(context, msg: "Announcement Deleted");
-            await onAnnouncementDeleted(model);
+            if (onAnnouncementDeleted != null) {
+              await onAnnouncementDeleted!(model);
+            }
           }
           loader.hideLoader();
         });
@@ -160,7 +162,7 @@ class AnnouncementWidget extends StatelessWidget {
                 child: TileActionWidget(
                   list: actions,
                   onDelete: () => deleteAnnouncement(context, model.id),
-                  onEdit: () => onAnnouncementEdit(model),
+                  onEdit: () => onAnnouncementEdit?.call(model),
                   onCustomIconPressed: () {
                     // Custom action, if needed
                   },

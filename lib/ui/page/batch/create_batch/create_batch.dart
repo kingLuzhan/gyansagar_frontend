@@ -162,7 +162,7 @@ class _CreateBatchState extends State<CreateBatch> {
                   children: <Widget>[
                     _title(context, "Add new subject"),
                     const SizedBox(height: 30),
-                    PTextField(type: Type.text, controller: _subject),
+                    PTextField(type: FieldType.text, controller: _subject),
                     PFlatButton(
                       label: "Add",
                       isLoading: addSubjectLoading,
@@ -251,13 +251,13 @@ class _CreateBatchState extends State<CreateBatch> {
               children: <Widget>[
                 const SizedBox(height: 16),
                 PTextField(
-                  type: Type.text,
+                  type: FieldType.text,
                   controller: _name,
                   label: "Batch Name",
                   hintText: "Enter batch name",
                 ),
                 PTextField(
-                  type: Type.optional,
+                  type: FieldType.optional,
                   controller: _description,
                   label: "Description",
                   hintText: "Description",

@@ -104,6 +104,7 @@ class QuizResultPage extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
+                isLoading: ValueNotifier<bool>(false),
               )
             ],
           ),

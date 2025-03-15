@@ -245,6 +245,22 @@ class BatchDetailPage extends StatelessWidget {
                       onAnnouncementDeleted: (model) async {
                         await onAnnouncementDeleted(context, model);
                       },
+                      onAnnouncementEdit: (model) {
+                        Navigator.push(
+                          context,
+                          CreateAnnouncement.getEditRoute(
+                            batch: batchModel,
+                            announcementModel: model,
+                            onAnnouncementCreated: () {
+                              // if an announcement is created or edited then
+                              // refresh timelime api
+                              context
+                                  .read<BatchDetailState>()
+                                  .getBatchTimeLine();
+                            },
+                          ),
+                        );
+                      },
                     ),
                   );
                 }

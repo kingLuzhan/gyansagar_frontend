@@ -169,6 +169,10 @@ class BatchMaterialCard extends StatelessWidget {
               list: actions,
               onDelete: () => deleteVideo(context, model.id),
               onEdit: () => editMaterial(context, model),
+              onCustomIconPressed: () {
+                // Perform some custom action
+                print("Custom icon pressed");
+              },
             ),
         ],
       ),

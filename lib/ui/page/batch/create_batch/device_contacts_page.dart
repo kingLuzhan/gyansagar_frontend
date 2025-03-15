@@ -79,7 +79,7 @@ class _AllContactsPageState extends State<AllContactsPage> {
             children: [
               PTextField(
                 controller: search,
-                type: Type.text,
+                type: FieldType.text,
                 onChange: (val) {
                   searchTerm = val;
                   _refreshContacts();

@@ -46,6 +46,7 @@ class BatchMasterDetailPage extends StatefulWidget {
                 videoUrl: '',
                 thumbnailUrl: '',
                 batchId: '',
+                createdAt: DateTime.now().toIso8601String(),
               ),
             ),
           ),
@@ -66,8 +67,8 @@ class BatchMasterDetailPage extends StatefulWidget {
                 filePath: '',
                 isPrivate: false,
                 fileUploadedOn: '',
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now(),
+                createdAt: DateTime.now(), // Use DateTime directly
+                updatedAt: DateTime.now(), // Use DateTime directly
               ),
             ),
           ),
@@ -327,7 +328,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
               controller: _tabController,
               children: [
                 BatchDetailPage(batchModel: model, loader: loader),
-                BatchVideosPage(loader: loader),
+                BatchVideosPage(model: model, loader: loader),
                 BatchAssignmentPage(model: model, loader: loader),
                 BatchStudyMaterialPage(model: model, loader: loader)
               ],

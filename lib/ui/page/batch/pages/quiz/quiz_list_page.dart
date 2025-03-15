@@ -98,6 +98,10 @@ class _QuizListPageState extends State<QuizListPage> {
                 list: ["Delete"],
                 onDelete: () => deleteQuiz(model.id),
                 onEdit: () {},
+                onCustomIconPressed: () {
+                  // Perform some custom action
+                  print("Custom icon pressed");
+                },
               ),
           ],
         ));

@@ -5,19 +5,19 @@ class PChip extends StatelessWidget {
   const PChip({
     Key? key,
     required this.label,
-    required this.backgroundColor,
-    required this.isCrossIcon,
-    required this.onDeleted,
-    required this.style,
+    this.backgroundColor = Colors.white, // Default value
+    this.isCrossIcon = false, // Default value
+    this.onDeleted, // Optional parameter
+    this.style, // Optional parameter
     this.borderColor = Colors.black54,
   }) : super(key: key);
 
   final String label;
   final Color backgroundColor;
   final bool isCrossIcon;
-  final Function onDeleted;
+  final Function? onDeleted;
   final Color borderColor;
-  final TextStyle style;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,10 @@ class PChip extends StatelessWidget {
       ),
       child: Wrap(
         children: <Widget>[
-          Text(label, style: style),
-          if (isCrossIcon) ...[
+          Text(label, style: style ?? TextStyle()), // Default TextStyle if none provided
+          if (isCrossIcon && onDeleted != null) ...[
             SizedBox(width: 4),
-            Icon(Icons.cancel, size: 17).ripple(() => onDeleted()),
+            Icon(Icons.cancel, size: 17).ripple(() => onDeleted!()),
           ],
         ],
       ),
