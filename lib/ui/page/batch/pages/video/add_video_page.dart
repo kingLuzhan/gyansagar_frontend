@@ -304,7 +304,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                           ],
                         ),
                       ).vP8;
-                                          return const SizedBox();
+                      return const SizedBox();
                     },
                   ),
                   const SizedBox(height: 20),
@@ -317,7 +317,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                           url: state.thumbnailUrl,
                         ),
                       );
-                                          return const SizedBox();
+                      return const SizedBox();
                     },
                   ),
                   SizedBox(

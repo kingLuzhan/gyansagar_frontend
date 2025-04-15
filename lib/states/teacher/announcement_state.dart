@@ -96,7 +96,8 @@ class AnnouncementState extends BaseState {
       var model = announcementModel.copyWith(
         batches: batches?.where((element) => element.isSelected).map((e) => e.id).toList(),
         description: description,
-        isForAll: false,
+        title: title, // Add title here
+        isForAll: batches == null || batches.isEmpty || !batches.any((element) => element.isSelected),
       );
 
       final getit = GetIt.instance;

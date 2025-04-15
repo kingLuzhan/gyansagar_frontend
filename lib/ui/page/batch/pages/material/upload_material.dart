@@ -144,6 +144,20 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     if (!isTrue) {
       return;
     }
+    
+    // Check if either a link or a file is provided
+    if (_link.text.isEmpty && state.file.path.isEmpty) {
+      // Using Alert.success instead of Alert.error since error is not defined
+      Alert.success(context, 
+        message: "Please provide either a link or upload a file", 
+        title: "Missing Content",
+        onPressed: () {
+          Navigator.pop(context);
+        }
+      );
+      return;
+    }
+    
     if (_link.text.isNotEmpty) {
       state.setArticleUrl(_link.text);
     }
@@ -260,42 +274,44 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
               ).ripple(pickFile),
               Consumer<BatchMaterialState>(
                 builder: (context, state, child) {
-                  return SizedBox(
-                    height: 65,
-                    width: AppTheme.fullWidth(context),
-                    child: Column(
-                      children: <Widget>[
-                        Row(children: <Widget>[
-                          SizedBox(
-                            width: 50,
-                            child: Image.asset(
-                              Images.getFileTypeIcon(state.file.path.split(".").last),
-                              height: 30,
+                  if (state.file.path.isNotEmpty) {
+                    return SizedBox(
+                      height: 65,
+                      width: AppTheme.fullWidth(context),
+                      child: Column(
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            SizedBox(
+                              width: 50,
+                              child: Image.asset(
+                                Images.getFileTypeIcon(state.file.path.split(".").last),
+                                height: 30,
+                              ),
+                            ),
+                            Text(state.file.path.split("/").last),
+                            const Spacer(),
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: const Icon(Icons.cancel),
+                              onPressed: () {
+                                state.removeFile();
+                              },
+                            ),
+                          ]),
+                          Container(
+                            height: 5,
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            width: AppTheme.fullWidth(context),
+                            decoration: BoxDecoration(
+                              color: const Color(0xff0CC476),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          Text(state.file.path.split("/").last),
-                          const Spacer(),
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(Icons.cancel),
-                            onPressed: () {
-                              state.removeFile();
-                            },
-                          ),
-                        ]),
-                        Container(
-                          height: 5,
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          width: AppTheme.fullWidth(context),
-                          decoration: BoxDecoration(
-                            color: const Color(0xff0CC476),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ).vP8;
-                                  return const SizedBox();
+                        ],
+                      ),
+                    ).vP8;
+                  }
+                  return const SizedBox();
                 },
               ),
               Consumer<BatchMaterialState>(

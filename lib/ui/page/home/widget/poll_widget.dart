@@ -6,7 +6,7 @@ import 'package:gyansagar_frontend/ui/page/batch/widget/tile_action_widget.dart'
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
-class PollWidget extends StatelessWidget {
+class PollWidget extends StatefulWidget {
   const PollWidget({
     super.key,
     required this.model,
@@ -17,6 +17,11 @@ class PollWidget extends StatelessWidget {
   final CustomLoader loader;
   final bool hideFinishButton;
 
+  @override
+  State<PollWidget> createState() => _PollWidgetState();
+}
+
+class _PollWidgetState extends State<PollWidget> {
   Widget _secondaryButton(BuildContext context,
       {required String label, required VoidCallback onPressed, bool isLoading = false}) {
     final theme = Theme.of(context);
@@ -46,40 +51,45 @@ class PollWidget extends StatelessWidget {
       margin: const EdgeInsets.only(top: 5),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: model.selection?.choice == e
+        decoration: widget.model.selection?.choice == e
             ? AppTheme.outlineSucess(context)
-            .copyWith(color: PColors.green.withOpacity(.3))
-            : model.isMyVote(
-            Provider.of<HomeState>(context).userId, e)
-            ? AppTheme.outlineSucess(context)
-            .copyWith(color: PColors.green.withOpacity(.3))
-            : model.endTime.isAfter(DateTime.now())
-            ? AppTheme.outlinePrimary(context)
-            : AppTheme.outline(context),
+                .copyWith(color: PColors.green.withOpacity(.3))
+            : widget.model.isMyVote(Provider.of<HomeState>(context).userId, e)
+                ? AppTheme.outlineSucess(context)
+                    .copyWith(color: PColors.green.withOpacity(.3))
+                : widget.model.endTime.isAfter(DateTime.now())
+                    ? AppTheme.outlinePrimary(context)
+                    : AppTheme.outline(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(e).extended,
-            Text('${model.percent(e).toStringAsFixed(1)}%'),
+            Text('${widget.model.percent(e).toStringAsFixed(1)}%'),
           ],
         ),
       ).ripple(() {
         final state = Provider.of<HomeState>(context, listen: false);
 
         if (state.isTeacher ||
-            model.selection?.loading == true ||
-            model.endTime.isBefore(DateTime.now())) {
+            widget.model.selection?.loading == true ||
+            widget.model.endTime.isBefore(DateTime.now())) {
           return;
         }
 
-        final userId = Provider.of<HomeState>(context, listen: false).userId;
-        if (model.isVoted(userId)) {
+        final userId = state.userId;
+        if (widget.model.isVoted(userId)) {
           print("Already voted");
           return;
         }
-        model.selection = MySelection(choice: e, isSelected: true);
-        state.savePollSelection(model);
+
+        setState(() {
+          widget.model.selection = MySelection(
+            choice: e,
+            isSelected: true,
+            loading: false,
+          );
+        });
       }),
     );
   }
@@ -89,8 +99,7 @@ class PollWidget extends StatelessWidget {
     if (state.isBusy) {
       return;
     }
-
-    state.castVoteOnPoll(model, answer);
+    state.castVoteOnPoll(widget.model, answer);
   }
 
   @override
@@ -105,19 +114,19 @@ class PollWidget extends StatelessWidget {
         children: <Widget>[
           Row(
             children: [
-              Text(model.question).pL(16).extended,
+              Text(widget.model.question).pL(16).extended,
               if (context.watch<HomeState>().isTeacher)
                 TileActionWidget(
                   list: const ["End Poll", "Delete"],
                   onCustomIconPressed: () async {
-                    loader.showLoader(context);
-                    await context.read<HomeState>().expirePoll(model.id);
-                    loader.hideLoader();
+                    widget.loader.showLoader(context);
+                    await context.read<HomeState>().expirePoll(widget.model.id);
+                    widget.loader.hideLoader();
                   },
                   onDelete: () async {
-                    loader.showLoader(context);
-                    await context.read<HomeState>().deletePoll(model.id);
-                    loader.hideLoader();
+                    widget.loader.showLoader(context);
+                    await context.read<HomeState>().deletePoll(widget.model.id);
+                    widget.loader.hideLoader();
                   },
                   onEdit: () {},
                 )
@@ -127,18 +136,18 @@ class PollWidget extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Column(
-              children: model.options.map((e) {
+              children: widget.model.options.map((e) {
                 return _option(context, e).hP16;
               }).toList()),
           if (!state.isTeacher &&
-              !model.isVoted(state.userId) &&
-              model.selection?.isSelected == true &&
-              !model.endTime.isBefore(DateTime.now())) ...[
+              !widget.model.isVoted(state.userId) &&
+              widget.model.selection?.isSelected == true &&
+              !widget.model.endTime.isBefore(DateTime.now())) ...[
             const SizedBox(height: 10),
             _secondaryButton(context,
-                isLoading: model.selection?.loading == true,
+                isLoading: widget.model.selection?.loading == true,
                 label: "Submit", onPressed: () {
-                  submitVote(context, model.selection?.choice ?? '');
+                  submitVote(context, widget.model.selection?.choice ?? '');
                 })
           ],
           const SizedBox(height: 16)

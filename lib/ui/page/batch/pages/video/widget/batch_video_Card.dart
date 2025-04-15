@@ -124,8 +124,9 @@ class BatchVideoCard extends StatelessWidget {
           Expanded(
               child: InkWell(
                 onTap: () {
+                  // Use model.video instead of model.videoUrl
                   Navigator.push(context,
-                      VideoPlayerPage2.getRoute(model.videoUrl, title: model.title)); // Correct class name
+                      VideoPlayerPage2.getRoute(model.video, title: model.title));
                 },
                 child: Padding(
                   padding:

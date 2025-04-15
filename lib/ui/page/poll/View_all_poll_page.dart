@@ -16,6 +16,11 @@ class ViewAllPollPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Make sure to refresh the poll list when the page is loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeState>().getPollList();
+    });
+    
     return Scaffold(
       appBar: const CustomAppBar("All Polls"),
       body: Consumer<HomeState>(
@@ -26,7 +31,7 @@ class ViewAllPollPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return PollWidget(
                   model: state.allPolls[index],
-                  loader: CustomLoader(), // Provide the required loader argument
+                  loader: CustomLoader(),
                 );
               },
             ),

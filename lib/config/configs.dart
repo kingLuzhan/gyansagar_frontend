@@ -12,12 +12,5 @@ class Configs {
         diagnostic: true,
       );
 
-  static proConfig() => Config(
-        appName: 'Gyansagar',
-        appIcon: Images.logo,
-        apiBaseUrl: Constants.productionBaseUrl,
-        appToken: '',
-        apiLogging: false,
-        diagnostic: false,
-      );
+
 }

@@ -50,13 +50,13 @@ class _PollOptionState extends State<PollOption> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0), // Provide non-null values
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: PTextField(
         type: FieldType.text,
         controller: controller,
         hintText: "Enter option ${widget.index}",
-        maxLines: 0,
-        height: 8.0,
+        maxLines: 1,  // Change from 0 to 1
+        height: 50.0,  // Change to an appropriate height
         suffixIcon: widget.index < 2
             ? null
             : IconButton(

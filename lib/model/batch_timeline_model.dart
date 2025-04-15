@@ -1,10 +1,13 @@
 import 'package:gyansagar_frontend/helper/enum.dart';
+import 'package:gyansagar_frontend/model/create_announcement_model.dart';
+import 'package:gyansagar_frontend/model/video_model.dart';
+import 'package:gyansagar_frontend/model/batch_material_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'batch_timeline_model.g.dart';
 
 class BatchTimeline {
-  final RawType type;
+  final String type;
   final DateTime createdAt;
   final dynamic datum;
 
@@ -15,16 +18,30 @@ class BatchTimeline {
   });
 
   factory BatchTimeline.fromJson(Map<String, dynamic> json) {
+    final type = json['type'] as String;
+    dynamic parsedDatum;
+    
+    // Parse datum based on type
+    if (type == 'video') {
+      parsedDatum = VideoModel.fromJson(json['datum']);
+    } else if (type == 'announcement') {
+      parsedDatum = AnnouncementModel.fromJson(json['datum']);
+    } else if (type == 'material') {
+      parsedDatum = BatchMaterialModel.fromJson(json['datum']);
+    } else {
+      parsedDatum = json['datum'];
+    }
+    
     return BatchTimeline(
-      type: typeValues.map[json['type']]!,
+      type: type,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      datum: json['datum'],
+      datum: parsedDatum,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'type': typeValues.reverse[type],
+      'type': type,
       'createdAt': createdAt.toIso8601String(),
       'datum': datum,
     };

@@ -163,8 +163,8 @@ class _CreateBatchState extends State<CreatePoll> {
                   controller: _question,
                   label: "Poll question",
                   hintText: "Enter question",
-                  maxLines: 0,
-                  height: 0.0,
+                  maxLines: 1,
+                  height: 50.0,  // Changed from null to a specific height
                 ),
                 const SizedBox(height: 15),
                 _title(context, "Poll Expire time"),

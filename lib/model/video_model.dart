@@ -9,6 +9,7 @@ class VideoModel {
   final String thumbnailUrl;
   final String batchId;
   final String createdAt;
+  final String video; // Added this field to match backend model
 
   VideoModel({
     required this.id,
@@ -19,6 +20,7 @@ class VideoModel {
     required this.thumbnailUrl,
     required this.batchId,
     required this.createdAt,
+    this.video = "", // Default to empty string
   });
 
   factory VideoModel.fromRawJson(String str) => VideoModel.fromJson(json.decode(str));
@@ -34,6 +36,7 @@ class VideoModel {
     thumbnailUrl: json["thumbnailUrl"] ?? "",
     batchId: json["batchId"] ?? "",
     createdAt: json["createdAt"] ?? "",
+    video: json["video"] ?? "", // Parse the video field from JSON
   );
 
   Map<String, dynamic> toJson() => {
@@ -45,6 +48,7 @@ class VideoModel {
     "thumbnailUrl": thumbnailUrl,
     "batchId": batchId,
     "createdAt": createdAt,
+    "video": video, // Include video field in JSON output
   };
 
   VideoModel copyWith({
@@ -56,6 +60,7 @@ class VideoModel {
     String? thumbnailUrl,
     String? batchId,
     String? createdAt,
+    String? video,
   }) {
     return VideoModel(
       id: id ?? this.id,
@@ -66,6 +71,12 @@ class VideoModel {
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       batchId: batchId ?? this.batchId,
       createdAt: createdAt ?? this.createdAt,
+      video: video ?? this.video,
     );
+  }
+  
+  // Helper method to get the actual video URL (prioritize video field over videoUrl)
+  String getVideoUrl() {
+    return video.isNotEmpty ? video : videoUrl;
   }
 }

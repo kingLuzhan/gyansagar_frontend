@@ -263,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Row(
           children: <Widget>[
-            Image.asset("assets/images/google_icon.png", height: 30),
+            Image.asset("assets/google_icon.png", height: 30),
             const Spacer(),
             const Text("Continue with Google"),
             const Spacer(),

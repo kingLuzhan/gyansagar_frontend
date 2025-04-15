@@ -217,7 +217,12 @@ class BatchDetailPage extends StatelessWidget {
           },
         ),
         // Batch video, announcement, study material timeline
+        // In the Consumer<BatchDetailState> section:
         Consumer<BatchDetailState>(builder: (context, state, child) {
+          if (state.isBusy) {
+            return const SliverToBoxAdapter(child: PCLoader(stroke: 2));
+          }
+          
           if (state.timeLineList != null && state.timeLineList!.isNotEmpty) {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
@@ -228,62 +233,65 @@ class BatchDetailPage extends StatelessWidget {
                   );
                 }
                 final model = state.timeLineList![index - 1];
-                if (model.datum is VideoModel) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                    child: BatchVideoCard(
-                      model: model.datum,
-                      loader: loader,
-                      actions: const ["Delete"],
-                    ),
-                  );
+                
+                // Handle different types of timeline items
+                switch(model.type) {
+                  case 'video':
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                      child: BatchVideoCard(
+                        model: model.datum,
+                        loader: loader,
+                        actions: const ["Delete"],
+                      ),
+                    );
+                  case 'announcement':
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: AnnouncementWidget(
+                        model.datum,
+                        actions: const ["Delete"],
+                        loader: loader,
+                        onAnnouncementDeleted: (announcementModel) async {
+                          await onAnnouncementDeleted(context, announcementModel);
+                        },
+                        onAnnouncementEdit: (announcementModel) {
+                          Navigator.push(
+                            context,
+                            CreateAnnouncement.getEditRoute(
+                              batch: batchModel,
+                              announcementModel: announcementModel,
+                              onAnnouncementCreated: () {
+                                context.read<BatchDetailState>().getBatchTimeLine();
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  case 'material':
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                      child: BatchMaterialCard(
+                        model: model.datum,
+                        loader: loader,
+                        actions: const ["Delete"],
+                      ),
+                    );
+                  default:
+                    print("Unknown timeline item type: ${model.type}");
+                    return const SizedBox();
                 }
-                if (model.datum is AnnouncementModel) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: AnnouncementWidget(
-                      model.datum,
-                      actions: const ["Delete"],
-                      loader: loader,
-                      onAnnouncementDeleted: (model) async {
-                        await onAnnouncementDeleted(context, model);
-                      },
-                      onAnnouncementEdit: (model) {
-                        Navigator.push(
-                          context,
-                          CreateAnnouncement.getEditRoute(
-                            batch: batchModel,
-                            announcementModel: model,
-                            onAnnouncementCreated: () {
-                              // if an announcement is created or edited then
-                              // refresh timelime api
-                              context
-                                  .read<BatchDetailState>()
-                                  .getBatchTimeLine();
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }
-                if (model.datum is BatchMaterialModel) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                    child: BatchMaterialCard(
-                      model: model.datum,
-                      loader: loader,
-                      actions: const ["Delete"],
-                    ),
-                  );
-                }
-                print(
-                    "Unknown item found on batch timeline\n Type: ${model.type}");
-                return const SizedBox();
               }, childCount: state.timeLineList!.length + 1),
             );
           }
-          return const SliverToBoxAdapter();
+          
+          return const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text("No timeline items available"),
+            ),
+          );
         }),
         const SliverToBoxAdapter(child: SizedBox(height: 70))
       ],

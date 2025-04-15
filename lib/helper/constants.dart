@@ -1,6 +1,6 @@
 class Constants {
-  static const String productionBaseUrl = "http://34.222.54.250:3000/api/";
-  static const String developmentBaseUrl = "https://pensil-staging.herokuapp.com/api";
+  static const String productionBaseUrl = "http://10.0.2.2:3000/api/";
+  static const String developmentBaseUrl = "http://10.0.2.2:3000/api/";
   static const String batch = "batch";
   static const String announcement = 'announcement';
   static const String assignment = 'assignment';
@@ -19,6 +19,7 @@ class Constants {
   static const String studentNotificationList = "student/my-notifications";
 
   static const String defaultUploadEndpoint = 'upload'; // Add this line
+
 
   static const String studentBatch = "$student/my-batches";
   static const String studentAnnouncements = "$student/my-announcements";
@@ -97,6 +98,10 @@ class Constants {
 
   static String crudMaterial(String id) {
     return "$material/$id";
+  }
+
+  static String uploadMaterialFile(String id) {
+    return "$material/$id/upload";
   }
 
   static String crudAssignment(String id) {

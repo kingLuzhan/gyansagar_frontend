@@ -68,10 +68,17 @@ class VideoState extends BaseState {
         return await repo.addVideo(model, isEdit: isEditMode);
       }, label: "addVideo");
 
-      /// If video is uploaded
-      bool ok = await upload(data!.id);
-      isBusy = false;
-      return ok;
+      /// If video is uploaded and we have a valid file
+      if (data != null && data.id.isNotEmpty && file.path.isNotEmpty) {
+        print("Debug - About to upload file with ID: ${data.id}");
+        bool ok = await upload(data.id);
+        isBusy = false;
+        return ok;
+      } else {
+        print("Debug - No file to upload or invalid ID: ${data?.id}");
+        isBusy = false;
+        return data != null; // Return true if video was created successfully even without file
+      }
     } catch (error, stackTrace) {
       log("addVideo", error: error, stackTrace: stackTrace);
       return false;
@@ -80,15 +87,30 @@ class VideoState extends BaseState {
 
   /// Upload video file to server
   Future<bool> upload(String id) async {
+    if (id.isEmpty) {
+      print("Debug - Cannot upload: Empty ID provided");
+      return false;
+    }
+    
     String endpoint = "${Constants.video}/$id/upload";
+    print("Debug - Upload endpoint: $endpoint");
+    print("Debug - Video ID: $id");
+    
     return (await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
+      
+      // Check if file is valid
+      if (file.path.isEmpty) {
+        print("Debug - File path is empty");
+        return false;
+      }
+      
       bool? result = await repo.uploadFile(file, id, endpoint: endpoint);
       isBusy = false;
-      return result ?? false;  // Ensure that the result is not null
-    }, label: "Upload Video")) ?? false;  // Ensure that the final return value is not null
+      return result ?? false;
+    }, label: "Upload Video")) ?? false;
   }
 
   /// Fetch video list related to a batch from server

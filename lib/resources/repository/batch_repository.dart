@@ -20,7 +20,8 @@ class BatchRepository {
     return gateway.createBatch(model);
   }
 
-  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model, {bool? isEdit}) {
+  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model,
+      {bool? isEdit}) {
     return gateway.createAnnouncement(model, isEdit: isEdit ?? false);
   }
 
@@ -85,7 +86,8 @@ class BatchRepository {
   }
 
   Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId) {
-    return gateway.getBatchAnnouncementList(batchId); // Assuming API still has the typo
+    return gateway.getBatchAnnouncementList(
+        batchId); // Assuming API still has the typo
   }
 
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId) {
@@ -96,7 +98,8 @@ class BatchRepository {
     return gateway.getAssignmentList(batchId);
   }
 
-  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assignmentId) {
+  Future<QuizDetailModel> getAssignmentDetailList(String batchId,
+      String assignmentId) {
     return gateway.getAssignmentDetailList(batchId, assignmentId);
   }
 
@@ -115,5 +118,19 @@ class BatchRepository {
 
   Future<void> deletePoll(String pollId) async {
     return gateway.deletePoll(pollId);
+
+
+    Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId) async {
+      return await gateway.getBatchMaterialList(batchId);
+    }
+
+    Future<List<AnnouncementModel>> getBatchAnnouncementList(
+        String batchId) async {
+      return await gateway.getBatchAnnouncementList(batchId);
+    }
+
+    Future<List<AssignmentModel>> getAssignmentList(String batchId) async {
+      return await gateway.getAssignmentList(batchId);
+    }
   }
 }

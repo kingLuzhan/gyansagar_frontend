@@ -27,7 +27,7 @@ class BatchTimeSlotModel extends Equatable {
     return BatchTimeSlotModel(
       key: UniqueKey().toString(),
       index: 0,
-      day: "Mon",
+      day: "Monday",
       startTime: "Start time",
       endTime: "End time",
       dayOfWeek: 1, // Monday
@@ -52,19 +52,19 @@ class BatchTimeSlotModel extends Equatable {
 
   static int dayToIndex(String day) {
     switch (day) {
-      case "Mon":
+      case "Monday":
         return 1;
-      case "Tue":
+      case "Tuesday":
         return 2;
-      case "Wed":
+      case "Wednesday":
         return 3;
-      case "Thu":
+      case "Thursday":
         return 4;
-      case "Fri":
+      case "Friday":
         return 5;
-      case "Sat":
+      case "Saturday":
         return 6;
-      case "Sun":
+      case "Sunday":
         return 7;
       default:
         log("Unknown Day index $day", name: "BatchTimeSlotModel");
@@ -75,19 +75,19 @@ class BatchTimeSlotModel extends Equatable {
   static String indexToDay(int dayOfWeek) {
     switch (dayOfWeek) {
       case 1:
-        return "Mon";
+        return "Monday";
       case 2:
-        return "Tue";
+        return "Tuesday";
       case 3:
-        return "Wed";
+        return "Wednesday";
       case 4:
-        return "Thu";
+        return "Thursday";
       case 5:
-        return "Fri";
+        return "Friday";
       case 6:
-        return "Sat";
+        return "Saturday";
       case 7:
-        return "Sun";
+        return "Sunday";
       default:
         log("Unknown dayOfWeek $dayOfWeek",
             name: "BatchTimeSlotModel");
@@ -98,19 +98,19 @@ class BatchTimeSlotModel extends Equatable {
   String toShortDay() {
     switch (day) {
       case "Monday":
-        return "Mon";
+        return "Monday";
       case "Tuesday":
-        return "Tue";
+        return "Tuesday";
       case "Wednesday":
-        return "Wed";
+        return "Wednesday";
       case "Thursday":
-        return "Thu";
+        return "Thursday";
       case "Friday":
-        return "Fri";
+        return "Friday";
       case "Saturday":
-        return "Sat";
+        return "Saturday";
       case "Sunday":
-        return "Sun";
+        return "Sunday";
       default:
         log("Unknown day $day", name: "BatchTimeSlotModel");
         return "N/A";

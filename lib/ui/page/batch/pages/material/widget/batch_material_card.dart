@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/helper/images.dart';
 import 'package:gyansagar_frontend/helper/utility.dart';
@@ -12,6 +13,8 @@ import 'package:gyansagar_frontend/ui/page/batch/widget/tile_action_widget.dart'
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_chiip.dart';
 import 'package:provider/provider.dart';
+import 'package:gyansagar_frontend/ui/page/batch/pages/material/pdf_viewer_page.dart';
+import 'package:gyansagar_frontend/ui/page/common/web_view.page.dart';
 
 class BatchMaterialCard extends StatelessWidget {
   const BatchMaterialCard(
@@ -63,9 +66,124 @@ class BatchMaterialCard extends StatelessWidget {
   }
 
   void openMaterial(context, BatchMaterialModel model) {
-    if (model.filePath.isNotEmpty || (model.articleUrl != null && model.articleUrl!.isNotEmpty)) {
-      Utility.launchOnWeb(model.articleUrl ?? model.filePath);
+    // Add debug print to see what's being passed
+    print("Opening material: ${model.articleUrl ?? model.fileUrl ?? model.filePath}");
+    
+    String filePath = "";
+    
+    if (model.articleUrl != null && model.articleUrl!.isNotEmpty) {
+      // For article URLs, use launchOnWeb
+      Utility.launchOnWeb(model.articleUrl!);
+      return;
+    } else if (model.fileUrl.isNotEmpty) {
+      // For file URLs, use launchOnWeb with the file URL
+      filePath = model.fileUrl;
+    } else if (model.filePath.isNotEmpty) {
+      filePath = model.filePath;
+    } else {
+      // Show a message if no URL or file is available
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No URL or file available to open this material")),
+      );
+      return;
     }
+    
+    // If the URL contains localhost, replace it with the actual server address
+    if (filePath.contains('localhost')) {
+      filePath = filePath.replaceAll('localhost', '10.0.2.2');
+    }
+    
+    // Check if filePath is actually a URL (starts with http)
+    if (filePath.startsWith('http')) {
+      print("Opening remote file URL: $filePath");
+      
+      // Determine file type and open with appropriate viewer
+      final fileExtension = filePath.split('.').last.toLowerCase();
+      
+      if (['pdf', 'doc', 'docx', 'xlsx', 'xls'].contains(fileExtension)) {
+        // For documents, use a document viewer
+        _openDocumentFile(context, filePath);
+      } else if (['jpg', 'jpeg', 'png', 'gif'].contains(fileExtension)) {
+        // For images, use an image viewer
+        _openImageFile(context, filePath);
+      } else {
+        // For other file types, try to open with default handler
+        Utility.launchOnWeb(filePath);
+      }
+    } else {
+      // For local files
+      print("Opening local file: $filePath");
+      Utility.openFile(filePath);
+    }
+  }
+  
+  void _openDocumentFile(BuildContext context, String filePath) {
+    // Determine file type
+    final fileExtension = filePath.split('.').last.toLowerCase();
+    
+    if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].contains(fileExtension)) {
+      // For document files, use Google Docs Viewer
+      final encodedUrl = Uri.encodeComponent(filePath);
+      final viewerUrl = 'https://docs.google.com/viewer?url=$encodedUrl&embedded=true';
+      
+      Navigator.push(
+        context,
+        WebViewPage.getRoute(viewerUrl, title: "Document Viewer"),
+      );
+    } else {
+      // For other document types, try to open with external app
+      Utility.launchOnWeb(filePath);
+      
+      // Also show a message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Opening document with external app: $fileExtension")),
+      );
+    }
+  }
+  
+  void _openImageFile(BuildContext context, String filePath) {
+    // Open image in a full-screen viewer
+    String imageUrl = filePath;
+    
+    // If the URL contains localhost, replace it with the actual server address
+    if (filePath.contains('localhost')) {
+      // Replace localhost with the actual server address (10.0.2.2 for Android emulator)
+      imageUrl = filePath.replaceAll('localhost', '10.0.2.2');
+    }
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: const Text("Image Viewer"),
+            backgroundColor: Colors.black,
+          ),
+          body: Center(
+            child: imageUrl.startsWith('http') 
+                ? Image.network(
+                    imageUrl,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded / 
+                                loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Text('Error loading image: $error');
+                    },
+                  )
+                : Image.file(File(imageUrl)),
+          ),
+          backgroundColor: Colors.black,
+        ),
+      ),
+    );
   }
 
   void deleteVideo(BuildContext context, String id) async {

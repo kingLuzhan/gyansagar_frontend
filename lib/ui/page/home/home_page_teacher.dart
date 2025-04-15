@@ -146,20 +146,101 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             animationValue: 1,
             onPressed: () {
               animate();
-              Navigator.push(context, CreateAnnouncement.getRoute(
-                batch: BatchModel(
-                  id: '',
-                  name: '',
-                  description: '',
-                  classes: [],
-                  subject: '',
-                  students: [],
-                  studentModel: [],
-                ),
-                onAnnouncementCreated: () {
-                  context.read<HomeState>().fetchAnnouncementList();
-                },
-              ));
+              // Check if there are any batches available
+              if (context.read<HomeState>().batchList.isNotEmpty) {
+                // Show a dialog to select a batch or create for all
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Create Announcement'),
+                    content: const Text('Do you want to create an announcement for a specific batch or for all?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          // Store the HomeState reference before navigation
+                          final homeState = context.read<HomeState>();
+                          // For "For All" option, use an empty batch list
+                          Navigator.push(context, CreateAnnouncement.getRoute(
+                            batch: BatchModel(
+                              id: '',
+                              name: '',
+                              description: '',
+                              classes: [],
+                              subject: '',
+                              students: [],
+                              studentModel: [],
+                            ),
+                            onAnnouncementCreated: () {
+                              // Use the stored reference instead of reading from context
+                              homeState.fetchAnnouncementList();
+                            },
+                          ));
+                        },
+                        child: const Text('For All'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          // Store the HomeState reference before navigation
+                          final homeState = context.read<HomeState>();
+                          // Show batch selection dialog
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Select Batch'),
+                              content: SizedBox(
+                                width: double.maxFinite,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: context.read<HomeState>().batchList.length,
+                                  itemBuilder: (context, index) {
+                                    final batch = context.read<HomeState>().batchList[index];
+                                    return ListTile(
+                                      title: Text(batch.name),
+                                      subtitle: Text(batch.subject),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(context, CreateAnnouncement.getRoute(
+                                          batch: batch,
+                                          onAnnouncementCreated: () {
+                                            // Use the stored reference instead of reading from context
+                                            homeState.fetchAnnouncementList();
+                                          },
+                                        ));
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text('Select Batch'),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                // No batches available, create for all
+                // Store the HomeState reference before navigation
+                final homeState = context.read<HomeState>();
+                Navigator.push(context, CreateAnnouncement.getRoute(
+                  batch: BatchModel(
+                    id: '',
+                    name: '',
+                    description: '',
+                    classes: [],
+                    subject: '',
+                    students: [],
+                    studentModel: [],
+                  ),
+                  onAnnouncementCreated: () {
+                    // Use the stored reference instead of reading from context
+                    homeState.fetchAnnouncementList();
+                  },
+                ));
+              }
             },
           ),
         ],
@@ -312,13 +393,16 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                       state.announcementList[index - 1],
                       loader: loader,
                       onAnnouncementEdit: (model) {
+                        // Store the HomeState reference before navigation
+                        final homeState = context.read<HomeState>();
                         Navigator.push(
                           context,
                           CreateAnnouncement.getEditRoute(
                             batch: state.batchList.firstWhere((batch) => batch.id == model.batches.first),
                             announcementModel: model,
                             onAnnouncementCreated: () {
-                              context.read<HomeState>().fetchAnnouncementList();
+                              // Use the stored reference instead of reading from context
+                              homeState.fetchAnnouncementList();
                             },
                           ),
                         );

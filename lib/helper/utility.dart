@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 
 class Utility {
   static void displaySnackbar(BuildContext context,
@@ -22,6 +23,26 @@ class Utility {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+  
+  static Future<void> openFile(String filePath) async {
+    try {
+      final file = File(filePath);
+      if (await file.exists()) {
+        // For now, we'll try to open the file using URL launcher
+        // This might not work for all file types, but it's a start
+        final Uri uri = Uri.file(filePath);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri);
+        } else {
+          print("Cannot launch file: $filePath");
+        }
+      } else {
+        print("File does not exist: $filePath");
+      }
+    } catch (e) {
+      print("Error opening file: $e");
     }
   }
 

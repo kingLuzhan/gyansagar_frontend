@@ -50,7 +50,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
                     isExpanded: true,
                     underline: const SizedBox(),
                     value: model.day,
-                    items: <String>['Mon', 'Tue', 'Wed', 'Thu', "Fri", "Sat", "Sun"]
+                    items: <String>['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
                         .map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

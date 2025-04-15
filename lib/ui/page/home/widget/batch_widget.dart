@@ -22,49 +22,55 @@ class BatchWidget extends StatelessWidget {
       width: AppTheme.fullWidth(context) * .7,
       margin: const EdgeInsets.only(left: 16),
       decoration: AppTheme.outline(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(model.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: (Theme.of(context).textTheme.titleLarge ?? const TextStyle())
-                  .copyWith(fontSize: 15, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          PChip(
-            label: model.subject,
-            backgroundColor: const Color(0xffF67619),
-            borderColor: Colors.transparent,
-            style: (theme.textTheme.bodyLarge ?? const TextStyle()).copyWith(
-                fontSize: 14, color: theme.colorScheme.onSecondary),
-            isCrossIcon: false, // Added isCrossIcon parameter
-            onDeleted: () {}, // Added onDeleted parameter
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: Iterable.generate(model.classes.length, (index) {
-                  final e = model.classes[index];
-                  return Text(e.toShortDay() +
-                      (model.classes.length == index + 1 ? "" : ","))
-                      .hP4;
-                }).toList(),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              StudentListPreview(list: model.studentModel),
-            ],
-          ),
-        ],
-      ).p16.ripple(() {
-        Navigator.push(context,
-            BatchMasterDetailPage.getRoute(model, isTeacher: isTeacher));
-      }),
+      // Wrap with SingleChildScrollView to handle overflow
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(model.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: (Theme.of(context).textTheme.titleLarge ?? const TextStyle())
+                    .copyWith(fontSize: 15, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            PChip(
+              label: model.subject,
+              backgroundColor: const Color(0xffF67619),
+              borderColor: Colors.transparent,
+              style: (theme.textTheme.bodyLarge ?? const TextStyle()).copyWith(
+                  fontSize: 14, color: theme.colorScheme.onSecondary),
+              isCrossIcon: false,
+              onDeleted: () {},
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(  // Added Flexible to prevent overflow in the row
+                  child: Row(
+                    children: Iterable.generate(model.classes.length, (index) {
+                      final e = model.classes[index];
+                      return Text(e.toShortDay() +
+                          (model.classes.length == index + 1 ? "" : ","))
+                          .hP4;
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),  // Reduced spacing
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                StudentListPreview(list: model.studentModel),
+              ],
+            ),
+          ],
+        ).p16.ripple(() {
+          Navigator.push(context,
+              BatchMasterDetailPage.getRoute(model, isTeacher: isTeacher));
+        }),
+      ),
     );
   }
 }
