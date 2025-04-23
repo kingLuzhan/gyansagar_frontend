@@ -7,11 +7,18 @@ class NotificationRepository {
   NotificationRepository(this._apiGateway);
 
   Future<List<NotificationModel>> getNotifications() async {
-    try {
-      final response = await _apiGateway.getStudentNotificationsList();
-      return response;
-    } catch (error) {
-      rethrow;
-    }
+    return await _apiGateway.getStudentNotificationsList();
+  }
+
+  Future<int> getUnreadCount() async {
+    return await _apiGateway.getUnreadNotificationCount();
+  }
+
+  Future<bool> markAsRead(String notificationId) async {
+    return await _apiGateway.markNotificationAsRead(notificationId);
+  }
+
+  Future<bool> markAllAsRead() async {
+    return await _apiGateway.markAllNotificationsAsRead();
   }
 }

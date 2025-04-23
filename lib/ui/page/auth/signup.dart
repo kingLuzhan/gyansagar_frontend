@@ -36,7 +36,6 @@ class _SignUpState extends State<SignUp> {
   late TextEditingController email;
   late TextEditingController name;
   late TextEditingController password;
-  late TextEditingController mobile;
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
 
   @override
@@ -44,7 +43,6 @@ class _SignUpState extends State<SignUp> {
     name = TextEditingController();
     email = TextEditingController();
     password = TextEditingController();
-    mobile = TextEditingController();
     super.initState();
   }
 
@@ -54,8 +52,6 @@ class _SignUpState extends State<SignUp> {
     password.dispose();
     name.dispose();
     email.dispose();
-    password.dispose();
-    mobile.dispose();
     passwordVisibility.dispose();
     super.dispose();
   }
@@ -116,13 +112,6 @@ class _SignUpState extends State<SignUp> {
               hintText: "Enter email here",
             ).hP16,
             const SizedBox(height: 10),
-            PTextField(
-              type: FieldType.phone,
-              controller: mobile,
-              label: "Mobile",
-              hintText: "Enter mobile here",
-            ).hP16,
-            const SizedBox(height: 10),
             ValueListenableBuilder<bool>(
               valueListenable: passwordVisibility,
               builder: (context, value, child) {
@@ -168,7 +157,6 @@ class _SignUpState extends State<SignUp> {
       final state = Provider.of<AuthState>(context, listen: false);
       state.setEmail = email.text;
       state.setName = name.text;
-      state.setMobile = mobile.text;
       state.setPassword = password.text;
       isLoading.value = true;
       final isSucess = await state.register();

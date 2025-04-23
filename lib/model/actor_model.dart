@@ -33,7 +33,6 @@ class ActorModel {
     required this.email,
     required this.password,
     required this.role,
-    required this.mobile,
     required this.token,
     required this.id,
     required this.isVerified,
@@ -48,7 +47,6 @@ class ActorModel {
   final String email;
   final String password;
   final String role;
-  final String mobile;
   String? fcmToken;
   final String token;
   final bool isVerified;
@@ -73,7 +71,6 @@ class ActorModel {
     email: json["email"] ?? '',
     password: json["password"] ?? '',
     role: json["role"] ?? '',
-    mobile: json["mobile"] ?? '',
     token: json["token"] ?? '',
     fcmToken: json["fcmToken"],
     otp: json["otp"],
@@ -87,7 +84,6 @@ class ActorModel {
     "email": email,
     "password": password,
     "role": role,
-    "mobile": mobile,
     "token": token,
     "fcmToken": fcmToken,
     "otp": otp,
@@ -95,14 +91,12 @@ class ActorModel {
 
   Map<String, dynamic> toJson1() => {
     "name": name,
-    "mobile": mobile,
     "isSelected": isSelected,
   };
 
   factory ActorModel.fromError(Map<String, dynamic> json) => ActorModel(
     password: json.containsKey("password") ? json["password"][0] : '',
     email: json.containsKey("email") ? json["email"][0] : '',
-    mobile: json.containsKey("mobile") ? json["mobile"][0] : '',
     name: json.containsKey("name") ? json["name"][0] : '',
     otpErrorMsg: json.containsKey("otp") ? json["otp"][0] : null,
     isVerified: json.containsKey("isVerified") ? json["isVerified"][0] : false,

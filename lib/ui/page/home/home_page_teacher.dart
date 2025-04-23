@@ -17,6 +17,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/fab/fab_button.dart';
 import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
+import 'package:gyansagar_frontend/ui/page/chat/chat_page.dart'; // <-- Add this import
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({super.key});
@@ -71,26 +72,26 @@ class _TeacherHomePageState extends State<TeacherHomePage>
 
   setupAnimations() {
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
     _controller.repeat();
-    _animationController =
-    AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
-      ..addListener(() {
-        setState(() {});
-      });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _translateButton = Tween<double>(
-      begin: 100,
-      end: 0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.0,
-        1,
-        curve: _curve,
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    )..addListener(() {
+      setState(() {});
+    });
+    _animateIcon = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_animationController);
+    _translateButton = Tween<double>(begin: 100, end: 0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(0.0, 1, curve: _curve),
       ),
-    ));
+    );
   }
 
   Widget _floatingActionButton() {
@@ -128,15 +129,20 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             translateButton: _translateButton,
             onPressed: () {
               animate();
-              Navigator.push(context, CreateBatch.getRoute(model: BatchModel(
-                id: '',
-                name: '',
-                description: '',
-                classes: [],
-                subject: '',
-                students: [],
-                studentModel: [],
-              )));
+              Navigator.push(
+                context,
+                CreateBatch.getRoute(
+                  model: BatchModel(
+                    id: '',
+                    name: '',
+                    description: '',
+                    classes: [],
+                    subject: '',
+                    students: [],
+                    studentModel: [],
+                  ),
+                ),
+              );
             },
           ),
           FabButton(
@@ -151,95 +157,116 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                 // Show a dialog to select a batch or create for all
                 showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Create Announcement'),
-                    content: const Text('Do you want to create an announcement for a specific batch or for all?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          // Store the HomeState reference before navigation
-                          final homeState = context.read<HomeState>();
-                          // For "For All" option, use an empty batch list
-                          Navigator.push(context, CreateAnnouncement.getRoute(
-                            batch: BatchModel(
-                              id: '',
-                              name: '',
-                              description: '',
-                              classes: [],
-                              subject: '',
-                              students: [],
-                              studentModel: [],
-                            ),
-                            onAnnouncementCreated: () {
-                              // Use the stored reference instead of reading from context
-                              homeState.fetchAnnouncementList();
-                            },
-                          ));
-                        },
-                        child: const Text('For All'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          // Store the HomeState reference before navigation
-                          final homeState = context.read<HomeState>();
-                          // Show batch selection dialog
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Select Batch'),
-                              content: SizedBox(
-                                width: double.maxFinite,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: context.read<HomeState>().batchList.length,
-                                  itemBuilder: (context, index) {
-                                    final batch = context.read<HomeState>().batchList[index];
-                                    return ListTile(
-                                      title: Text(batch.name),
-                                      subtitle: Text(batch.subject),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(context, CreateAnnouncement.getRoute(
-                                          batch: batch,
-                                          onAnnouncementCreated: () {
-                                            // Use the stored reference instead of reading from context
-                                            homeState.fetchAnnouncementList();
-                                          },
-                                        ));
-                                      },
-                                    );
+                  builder:
+                      (context) => AlertDialog(
+                        title: const Text('Create Announcement'),
+                        content: const Text(
+                          'Do you want to create an announcement for a specific batch or for all?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              // Store the HomeState reference before navigation
+                              final homeState = context.read<HomeState>();
+                              // For "For All" option, use an empty batch list
+                              Navigator.push(
+                                context,
+                                CreateAnnouncement.getRoute(
+                                  batch: BatchModel(
+                                    id: '',
+                                    name: '',
+                                    description: '',
+                                    classes: [],
+                                    subject: '',
+                                    students: [],
+                                    studentModel: [],
+                                  ),
+                                  onAnnouncementCreated: () {
+                                    // Use the stored reference instead of reading from context
+                                    homeState.fetchAnnouncementList();
                                   },
                                 ),
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Text('Select Batch'),
+                              );
+                            },
+                            child: const Text('For All'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              // Store the HomeState reference before navigation
+                              final homeState = context.read<HomeState>();
+                              // Show batch selection dialog
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      title: const Text('Select Batch'),
+                                      content: SizedBox(
+                                        width: double.maxFinite,
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              context
+                                                  .read<HomeState>()
+                                                  .batchList
+                                                  .length,
+                                          itemBuilder: (context, index) {
+                                            final batch =
+                                                context
+                                                    .read<HomeState>()
+                                                    .batchList[index];
+                                            return ListTile(
+                                              title: Text(batch.name),
+                                              subtitle: Text(batch.subject),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  CreateAnnouncement.getRoute(
+                                                    batch: batch,
+                                                    onAnnouncementCreated: () {
+                                                      // Use the stored reference instead of reading from context
+                                                      homeState
+                                                          .fetchAnnouncementList();
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                              );
+                            },
+                            child: const Text('Select Batch'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
                 );
               } else {
                 // No batches available, create for all
                 // Store the HomeState reference before navigation
                 final homeState = context.read<HomeState>();
-                Navigator.push(context, CreateAnnouncement.getRoute(
-                  batch: BatchModel(
-                    id: '',
-                    name: '',
-                    description: '',
-                    classes: [],
-                    subject: '',
-                    students: [],
-                    studentModel: [],
+                Navigator.push(
+                  context,
+                  CreateAnnouncement.getRoute(
+                    batch: BatchModel(
+                      id: '',
+                      name: '',
+                      description: '',
+                      classes: [],
+                      subject: '',
+                      students: [],
+                      studentModel: [],
+                    ),
+                    onAnnouncementCreated: () {
+                      // Use the stored reference instead of reading from context
+                      homeState.fetchAnnouncementList();
+                    },
                   ),
-                  onAnnouncementCreated: () {
-                    // Use the stored reference instead of reading from context
-                    homeState.fetchAnnouncementList();
-                  },
-                ));
+                );
               }
             },
           ),
@@ -250,11 +277,9 @@ class _TeacherHomePageState extends State<TeacherHomePage>
 
   Widget _title(String text) {
     return Padding(
-        padding: const EdgeInsets.only(
-          top: 8,
-          left: 16,
-        ),
-        child: PTitleText(text));
+      padding: const EdgeInsets.only(top: 8, left: 16),
+      child: PTitleText(text),
+    );
   }
 
   @override
@@ -275,13 +300,12 @@ class _TeacherHomePageState extends State<TeacherHomePage>
               builder: (context, AsyncSnapshot<ActorModel?> snapShot) {
                 if (snapShot.hasData) {
                   return SliverToBoxAdapter(
-                    child: Text("Hi, ${snapShot.data!.name}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontSize: 22))
-                        .hP16
-                        .pT(10),
+                    child: Text(
+                      "Hi, ${snapShot.data!.name}",
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(fontSize: 22),
+                    ).hP16.pT(10),
                   );
                 } else {
                   return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -290,35 +314,34 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             ),
             if (!(state.batchList.isNotEmpty))
               SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    _title("Batches"),
-                    const SizedBox(height: 20),
-                    Container(
-                      height: 100,
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: AppTheme.outline(context),
-                      width: AppTheme.fullWidth(context),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("You haven't created any batch yet",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                color: PColors.gray,
-                              )),
-                          const SizedBox(height: 10),
-                          Text("Tap on below fab button to create new",
-                              style: Theme.of(context).textTheme.bodyLarge),
-                        ],
-                      ),
+                delegate: SliverChildListDelegate([
+                  _title("Batches"),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 100,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: AppTheme.outline(context),
+                    width: AppTheme.fullWidth(context),
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "You haven't created any batch yet",
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge?.copyWith(color: PColors.gray),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Tap on below fab button to create new",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20)
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                ]),
               ),
             if (state.batchList.isNotEmpty)
               SliverToBoxAdapter(
@@ -338,82 +361,100 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                         },
                       ),
                     ),
-                    const SizedBox(height: 10)
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Column(
                 children: [
-                  SizedBox(height: 16),
-                  Divider(),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  IconButton(
+                    icon: const Icon(Icons.chat),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ChatPage()),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    onPressed: () {
+                      // ... existing notification logic ...
+                    },
+                  ),
                 ],
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  if (index == 0) {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _title("Poll"),
-                        OutlinedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context, ViewAllPollPage.getRoute());
-                          },
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Theme.of(context).primaryColor),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                if (index == 0) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _title("Poll"),
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(context, ViewAllPollPage.getRoute());
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: Theme.of(context).primaryColor,
                           ),
-                          child: Text("View All", style: TextStyle(color: Theme.of(context).primaryColor)),
-                        ).hP16
-                      ],
-                    );
-                  }
-                  return PollWidget(
-                      model: state.polls[index - 1], loader: loader);
-                },
-                childCount: state.polls.length + 1,
-              ),
+                        ),
+                        child: Text(
+                          "View All",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ).hP16,
+                    ],
+                  );
+                }
+                return PollWidget(
+                  model: state.polls[index - 1],
+                  loader: loader,
+                );
+              }, childCount: state.polls.length + 1),
             ),
-            const SliverToBoxAdapter(
-              child: Divider(),
-            ),
+            const SliverToBoxAdapter(child: Divider()),
             if (state.announcementList.isNotEmpty)
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    if (index == 0) {
-                      return _title(
-                          "${state.announcementList.length} Announcement");
-                    }
-                    return AnnouncementWidget(
-                      state.announcementList[index - 1],
-                      loader: loader,
-                      onAnnouncementEdit: (model) {
-                        // Store the HomeState reference before navigation
-                        final homeState = context.read<HomeState>();
-                        Navigator.push(
-                          context,
-                          CreateAnnouncement.getEditRoute(
-                            batch: state.batchList.firstWhere((batch) => batch.id == model.batches.first),
-                            announcementModel: model,
-                            onAnnouncementCreated: () {
-                              // Use the stored reference instead of reading from context
-                              homeState.fetchAnnouncementList();
-                            },
-                          ),
-                        );
-                      },
-                      onAnnouncementDeleted: (model) async {
-                        context.read<HomeState>().fetchAnnouncementList();
-                      },
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  if (index == 0) {
+                    return _title(
+                      "${state.announcementList.length} Announcement",
                     );
-                  },
-                  childCount: state.announcementList.length + 1,
-                ),
+                  }
+                  return AnnouncementWidget(
+                    state.announcementList[index - 1],
+                    loader: loader,
+                    onAnnouncementEdit: (model) {
+                      // Store the HomeState reference before navigation
+                      final homeState = context.read<HomeState>();
+                      Navigator.push(
+                        context,
+                        CreateAnnouncement.getEditRoute(
+                          batch: state.batchList.firstWhere(
+                            (batch) => batch.id == model.batches.first,
+                          ),
+                          announcementModel: model,
+                          onAnnouncementCreated: () {
+                            // Use the stored reference instead of reading from context
+                            homeState.fetchAnnouncementList();
+                          },
+                        ),
+                      );
+                    },
+                    onAnnouncementDeleted: (model) async {
+                      context.read<HomeState>().fetchAnnouncementList();
+                    },
+                  );
+                }, childCount: state.announcementList.length + 1),
               ),
           ],
         );

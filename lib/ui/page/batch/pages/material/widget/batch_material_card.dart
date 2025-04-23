@@ -13,7 +13,6 @@ import 'package:gyansagar_frontend/ui/page/batch/widget/tile_action_widget.dart'
 import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_chiip.dart';
 import 'package:provider/provider.dart';
-import 'package:gyansagar_frontend/ui/page/batch/pages/material/pdf_viewer_page.dart';
 import 'package:gyansagar_frontend/ui/page/common/web_view.page.dart';
 
 class BatchMaterialCard extends StatelessWidget {

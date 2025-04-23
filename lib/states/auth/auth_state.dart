@@ -11,7 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthState extends BaseState {
   String? email;
   String? password;
-  String? mobile;
+  // Removed mobile field
   String? name;
   String? otp;
 
@@ -20,7 +20,7 @@ class AuthState extends BaseState {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   set setEmail(String value) => email = value;
-  set setMobile(String value) => mobile = value;
+  // Removed setMobile setter
   set setName(String value) => name = value;
   set setPassword(String value) => password = value;
 
@@ -35,7 +35,6 @@ class AuthState extends BaseState {
         name: name ?? "Unknown",
         email: email ?? "",
         password: password ?? "",
-        mobile: mobile ?? "",
         role: "user",
         id: "",
         token: "",
@@ -48,7 +47,7 @@ class AuthState extends BaseState {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
       log("Login", error: error.message);
-      throw Exception(model.email ?? model.password ?? model.mobile ?? "Unknown error");
+      throw Exception(model.email ?? model.password ?? "Unknown error");
     } on UnauthorisedException catch (error) {
       log("Login", error: error.message);
       throw Exception(error.message);
@@ -56,7 +55,9 @@ class AuthState extends BaseState {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
       log("Login", error: error.message, name: "UnprocessableException");
-      throw Exception(model.email ?? model.password ?? model.mobile ?? model.name ?? "Unknown error");
+      throw Exception(
+        model.email ?? model.password ?? model.name ?? "Unknown error",
+      );
     } catch (error, stackTrace) {
       log("Error", error: error, stackTrace: stackTrace);
       return false;
@@ -69,7 +70,6 @@ class AuthState extends BaseState {
         name: name ?? "Unknown",
         email: email ?? "",
         password: password ?? "",
-        mobile: mobile ?? "",
         role: "user",
         id: "",
         token: "",
@@ -81,8 +81,13 @@ class AuthState extends BaseState {
     } on ApiException catch (error, stackTrace) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("Register", error: error.message, stackTrace: stackTrace, name: "ApiException");
-      throw Exception(model.email ?? model.password ?? model.mobile ?? "Unknown error");
+      log(
+        "Register",
+        error: error.message,
+        stackTrace: stackTrace,
+        name: "ApiException",
+      );
+      throw Exception(model.email ?? model.password ?? "Unknown error");
     } catch (error, stackTrace) {
       log("Error", error: error, stackTrace: stackTrace, name: "Register");
       return false;
@@ -99,7 +104,6 @@ class AuthState extends BaseState {
         email: email ?? "",
         password: "",
         otp: otpInt,
-        mobile: mobile ?? "",
         role: "user",
         id: "",
         token: "",
@@ -111,8 +115,13 @@ class AuthState extends BaseState {
     } on ApiException catch (error, stackTrace) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("verifyOtp", error: error.message, stackTrace: stackTrace, name: "ApiException");
-      throw Exception(model.email ?? model.password ?? model.mobile ?? "Unknown error");
+      log(
+        "verifyOtp",
+        error: error.message,
+        stackTrace: stackTrace,
+        name: "ApiException",
+      );
+      throw Exception(model.email ?? model.password ?? "Unknown error");
     } catch (error, stackTrace) {
       log("Error", error: error, stackTrace: stackTrace, name: "verifyOtp");
       return false;
@@ -125,7 +134,6 @@ class AuthState extends BaseState {
         name: name ?? "Unknown",
         email: email ?? "",
         password: "",
-        mobile: mobile ?? "",
         role: "user",
         id: "",
         token: "",
@@ -135,7 +143,12 @@ class AuthState extends BaseState {
       final repo = GetIt.instance.get<BatchRepository>();
       return await repo.forgotPassword(model);
     } catch (error, stackTrace) {
-      log("Error", error: error, stackTrace: stackTrace, name: "forgetPassword");
+      log(
+        "Error",
+        error: error,
+        stackTrace: stackTrace,
+        name: "forgetPassword",
+      );
       return false;
     }
   }
@@ -153,14 +166,15 @@ class AuthState extends BaseState {
         return false; // the user canceled the sign-in
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential =
-      await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
@@ -188,8 +202,8 @@ class AuthState extends BaseState {
   void clearData() {
     email = null;
     password = null;
-    mobile = null;
     name = null;
     otp = null;
+    // Removed mobile field
   }
 }

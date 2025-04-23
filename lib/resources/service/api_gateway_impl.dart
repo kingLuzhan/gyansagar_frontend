@@ -34,23 +34,23 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      
+
       final data = {
-        "answer": vote  // Changed from "option" to "answer"
+        "answer": vote, // Changed from "option" to "answer"
       };
-      
+
       final endpoint = Constants.castStudentVoteOnPoll(pollId);
       var response = await _dioClient.post(
         endpoint,
         data: data,
         options: Options(headers: header),
       );
-      
+
       var json = _dioClient.getJsonBody(response);
       if (json.containsKey("poll")) {
         return PollModel.fromJson(json["poll"]);
       }
-      
+
       throw Exception("Failed to cast vote: Invalid response format");
     } catch (error) {
       print("Error casting vote on poll: $error");
@@ -59,26 +59,33 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assignmentId) {
+  Future<QuizDetailModel> getAssignmentDetailList(
+    String batchId,
+    String assignmentId,
+  ) {
     // TODO: implement getAssignmentDetailList
     throw UnimplementedError();
   }
 
   @override
-  Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId) async {
+  Future<List<AnnouncementModel>> getBatchAnnouncementList(
+    String batchId,
+  ) async {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      
+
       final response = await _dioClient.get(
         Constants.getBatchAnnouncementList(batchId),
         options: Options(headers: header),
       );
-      
+
       var json = _dioClient.getJsonBody(response);
       List<dynamic> announcementList = json["announcements"] ?? [];
-      
-      return announcementList.map((announcement) => AnnouncementModel.fromJson(announcement)).toList();
+
+      return announcementList
+          .map((announcement) => AnnouncementModel.fromJson(announcement))
+          .toList();
     } catch (error) {
       print("Error fetching batch announcements: $error");
       return [];
@@ -90,21 +97,21 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      
+
       final endpoint = Constants.getBatchVideoList(batchId);
       final response = await _dioClient.get(
         endpoint,
         options: Options(headers: header),
       );
-      
+
       var json = _dioClient.getJsonBody(response);
       List<dynamic> videoList = json["videos"] ?? [];
-      
+
       // Print a sample video to debug
       if (videoList.isNotEmpty) {
         print("Sample video from API: ${videoList[0]}");
       }
-      
+
       return videoList.map((video) => VideoModel.fromJson(video)).toList();
     } catch (error) {
       print("Error fetching videos: $error");
@@ -137,55 +144,59 @@ class ApiGatewayImpl implements ApiGateway {
     }
   }
 
-
-
   @override
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit = false}) async {
+  Future<BatchMaterialModel> uploadMaterial(
+    BatchMaterialModel model, {
+    bool isEdit = false,
+  }) async {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      
+
       // Create form data for the request
       var formData = FormData();
-      
+
       // Add model data to form
       formData.fields.add(MapEntry('title', model.title));
       formData.fields.add(MapEntry('description', model.description));
       formData.fields.add(MapEntry('subject', model.subject));
       formData.fields.add(MapEntry('batchId', model.batchId));
       formData.fields.add(MapEntry('isPrivate', model.isPrivate.toString()));
-      
+
       // Add article URL if available
       if (model.articleUrl != null && model.articleUrl!.isNotEmpty) {
         formData.fields.add(MapEntry('articleUrl', model.articleUrl!));
       }
-      
+
       // Add file if model has a file path
       if (model.filePath.isNotEmpty) {
         File file = File(model.filePath);
         if (file.existsSync()) {
           String fileName = file.path.split('/').last;
-          formData.files.add(MapEntry(
-            'file',
-            await MultipartFile.fromFile(file.path, filename: fileName),
-          ));
+          formData.files.add(
+            MapEntry(
+              'file',
+              await MultipartFile.fromFile(file.path, filename: fileName),
+            ),
+          );
         }
       }
-      
+
       // Determine endpoint based on whether it's an edit or create operation
-      final endpoint = isEdit ? Constants.crudMaterial(model.id) : Constants.material;
-      
+      final endpoint =
+          isEdit ? Constants.crudMaterial(model.id) : Constants.material;
+
       var response = await _dioClient.post(
         endpoint,
         data: formData,
         options: Options(headers: header),
       );
-      
+
       var json = _dioClient.getJsonBody(response);
       if (json.containsKey('material')) {
         return BatchMaterialModel.fromJson(json['material']);
       }
-      
+
       return model;
     } catch (error) {
       print("Error uploading material: $error");
@@ -199,18 +210,20 @@ class ApiGatewayImpl implements ApiGateway {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
       final endpoint = Constants.getBatchMaterialList(batchId);
-      
+
       final response = await _dioClient.get(
         endpoint,
         options: Options(headers: header),
       );
-      
+
       var json = _dioClient.getJsonBody(response);
       if (json.containsKey('materials')) {
         List<dynamic> materials = json['materials'];
-        return materials.map((item) => BatchMaterialModel.fromJson(item)).toList();
+        return materials
+            .map((item) => BatchMaterialModel.fromJson(item))
+            .toList();
       }
-      
+
       return [];
     } catch (error) {
       print("Error fetching batch materials: $error");
@@ -225,18 +238,20 @@ class ApiGatewayImpl implements ApiGateway {
       final header = {"Authorization": "Bearer $token"};
       bool isStudent = await pref.isStudent();
       final endpoint = Constants.getBatchAssignmentList(batchId, isStudent);
-      
+
       final response = await _dioClient.get(
         endpoint,
         options: Options(headers: header),
       );
-      
+
       var json = _dioClient.getJsonBody(response);
       if (json.containsKey('assignments')) {
         List<dynamic> assignments = json['assignments'];
-        return assignments.map((item) => AssignmentModel.fromJson(item)).toList();
+        return assignments
+            .map((item) => AssignmentModel.fromJson(item))
+            .toList();
       }
-      
+
       return [];
     } catch (error) {
       print("Error fetching assignments: $error");
@@ -245,34 +260,50 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> createBatch(BatchModel model) async {
+  Future<BatchModel> createBatch(BatchModel model) async {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      var endpoint = model.id == null
-          ? Constants.batch
-          : Constants.editBatchDetail(model.id);
-      var response = await _dioClient.post(endpoint,
-          data: data, options: Options(headers: header));
-      return true;
+      var endpoint =
+          model.id == null
+              ? Constants.batch
+              : Constants.editBatchDetail(model.id);
+      var response = await _dioClient.post(
+        endpoint,
+        data: data,
+        options: Options(headers: header),
+      );
+
+      var json = _dioClient.getJsonBody(response);
+      if (json.containsKey('batch')) {
+        return BatchModel.fromJson(json['batch']);
+      }
+
+      throw Exception('Failed to create batch: Invalid response format');
     } catch (error) {
       rethrow;
     }
   }
 
   @override
-  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model,
-      {bool isEdit = false}) async {
+  Future<AnnouncementModel> createAnnouncement(
+    AnnouncementModel model, {
+    bool isEdit = false,
+  }) async {
     try {
       final mapJson = model.toJson();
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      final endpoint = isEdit
-          ? Constants.crudAnnouncement(model.id)
-          : Constants.announcement;
-      var response = await _dioClient.post(endpoint,
-          data: mapJson, options: Options(headers: header));
+      final endpoint =
+          isEdit
+              ? Constants.crudAnnouncement(model.id)
+              : Constants.announcement;
+      var response = await _dioClient.post(
+        endpoint,
+        data: mapJson,
+        options: Options(headers: header),
+      );
       final map = _dioClient.getJsonBody(response);
       final data = AnnouncementModel.fromJson(map["announcement"]);
       return data;
@@ -289,10 +320,7 @@ class ApiGatewayImpl implements ApiGateway {
       model.fcmToken = fcmToken;
       final data = model.toJson();
       data.removeWhere((key, value) => value == null);
-      var response = await _dioClient.post(
-        Constants.login,
-        data: data,
-      );
+      var response = await _dioClient.post(Constants.login, data: data);
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
@@ -308,10 +336,7 @@ class ApiGatewayImpl implements ApiGateway {
       final fcmToken = await getit.getDeviceToken();
       model.fcmToken = fcmToken;
       final data = model.toJson();
-      var response = await _dioClient.post(
-        Constants.register,
-        data: data,
-      );
+      var response = await _dioClient.post(Constants.register, data: data);
 
       return true;
     } catch (error) {
@@ -336,10 +361,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       final data = model.toJson();
       data.removeWhere((key, value) => value == null);
-      var response = await _dioClient.post(
-        Constants.verifyOtp,
-        data: data,
-      );
+      var response = await _dioClient.post(Constants.verifyOtp, data: data);
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
@@ -372,8 +394,10 @@ class ApiGatewayImpl implements ApiGateway {
   Future<ActorModel> loginWithGoogle(String token) async {
     try {
       final header = {"Authorization": "Bearer $token"};
-      var response = await _dioClient.get(Constants.googleAuth,
-          options: Options(headers: header));
+      var response = await _dioClient.get(
+        Constants.googleAuth,
+        options: Options(headers: header),
+      );
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
@@ -401,15 +425,35 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
+  Future<BatchModel> getBatchDetails(String batchId) async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer $token"};
+      
+      var response = await _dioClient.get(
+        Constants.getBatchDetails(batchId),
+        options: Options(headers: header),
+      );
+      
+      var json = _dioClient.getJsonBody(response);
+      if (json.containsKey('batch')) {
+        return BatchModel.fromJson(json['batch']);
+      }
+      
+      throw Exception('Failed to get batch details: Invalid response format');
+    } catch (error) {
+      print("Error fetching batch details: $error");
+      rethrow;
+    }
+  }
+
+  @override
   Future<bool> deleteBatch(String typeAndId) async {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
 
-      await _dioClient.delete(
-        typeAndId,
-        options: Options(headers: header),
-      );
+      await _dioClient.delete(typeAndId, options: Options(headers: header));
       return true;
     } catch (error) {
       rethrow;
@@ -422,8 +466,11 @@ class ApiGatewayImpl implements ApiGateway {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      await _dioClient.post(Constants.poll,
-          data: data, options: Options(headers: header));
+      await _dioClient.post(
+        Constants.poll,
+        data: data,
+        options: Options(headers: header),
+      );
       return true;
     } catch (error) {
       rethrow;
@@ -435,8 +482,10 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      await _dioClient.post("${Constants.crudePoll(pollId)}/end",
-          options: Options(headers: header));
+      await _dioClient.post(
+        "${Constants.crudePoll(pollId)}/end",
+        options: Options(headers: header),
+      );
       return true;
     } catch (error) {
       rethrow;
@@ -451,8 +500,9 @@ class ApiGatewayImpl implements ApiGateway {
       bool isStudent = await pref.isStudent();
 
       final response = await _dioClient.get(
-          Constants.getMyAnnouncement(isStudent),
-          options: Options(headers: header));
+        Constants.getMyAnnouncement(isStudent),
+        options: Options(headers: header),
+      );
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
@@ -469,19 +519,20 @@ class ApiGatewayImpl implements ApiGateway {
       bool isStudent = await pref.isStudent();
 
       final response = await _dioClient.get(
-          Constants.getMyBatchDetailTimeLine(isStudent, batchId),
-          options: Options(headers: header));
-          
+        Constants.getMyBatchDetailTimeLine(isStudent, batchId),
+        options: Options(headers: header),
+      );
+
       var json = _dioClient.getJsonBody(response);
-      
+
       if (!json.containsKey('timeline')) {
         return [];
       }
-      
+
       List<dynamic> timelineData = json['timeline'];
       return timelineData.map((item) {
         // Properly handle different timeline item types
-        switch(item['type']?.toLowerCase()) {
+        switch (item['type']?.toLowerCase()) {
           case 'announcement':
             return BatchTimeline.fromJson(item);
           case 'video':
@@ -503,9 +554,11 @@ class ApiGatewayImpl implements ApiGateway {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
       String endpoint =
-      await pref.isStudent() ? Constants.studentPolls : Constants.poll;
-      final response =
-      await _dioClient.get(endpoint, options: Options(headers: header));
+          await pref.isStudent() ? Constants.studentPolls : Constants.poll;
+      final response = await _dioClient.get(
+        endpoint,
+        options: Options(headers: header),
+      );
       var json = _dioClient.getJsonBody(response);
       final model = PollResponseModel.fromJson(json);
       return model.polls;
@@ -519,8 +572,10 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      final response = await _dioClient.get(Constants.getAllStudentList,
-          options: Options(headers: header));
+      final response = await _dioClient.get(
+        Constants.getAllStudentList,
+        options: Options(headers: header),
+      );
       var json = _dioClient.getJsonBody(response);
       final model = StudentResponseModel.fromJson(json);
       return model.students;
@@ -534,8 +589,10 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      final response = await _dioClient.get(Constants.subjects,
-          options: Options(headers: header));
+      final response = await _dioClient.get(
+        Constants.subjects,
+        options: Options(headers: header),
+      );
       var json = _dioClient.getJsonBody(response);
       final model = SubjectResponseModel.fromJson(json);
       return model.subjects;
@@ -549,8 +606,10 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      final response = await _dioClient.get(Constants.studentNotificationList,
-          options: Options(headers: header));
+      final response = await _dioClient.get(
+        Constants.studentNotificationList,
+        options: Options(headers: header),
+      );
       var json = _dioClient.getJsonBody(response);
       final model = NotificationResponseModel.fromJson(json);
       return model.notifications;
@@ -565,20 +624,22 @@ class ApiGatewayImpl implements ApiGateway {
       final data = model.toJson();
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
-      final endpoint = isEdit
-          ? Constants.crudVideo(model.id ?? '')
-          : Constants.video;
-      
-      var response = await _dioClient.post(endpoint,
-          data: data, options: Options(headers: header));
-      
+      final endpoint =
+          isEdit ? Constants.crudVideo(model.id ?? '') : Constants.video;
+
+      var response = await _dioClient.post(
+        endpoint,
+        data: data,
+        options: Options(headers: header),
+      );
+
       // Extract the video object from the response
       var json = _dioClient.getJsonBody(response);
       if (json.containsKey("video")) {
         // Create a new VideoModel from the response
         return VideoModel.fromJson(json["video"]);
       }
-      
+
       return model; // Return original model if no video in response
     } catch (error) {
       print("Error adding video: $error");
@@ -661,6 +722,62 @@ class ApiGatewayImpl implements ApiGateway {
       }
     } catch (error) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<int> getUnreadNotificationCount() async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer $token"};
+
+      final response = await _dioClient.get(
+        Constants.studentNotificationUnreadCount,
+        options: Options(headers: header),
+      );
+
+      var json = _dioClient.getJsonBody(response);
+      return json["count"] ?? 0;
+    } catch (error) {
+      print("Error getting unread notification count: $error");
+      return 0;
+    }
+  }
+
+  @override
+  Future<bool> markNotificationAsRead(String notificationId) async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer $token"};
+
+      final response = await _dioClient.post(
+        Constants.markNotificationAsRead(notificationId),
+        options: Options(headers: header),
+      );
+
+      return response.statusCode == 200;
+    } catch (error) {
+      print("Error marking notification as read: $error");
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> markAllNotificationsAsRead() async {
+    try {
+      String token = await pref.getAccessToken() ?? '';
+      final header = {"Authorization": "Bearer $token"};
+
+      final response = await _dioClient.post(
+        Constants
+            .studentMarkAllNotificationsAsRead, // Use the constant string instead
+        options: Options(headers: header),
+      );
+
+      return response.statusCode == 200;
+    } catch (error) {
+      print("Error marking all notifications as read: $error");
+      return false;
     }
   }
 }

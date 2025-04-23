@@ -23,7 +23,15 @@ class CreateBatchStates extends BaseState {
   bool isEditBatch = false;
   String selectedSubjects = "";
 
-  BatchModel editBatch = BatchModel(id: '', name: '', description: '', classes: [], subject: '', students: [], studentModel: []);
+  BatchModel editBatch = BatchModel(
+    id: '',
+    name: '',
+    description: '',
+    classes: [],
+    subject: '',
+    students: [],
+    studentModel: [],
+  );
 
   void setBatchToEdit(BatchModel model) {
     isEditBatch = true;
@@ -32,9 +40,10 @@ class CreateBatchStates extends BaseState {
     description = model.description;
     var counter = 0;
     timeSlots = List.from(model.classes);
-    timeSlots = timeSlots.map((clas) {
-      return clas.copyWith(index: counter++, key: UniqueKey().toString());
-    }).toList();
+    timeSlots =
+        timeSlots.map((clas) {
+          return clas.copyWith(index: counter++, key: UniqueKey().toString());
+        }).toList();
 
     selectedSubjects = model.subject;
     selectedStudentsList = model.studentModel;
@@ -63,9 +72,10 @@ class CreateBatchStates extends BaseState {
 
   bool removeTimeSlot(BatchTimeSlotModel model) {
     timeSlots.removeWhere((element) => element.key == model.key);
-    timeSlots = timeSlots.map((element) {
-      return element.copyWith(index: timeSlots.indexOf(element));
-    }).toList();
+    timeSlots =
+        timeSlots.map((element) {
+          return element.copyWith(index: timeSlots.indexOf(element));
+        }).toList();
     notifyListeners();
     return true;
   }
@@ -86,6 +96,47 @@ class CreateBatchStates extends BaseState {
     notifyListeners();
   }
 
+  void checkSlotsModel(BatchTimeSlotModel model) {
+    BatchTimeSlotModel updatedModel = model;
+
+    // Validate start time
+    if (model.startTime == "Start time") {
+      updatedModel = model.copyWith(isValidStartEntry: false);
+    } else {
+      updatedModel = model.copyWith(isValidStartEntry: true);
+    }
+
+    // Validate end time
+    if (model.endTime == "End time") {
+      updatedModel = model.copyWith(isValidEndEntry: false);
+    } else {
+      updatedModel = model.copyWith(isValidEndEntry: true);
+    }
+
+    // Compare start and end times if both are set
+    if (model.startTime != "Start time" && model.endTime != "End time") {
+      final startParts = model.startTime.split(":");
+      final endParts = model.endTime.split(":");
+
+      final startHour = int.parse(startParts[0]);
+      final startMinute = int.parse(startParts[1]);
+      final endHour = int.parse(endParts[0]);
+      final endMinute = int.parse(endParts[1]);
+
+      if (startHour > endHour ||
+          (startHour == endHour && startMinute >= endMinute)) {
+        updatedModel = model.copyWith(isValidEndEntry: false);
+      }
+    }
+
+    // Update the model in timeSlots list
+    final index = timeSlots.indexWhere((slot) => slot.key == model.key);
+    if (index != -1) {
+      timeSlots[index] = updatedModel;
+      notifyListeners();
+    }
+  }
+
   void addContact(String mobile) {
     contactList.add(mobile);
     notifyListeners();
@@ -97,107 +148,58 @@ class CreateBatchStates extends BaseState {
   }
 
   set setStudentsFromList(ActorModel value) {
-    var model = studentsList
-        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    var model = studentsList.firstWhere(
+      (e) => e.name == value.name && e.email == value.email,
+    );
     model.isSelected = true;
     notifyListeners();
   }
 
   void removeStudentFromList(ActorModel value) {
-    var model = studentsList
-        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    var model = studentsList.firstWhere(
+      (e) => e.name == value.name && e.email == value.email,
+    );
     model.isSelected = false;
     notifyListeners();
   }
 
-  void addNewSubject(String value) {
-    availableSubjects.add(Subject(
-        index: availableSubjects.length, name: value, isSelected: false));
+  // Add these inside the class
+  List<String> _selectedStudents = [];
+
+  set setSelectedStudents(List<String> value) {
+    _selectedStudents = value;
     notifyListeners();
   }
 
-  Future<void> fetchContacts() async {
-    var status = await Permission.contacts.status;
-    if (!status.isGranted) {
-      status = await Permission.contacts.request();
-      if (!status.isGranted) {
-        // Handle the case where the user denied the permission
-        return;
-      }
-    }
-
-    try {
-      List<Contact> contacts = await FastContacts.getAllContacts();
-      setDeviceSelectedContacts(contacts);
-    } catch (e) {
-      // Handle error
-      print("Error fetching contacts: $e");
-    }
-  }
-
-  void setDeviceSelectedContacts(List<Contact> list) {
-    deviceSelectedContacts =
-        list.map((e) => e.phones.isNotEmpty ? e.phones.first.number.replaceAll(" ", "") : "").toList();
-    notifyListeners();
-  }
-
-  bool checkSlotsValidations() {
-    bool allGood = true;
-    for (var model in timeSlots) {
-      checkSlotsModel(model);
-    }
-    notifyListeners();
-    return timeSlots.every(
-            (element) => element.isValidEndEntry && element.isValidStartEntry);
-  }
-
-  void checkSlotsModel(BatchTimeSlotModel model) {
-    if (model.startTime == "Start time") {
-      model = model.copyWith(isValidStartEntry: false);
-    } else {
-      model = model.copyWith(isValidStartEntry: true);
-    }
-    if (model.endTime == "End time") {
-      model = model.copyWith(isValidEndEntry: false);
-    } else {
-      model = model.copyWith(isValidEndEntry: true);
-    }
-
-    if (model.startTime != "Start time" && model.endTime != "End time") {
-      if (int.parse(model.startTime.split(":")[0]) >
-          int.parse(model.endTime.split(":")[0])) {
-        model = model.copyWith(isValidEndEntry: false);
-      }
-
-      if (int.parse(model.startTime.split(":")[0]) ==
-          int.parse(model.endTime.split(":")[0])) {
-        if (int.parse(model.startTime.split(":")[1]) >=
-            int.parse(model.endTime.split(":")[1])) {
-          model = model.copyWith(isValidEndEntry: false);
-        }
-      }
-    }
-  }
+  List<String> get selectedStudents => _selectedStudents;
 
   Future<BatchModel> createBatch() async {
     try {
-      final mobile = studentsList
-          .where((element) => element.isSelected)
-          .map((e) => e.mobile);
-      List<String> contacts = List.from(contactList)
-        ..addAll(mobile)
-        ..addAll(deviceSelectedContacts);
+      final selectedStudents =
+          studentsList
+              .where((element) => element.isSelected)
+              .map((e) => e.email ?? '')
+              .where((email) => email.isNotEmpty)
+              .toList();
+
+      if (selectedStudents.isEmpty) {
+        throw "Please select at least one student with valid email";
+      }
+
       final model = editBatch.copyWith(
-          name: batchName,
-          description: description,
-          classes: timeSlots,
-          subject: selectedSubjects,
-          students: contacts);
+        name: batchName,
+        description: description,
+        classes: timeSlots,
+        subject: selectedSubjects,
+        students: selectedStudents,
+        studentModel:
+            studentsList.where((element) => element.isSelected).toList(),
+      );
+
       final repo = getit.get<BatchRepository>();
-      await repo.createBatch(model);
-      return model;
-    } catch (error, strackTrace) {
-      log("createBatch", error: error, stackTrace: strackTrace);
+      return await repo.createBatch(model); // Ensure this returns a BatchModel
+    } catch (error, stackTrace) {
+      log("createBatch", error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -207,14 +209,15 @@ class CreateBatchStates extends BaseState {
       final repo = getit.get<TeacherRepository>();
       studentsList = await repo.getStudentList();
       if (studentsList.isNotEmpty) {
-        studentsList.removeWhere((element) => element.mobile == null);
+        studentsList.removeWhere((element) => element.email == null);
         studentsList = studentsList.toSet().toList();
-        final ids = studentsList.map((e) => e.mobile).toSet();
-        studentsList.retainWhere((x) => ids.remove(x.mobile));
+        final ids = studentsList.map((e) => e.email).toSet();
+        studentsList.retainWhere((x) => ids.remove(x.email));
         if (selectedStudentsList.isNotEmpty) {
           for (var student in studentsList) {
-            var isAvailable =
-            selectedStudentsList.any((element) => student.id == element.id);
+            var isAvailable = selectedStudentsList.any(
+              (element) => student.id == element.id,
+            );
             student.isSelected = isAvailable;
           }
         }
@@ -222,8 +225,8 @@ class CreateBatchStates extends BaseState {
 
       await getSubjectList();
       notifyListeners();
-    } catch (error, strackTrace) {
-      log("getStudentList", error: error, stackTrace: strackTrace);
+    } catch (error, stackTrace) {
+      log("getStudentList", error: error, stackTrace: stackTrace);
       return null;
     }
   }
@@ -236,18 +239,37 @@ class CreateBatchStates extends BaseState {
       final ids = list.map((e) => e).toSet();
       list.retainWhere((x) => ids.remove(x));
 
-      availableSubjects = Iterable.generate(
-        list.length,
+      availableSubjects =
+          Iterable.generate(
+            list.length,
             (index) => Subject(
-          index: index,
-          name: list[index],
-          isSelected: selectedSubjects == list[index],
-        ),
-      ).toList();
+              index: index,
+              name: list[index],
+              isSelected: selectedSubjects == list[index],
+            ),
+          ).toList();
 
       if (selectedSubjects.isEmpty && availableSubjects.isNotEmpty) {
         selectedSubjects = availableSubjects.first.name;
       }
     }, label: "Get Subjects");
+  }
+
+  bool checkSlotsValidations() {
+    bool allGood = true;
+    for (var model in timeSlots) {
+      checkSlotsModel(model);
+    }
+    notifyListeners();
+    return timeSlots.every(
+      (element) => element.isValidEndEntry && element.isValidStartEntry,
+    );
+  }
+
+  void addNewSubject(String value) {
+    availableSubjects.add(
+      Subject(index: availableSubjects.length, name: value, isSelected: false),
+    );
+    notifyListeners();
   }
 }

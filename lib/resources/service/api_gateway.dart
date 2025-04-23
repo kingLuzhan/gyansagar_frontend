@@ -12,8 +12,12 @@ import 'package:gyansagar_frontend/model/video_model.dart';
 
 abstract class ApiGateway {
   Future<dynamic> getUser();
-  Future<bool> createBatch(BatchModel model);
-  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model, {bool isEdit});
+  // Change the return type from Future<bool> to Future<BatchModel>
+  Future<BatchModel> createBatch(BatchModel model);
+  Future<AnnouncementModel> createAnnouncement(
+    AnnouncementModel model, {
+    bool isEdit,
+  });
   Future<VideoModel> addVideo(VideoModel model, {bool isEdit});
   Future<ActorModel> login(ActorModel model);
   Future<bool> register(ActorModel model);
@@ -22,6 +26,7 @@ abstract class ApiGateway {
   Future<ActorModel> loginWithGoogle(String token);
   Future<ActorModel> verifyOtp(ActorModel model);
   Future<List<BatchModel>> getBatches();
+  Future<BatchModel> getBatchDetails(String batchId); // Add this new method
   Future<bool> deleteBatch(String batchId);
   Future<bool> createPoll(PollModel model);
   Future<bool> expirePollById(String pollId);
@@ -32,15 +37,25 @@ abstract class ApiGateway {
   Future<List<NotificationModel>> getStudentNotificationsList();
   Future<List<VideoModel>> getVideosList(String batchId);
   Future<bool> uploadFile(File file, String id, {String? endpoint});
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model, {bool isEdit});
+  Future<BatchMaterialModel> uploadMaterial(
+    BatchMaterialModel model, {
+    bool isEdit,
+  });
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncementList(String batchId);
   Future<List<AssignmentModel>> getAssignmentList(String batchId);
   Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId);
-  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assignmentId);
+  Future<QuizDetailModel> getAssignmentDetailList(
+    String batchId,
+    String assignmentId,
+  );
   Future<PollModel> castVoteOnPoll(String pollId, String vote);
   Future<void> savePollSelection(PollModel poll);
   Future<void> expirePoll(String pollId);
   Future<void> deletePoll(String pollId);
 
+  // Add these methods for notification functionality
+  Future<bool> markNotificationAsRead(String notificationId);
+  Future<bool> markAllNotificationsAsRead();
+  Future<int> getUnreadNotificationCount();
 }

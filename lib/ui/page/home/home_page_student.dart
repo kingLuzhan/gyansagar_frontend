@@ -12,6 +12,7 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
 import 'package:gyansagar_frontend/ui/kit/overlay_loader.dart';
+import 'package:gyansagar_frontend/ui/page/chat/chat_page.dart'; // <-- Add this import
 
 class StudentHomePage extends StatefulWidget {
   const StudentHomePage({super.key});
@@ -66,24 +67,22 @@ class _StudentHomePageState extends State<StudentHomePage>
 
   setupAnimations() {
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
     _controller.repeat();
-    _animationController =
-    AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
-      ..addListener(() {
-        setState(() {});
-      });
-    _translateButton = Tween<double>(
-      begin: 100,
-      end: 0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.0,
-        1,
-        curve: _curve,
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    )..addListener(() {
+      setState(() {});
+    });
+    _translateButton = Tween<double>(begin: 100, end: 0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(0.0, 1, curve: _curve),
       ),
-    ));
+    );
   }
 
   Widget _floatingActionButton() {
@@ -93,10 +92,7 @@ class _StudentHomePageState extends State<StudentHomePage>
       tooltip: 'Toggle',
       child: Transform.rotate(
         angle: _angle,
-        child: const Icon(
-          Icons.add,
-          size: 30,
-        ),
+        child: const Icon(Icons.add, size: 30),
       ),
     );
   }
@@ -123,8 +119,12 @@ class _StudentHomePageState extends State<StudentHomePage>
     );
   }
 
-  Widget _smallFabButton(String icon,
-      {required Function onPressed, required double animationValue, String text = ''}) {
+  Widget _smallFabButton(
+    String icon, {
+    required Function onPressed,
+    required double animationValue,
+    String text = '',
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Transform(
@@ -138,29 +138,35 @@ class _StudentHomePageState extends State<StudentHomePage>
           color: Colors.transparent,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-                topRight: Radius.circular(40)),
+              topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+              topRight: Radius.circular(40),
+            ),
           ),
           child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                    topRight: Radius.circular(40)),
-                color: Theme.of(context).primaryColor,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+                topRight: Radius.circular(40),
               ),
-              child: Row(
-                children: <Widget>[
-                  Image.asset(icon, height: 20),
-                  const SizedBox(width: 8),
-                  Text(text,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimary)),
-                ],
-              )).ripple(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Row(
+              children: <Widget>[
+                Image.asset(icon, height: 20),
+                const SizedBox(width: 8),
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ).ripple(
             onPressed,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -175,10 +181,7 @@ class _StudentHomePageState extends State<StudentHomePage>
 
   Widget _title(String text) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 16,
-        left: 16,
-      ),
+      padding: const EdgeInsets.only(top: 16, left: 16),
       child: PTitleText(text),
     );
   }
@@ -198,44 +201,45 @@ class _StudentHomePageState extends State<StudentHomePage>
           slivers: <Widget>[
             if (!(state.batchList.isNotEmpty))
               SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    FutureBuilder<ActorModel?>(
-                        future: state.getUser(),
-                        builder: (context, AsyncSnapshot<ActorModel?> snapShot) {
-                          if (snapShot.hasData) {
-                            return PTitleTextBold("Hi, ${snapShot.data!.name}")
-                                .hP16
-                                .pT(10);
-                          } else {
-                            return const SizedBox.shrink();
-                          }
-                        }),
-                    _title("My Batches"),
-                    const SizedBox(height: 20),
-                    Container(
-                        height: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: AppTheme.outline(context),
-                        width: AppTheme.fullWidth(context),
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("You have no batch",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                  color: PColors.gray,
-                                )),
-                            const SizedBox(height: 10),
-                            Text("Ask your teacher to add you in a batch!!",
-                                style: Theme.of(context).textTheme.bodyLarge),
-                          ],
-                        ))
-                  ],
-                ),
+                delegate: SliverChildListDelegate([
+                  FutureBuilder<ActorModel?>(
+                    future: state.getUser(),
+                    builder: (context, AsyncSnapshot<ActorModel?> snapShot) {
+                      if (snapShot.hasData) {
+                        return PTitleTextBold(
+                          "Hi, ${snapShot.data!.name}",
+                        ).hP16.pT(10);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+                  _title("My Batches"),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 100,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: AppTheme.outline(context),
+                    width: AppTheme.fullWidth(context),
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "You have no batch",
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge?.copyWith(color: PColors.gray),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Ask your teacher to add you in a batch!!",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
               ),
             if (state.batchList.isNotEmpty)
               SliverToBoxAdapter(
@@ -258,69 +262,77 @@ class _StudentHomePageState extends State<StudentHomePage>
                         },
                       ),
                     ),
-                    const SizedBox(height: 10)
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Column(
                 children: [
-                  SizedBox(height: 16),
-                  Divider(),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  IconButton(
+                    icon: const Icon(Icons.chat),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ChatPage()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  if (index == 0) {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        const PTitleText("Poll").hP16,
-                        OutlinedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context, ViewAllPollPage.getRoute());
-                          },
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Theme.of(context).primaryColor),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                if (index == 0) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const PTitleText("Poll").hP16,
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(context, ViewAllPollPage.getRoute());
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: Theme.of(context).primaryColor,
                           ),
-                          child: Text("View All", style: TextStyle(color: Theme.of(context).primaryColor)),
-                        ).hP16
-                      ],
-                    );
-                  }
-                  return PollWidget(
-                      model: state.polls[index - 1],
-                      loader: loader,
-                      hideFinishButton: false);
-                },
-                childCount: state.polls.length + 1,
-              ),
+                        ),
+                        child: Text(
+                          "View All",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ).hP16,
+                    ],
+                  );
+                }
+                return PollWidget(
+                  model: state.polls[index - 1],
+                  loader: loader,
+                  hideFinishButton: false,
+                );
+              }, childCount: state.polls.length + 1),
             ),
-            const SliverToBoxAdapter(
-              child: Divider(),
-            ),
+            const SliverToBoxAdapter(child: Divider()),
             if (state.announcementList.isNotEmpty)
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    if (index == 0) return _title("Announcement");
-                    return AnnouncementWidget(
-                      state.announcementList[index - 1],
-                      loader: loader,
-                      onAnnouncementEdit: (model) {
-                        // Handle announcement edit
-                      },
-                      onAnnouncementDeleted: (model) async {
-                        context.read<HomeState>().fetchAnnouncementList();
-                      },
-                    );
-                  },
-                  childCount: state.announcementList.length + 1,
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  if (index == 0) return _title("Announcement");
+                  return AnnouncementWidget(
+                    state.announcementList[index - 1],
+                    loader: loader,
+                    onAnnouncementEdit: (model) {
+                      // Handle announcement edit
+                    },
+                    onAnnouncementDeleted: (model) async {
+                      context.read<HomeState>().fetchAnnouncementList();
+                    },
+                  );
+                }, childCount: state.announcementList.length + 1),
               ),
           ],
         );

@@ -24,63 +24,75 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/fab/animated_fab.dart';
 import 'package:gyansagar_frontend/ui/widget/fab/fab_button.dart';
 import 'package:provider/provider.dart';
+import 'package:gyansagar_frontend/ui/page/chat/batch_chat_tab.dart'; // <-- Add this import
 
 class BatchMasterDetailPage extends StatefulWidget {
-  const BatchMasterDetailPage({super.key, required this.model, required this.isTeacher});
+  const BatchMasterDetailPage({
+    super.key,
+    required this.model,
+    required this.isTeacher,
+  });
   final BatchModel model;
   final bool isTeacher;
-  static MaterialPageRoute getRoute(BatchModel model, {required bool isTeacher}) {
+  static MaterialPageRoute getRoute(
+    BatchModel model, {
+    required bool isTeacher,
+  }) {
     return MaterialPageRoute(
-      builder: (_) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => VideoState(
-              batchId: model.id,
-              subject: model.subject,
-              videoModel: VideoModel(
-                id: '',
-                title: '',
-                description: '',
-                subject: '',
-                videoUrl: '',
-                thumbnailUrl: '',
-                batchId: '',
-                createdAt: DateTime.now().toIso8601String(),
+      builder:
+          (_) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create:
+                    (_) => VideoState(
+                      batchId: model.id,
+                      subject: model.subject,
+                      videoModel: VideoModel(
+                        id: '',
+                        title: '',
+                        description: '',
+                        subject: '',
+                        videoUrl: '',
+                        thumbnailUrl: '',
+                        batchId: '',
+                        createdAt: DateTime.now().toIso8601String(),
+                      ),
+                    ),
               ),
-            ),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => BatchDetailState(batchId: model.id),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => BatchMaterialState(
-              batchId: model.id,
-              subject: model.subject,
-              materialModel: BatchMaterialModel(
-                id: '',
-                fileUrl: '',
-                title: '',
-                subject: '',
-                description: '',
-                batchId: '',
-                filePath: '',
-                isPrivate: false,
-                fileUploadedOn: '',
-                createdAt: DateTime.now(), // Use DateTime directly
-                updatedAt: DateTime.now(), // Use DateTime directly
+              ChangeNotifierProvider(
+                create: (_) => BatchDetailState(batchId: model.id),
               ),
-            ),
+              ChangeNotifierProvider(
+                create:
+                    (_) => BatchMaterialState(
+                      batchId: model.id,
+                      subject: model.subject,
+                      materialModel: BatchMaterialModel(
+                        id: '',
+                        fileUrl: '',
+                        title: '',
+                        subject: '',
+                        description: '',
+                        batchId: '',
+                        filePath: '',
+                        isPrivate: false,
+                        fileUploadedOn: '',
+                        createdAt: DateTime.now(), // Use DateTime directly
+                        updatedAt: DateTime.now(), // Use DateTime directly
+                      ),
+                    ),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => AnnouncementState(batchId: model.id),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => QuizState(batchId: model.id),
+              ),
+            ],
+            builder:
+                (_, child) =>
+                    BatchMasterDetailPage(model: model, isTeacher: isTeacher),
           ),
-          ChangeNotifierProvider(
-            create: (_) => AnnouncementState(batchId: model.id),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => QuizState(batchId: model.id),
-          ),
-        ],
-        builder: (_, child) =>
-            BatchMasterDetailPage(model: model, isTeacher: isTeacher),
-      ),
     );
   }
 
@@ -113,14 +125,21 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
     loader = CustomLoader();
     model = widget.model;
     setupAnimations();
-    _tabController = TabController(length: 4, vsync: this)
-      ..addListener(tabListener);
+    _tabController = TabController(
+      length: 5,
+      vsync: this,
+    ) // <-- Change length to 5
+    ..addListener(tabListener);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<VideoState>(context, listen: false).getVideosList();
-      Provider.of<BatchMaterialState>(context, listen: false)
-          .getBatchMaterialList();
-      Provider.of<AnnouncementState>(context, listen: false)
-          .getBatchAnnouncementList();
+      Provider.of<BatchMaterialState>(
+        context,
+        listen: false,
+      ).getBatchMaterialList();
+      Provider.of<AnnouncementState>(
+        context,
+        listen: false,
+      ).getBatchAnnouncementList();
       Provider.of<QuizState>(context, listen: false).getQuizList();
       Provider.of<BatchDetailState>(context, listen: false).getBatchTimeLine();
     });
@@ -146,25 +165,23 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
       return;
     }
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
     _controller.repeat();
-    _animationController =
-    AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
-      ..addListener(() {
-        setState(() {});
-      });
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    )..addListener(() {
+      setState(() {});
+    });
 
-    _translateButton = Tween<double>(
-      begin: 100,
-      end: 0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.0,
-        1.0,
-        curve: _curve,
+    _translateButton = Tween<double>(begin: 100, end: 0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(0.0, 1.0, curve: _curve),
       ),
-    ));
+    );
   }
 
   void animate() {
@@ -187,10 +204,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
       tooltip: 'Toggle',
       child: Transform.rotate(
         angle: _angle,
-        child: const Icon(
-          Icons.add,
-          size: 30,
-        ),
+        child: const Icon(Icons.add, size: 30),
       ),
     );
   }
@@ -223,12 +237,13 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
           onPressed: () {
             animate();
             Navigator.push(
-                context,
-                UploadMaterialPage.getRoute(
-                  subject: model.subject,
-                  batchId: model.id,
-                  state: Provider.of<BatchMaterialState>(context, listen: false),
-                ));
+              context,
+              UploadMaterialPage.getRoute(
+                subject: model.subject,
+                batchId: model.id,
+                state: Provider.of<BatchMaterialState>(context, listen: false),
+              ),
+            );
           },
         ),
         FabButton(
@@ -241,11 +256,12 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             final model = widget.model;
             model.isSelected = true;
             Navigator.push(
-                context,
-                CreateAnnouncement.getRoute(
-                  batch: model,
-                  onAnnouncementCreated: onAnnouncementCreated,
-                ));
+              context,
+              CreateAnnouncement.getRoute(
+                batch: model,
+                onAnnouncementCreated: onAnnouncementCreated,
+              ),
+            );
           },
         ),
       ],
@@ -253,35 +269,42 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
   }
 
   void onAnnouncementCreated() async {
-    Provider.of<AnnouncementState>(context, listen: false)
-        .getBatchAnnouncementList();
+    Provider.of<AnnouncementState>(
+      context,
+      listen: false,
+    ).getBatchAnnouncementList();
 
     context.read<BatchDetailState>().getBatchTimeLine();
   }
 
   void deleteBatch() async {
-    Alert.yesOrNo(context,
-        message: "Are you sure, you want to delete this batch ?",
-        title: "Message",
-        barrierDismissible: true,
-        onCancel: () {}, onYes: () async {
-          loader.showLoader(context);
-          final isDeleted = await Provider.of<HomeState>(context, listen: false)
-              .deleteBatch(widget.model.id);
-          if (isDeleted) {
-            Navigator.pop(context);
-          }
-          loader.hideLoader();
-        });
+    Alert.yesOrNo(
+      context,
+      message: "Are you sure, you want to delete this batch ?",
+      title: "Message",
+      barrierDismissible: true,
+      onCancel: () {},
+      onYes: () async {
+        loader.showLoader(context);
+        final isDeleted = await Provider.of<HomeState>(
+          context,
+          listen: false,
+        ).deleteBatch(widget.model.id);
+        if (isDeleted) {
+          Navigator.pop(context);
+        }
+        loader.hideLoader();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5, // <-- Change length to 5
       child: Scaffold(
         floatingActionButton:
-        !widget.isTeacher ? null : _floatingActionButton(),
+            !widget.isTeacher ? null : _floatingActionButton(),
         appBar: AppBar(
           bottom: TabBar(
             controller: _tabController,
@@ -290,14 +313,12 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             tabs: const [
               Tab(text: "Detail"),
               Tab(text: "Videos"),
+              Tab(text: "Chat"), // <-- Add this tab
               Tab(text: "Quiz"),
               Tab(text: "Study Material"),
             ],
           ),
-          title: Title(
-            color: PColors.black,
-            child: Text(model.name),
-          ),
+          title: Title(color: PColors.black, child: Text(model.name)),
           actions: [
             if (widget.isTeacher)
               PopupMenuButton<Choice>(
@@ -306,7 +327,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
                     deleteBatch();
                   } else if (d.index == 0) {
                     Navigator.push(
-                        context, CreateBatch.getRoute(model: widget.model));
+                      context,
+                      CreateBatch.getRoute(model: widget.model),
+                    );
                   }
                 },
                 padding: EdgeInsets.zero,
@@ -315,7 +338,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
                 itemBuilder: (BuildContext context) {
                   return choices.map((Choice choice) {
                     return PopupMenuItem<Choice>(
-                        value: choice, child: Text(choice.title));
+                      value: choice,
+                      child: Text(choice.title),
+                    );
                   }).toList();
                 },
               ),
@@ -328,8 +353,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
               children: [
                 BatchDetailPage(batchModel: model, loader: loader),
                 BatchVideosPage(model: model, loader: loader),
+                BatchChatTab(batchModel: model), // <-- Add this widget
                 BatchAssignmentPage(model: model, loader: loader),
-                BatchStudyMaterialPage(model: model, loader: loader)
+                BatchStudyMaterialPage(model: model, loader: loader),
               ],
             ),
             if (widget.isTeacher)
@@ -337,8 +363,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
                 valueListenable: currentPageNo,
                 builder: (BuildContext context, int index, Widget? child) {
                   return AnimatedFabButton(
-                      showFabButton: showFabButton,
-                      children: _floatingButtons(index));
+                    showFabButton: showFabButton,
+                    children: _floatingButtons(index),
+                  );
                 },
               ),
           ],

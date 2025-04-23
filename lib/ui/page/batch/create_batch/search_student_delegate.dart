@@ -19,7 +19,7 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
           query = '';
         },
         icon: const Icon(Icons.clear),
-      )
+      ),
     ];
   }
 
@@ -29,79 +29,87 @@ class StudentSearch extends SearchDelegate<ActorModel?> {
       onPressed: () {
         close(context, null);
       },
-      icon: Icon(
-        Icons.arrow_back,
-        color: Theme.of(context).primaryColor,
-      ),
+      icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    templist = state.studentsList;
+    // Ensure templist is populated with the correct data
+    templist = state.studentsList; // Ensure this list is correctly populated
+    return _result(context);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Filter the list based on the query
+    templist =
+        list
+            .where((x) => x.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
     return _result(context);
   }
 
   Widget _result(BuildContext context) {
     return ValueListenableBuilder<List<ActorModel>>(
       valueListenable: student,
-      builder: (context, listenableList, chils) {
+      builder: (context, listenableList, child) {
         return ListView.builder(
-          itemCount: templist.length,
-          itemBuilder: (context, index) => Container(
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Theme.of(context).cardColor,
-            ),
-            child: ListTile(
-              title: Text(
-                templist[index].name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
+          itemCount: templist.length, // Ensure this reflects the correct count
+          itemBuilder:
+              (context, index) => Container(
+                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 10,
                 ),
-                textAlign: TextAlign.start,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Theme.of(context).cardColor,
+                ),
+                child: ListTile(
+                  title: Text(
+                    templist[index].name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  subtitle: Text("N/A"),
+                  trailing:
+                      _isSelected(
+                            templist[index],
+                            listenableList,
+                          ) // Corrected method name
+                          ? const Icon(Icons.check_box)
+                          : null,
+                  onTap: () {
+                    var model = templist[index];
+                    var selected =
+                        listenableList
+                            .firstWhere((element) => compare(element, model))
+                            .isSelected;
+                    listenableList
+                        .firstWhere((element) => compare(element, model))
+                        .isSelected = !selected;
+                    student.value = List.from(listenableList);
+                    student.notifyListeners();
+                  },
+                ),
               ),
-              subtitle: Text(templist[index].mobile ?? "N/A"),
-              trailing: isSelected(templist[index], listenableList)
-                  ? const Icon(Icons.check_box)
-                  : null,
-              onTap: () {
-                var model = templist[index];
-                var selected = listenableList
-                    .firstWhere((element) => compare(element, model))
-                    .isSelected;
-                listenableList
-                    .firstWhere((element) => compare(element, model))
-                    .isSelected = !selected;
-                student.value = List.from(listenableList);
-                student.notifyListeners();
-              },
-            ),
-          ),
         );
       },
     );
   }
 
-  bool isSelected(ActorModel model, List<ActorModel> list) {
+  // Corrected method name
+  bool _isSelected(ActorModel model, List<ActorModel> list) {
     var data = list.firstWhere((element) => compare(element, model));
     return data.isSelected;
   }
 
   bool compare(ActorModel value1, ActorModel value2) {
-    return value1.name == value2.name && value1.mobile == value2.mobile;
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    templist = list
-        .where((x) =>
-    x.name.toLowerCase().contains(query.toLowerCase()) ||
-        x.mobile.toLowerCase().contains(query.toLowerCase()) == true)
-        .toList();
-    return _result(context);
+    return value1.name == value2.name;
   }
 }

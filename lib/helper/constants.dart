@@ -17,6 +17,8 @@ class Constants {
   static const String student = 'student';
   static const String getAllStudentList = "get-all-student-list";
   static const String studentNotificationList = "student/my-notifications";
+  static const String studentNotificationUnreadCount = "student/notifications/unread-count";
+  static const String studentMarkAllNotificationsAsRead = "student/notifications/read-all";
 
   static const String defaultUploadEndpoint = 'upload'; // Add this line
 
@@ -27,6 +29,10 @@ class Constants {
 
   static getMyBatches(bool isStudent) {
     return isStudent ? studentBatch : Constants.batch;
+  }
+
+  static String getBatchDetails(String batchId) {
+    return "$batch/$batchId";
   }
 
   static String getMyAnnouncement(bool isStudent) {
@@ -110,5 +116,50 @@ class Constants {
 
   static String deleteAnnouncement(String announcementId) {
     return "$announcement/$announcementId";
+  }
+
+  // Add these methods for notification endpoints
+  static String markNotificationAsRead(String notificationId) {
+    return "student/notifications/$notificationId/read";
+  }
+  
+  // Chat related constants
+  static const String chat = "chat";
+  static const String conversation = "conversation";
+  static const String message = "message";
+  static const String messages = "messages";
+  
+  // Chat endpoint methods
+  static String createConversation() {
+    return "$chat/$conversation";
+  }
+  
+  static String listConversations() {
+    return "$chat/conversations";
+  }
+  
+  static String getConversationMessages(String conversationId) {
+    return "$chat/$conversation/$conversationId/$messages";
+  }
+  
+  static String sendMessage(String conversationId) {
+    return "$chat/$conversation/$conversationId/$message";
+  }
+  
+  // Direct message endpoints
+  static String createMessage() {
+    return "$message";
+  }
+  
+  static String getMessage(String messageId) {
+    return "$message/$messageId";
+  }
+  
+  static String updateMessage(String messageId) {
+    return "$message/$messageId";
+  }
+  
+  static String deleteMessage(String messageId) {
+    return "$message/$messageId";
   }
 }

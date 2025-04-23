@@ -15,16 +15,29 @@ import 'package:get_it/get_it.dart';
 final GetIt serviceLocator = GetIt.instance;
 
 Future<void> setUpDependency(Config config) async {
-  // Remove the registration of FlutterContactsService as it is not needed
-
+  // Initialize SharedPreferences first
   if (!serviceLocator.isRegistered<SharedPreferenceHelper>()) {
-    await SharedPreferenceHelper.init(); // Initialize SharedPreferences before registering the singleton
+    await SharedPreferenceHelper.init();
     serviceLocator.registerSingleton<SharedPreferenceHelper>(SharedPreferenceHelper.instance);
   }
 
+  // Register ApiGateway BEFORE NotificationService
+  if (!serviceLocator.isRegistered<ApiGateway>()) {
+    serviceLocator.registerLazySingleton<ApiGateway>(
+      () => ApiGatewayImpl(
+        DioClient(Dio(), baseEndpoint: config.apiBaseUrl, logging: true),
+        pref: serviceLocator<SharedPreferenceHelper>(),
+      ),
+    );
+  }
+
+  // Now register NotificationService with ApiGateway
   if (!serviceLocator.isRegistered<NotificationService>()) {
     serviceLocator.registerSingleton<NotificationService>(
-      NotificationService(FirebaseMessaging.instance),
+      NotificationService(
+        FirebaseMessaging.instance,
+        serviceLocator<ApiGateway>(),
+      ),
     );
 
     // Initialize notifications after registering
@@ -33,18 +46,9 @@ Future<void> setUpDependency(Config config) async {
     notificationService.configure();
   }
 
-  if (!serviceLocator.isRegistered<ApiGateway>()) {
-    serviceLocator.registerLazySingleton<ApiGateway>(
-          () => ApiGatewayImpl(
-        DioClient(Dio(), baseEndpoint: config.apiBaseUrl, logging: true),
-        pref: serviceLocator<SharedPreferenceHelper>(),
-      ),
-    );
-  }
-
   if (!serviceLocator.isRegistered<SessionService>()) {
     serviceLocator.registerLazySingleton<SessionService>(
-          () => SessionServiceImpl(
+      () => SessionServiceImpl(
         serviceLocator<ApiGateway>(),
         serviceLocator<SharedPreferenceHelper>(),
       ),
@@ -53,7 +57,7 @@ Future<void> setUpDependency(Config config) async {
 
   if (!serviceLocator.isRegistered<BatchRepository>()) {
     serviceLocator.registerLazySingleton<BatchRepository>(
-          () => BatchRepository(
+      () => BatchRepository(
         serviceLocator<ApiGateway>(),
         serviceLocator<SessionService>(),
       ),
@@ -62,7 +66,7 @@ Future<void> setUpDependency(Config config) async {
 
   if (!serviceLocator.isRegistered<TeacherRepository>()) {
     serviceLocator.registerLazySingleton<TeacherRepository>(
-          () => TeacherRepository(
+      () => TeacherRepository(
         serviceLocator<ApiGateway>(),
         serviceLocator<SessionService>(),
         serviceLocator<SharedPreferenceHelper>(),
@@ -70,5 +74,5 @@ Future<void> setUpDependency(Config config) async {
     );
   }
 
-  await serviceLocator.allReady(); // Ensures async dependencies are ready before use
+  await serviceLocator.allReady();
 }

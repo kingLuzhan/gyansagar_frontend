@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceHelper {
   SharedPreferenceHelper._internal();
-  static final SharedPreferenceHelper instance = SharedPreferenceHelper._internal();
+  static final SharedPreferenceHelper instance =
+      SharedPreferenceHelper._internal();
 
   static SharedPreferences? _prefs;
 
@@ -22,6 +23,21 @@ class SharedPreferenceHelper {
     return _prefs!.getString(UserPreferenceKey.AccessToken.toString());
   }
 
+  // Add static method to get token for easier access in chat pages
+  static Future<String?> getToken() async {
+    return _prefs!.getString(UserPreferenceKey.AccessToken.toString());
+  }
+
+  // Add method to get user ID from the stored profile
+  static Future<String?> getUserId() async {
+    final jsonString = _prefs!.getString(
+      UserPreferenceKey.UserProfile.toString(),
+    );
+    if (jsonString == null) return null;
+    final userProfile = ActorModel.fromJson(json.decode(jsonString));
+    return userProfile.id;
+  }
+
   Future<bool> setUserName(String value) async {
     return _prefs!.setString(UserPreferenceKey.UserName.toString(), value);
   }
@@ -35,11 +51,16 @@ class SharedPreferenceHelper {
   }
 
   Future<void> saveUserProfile(ActorModel user) async {
-    await _prefs!.setString(UserPreferenceKey.UserProfile.toString(), json.encode(user.toJson()));
+    await _prefs!.setString(
+      UserPreferenceKey.UserProfile.toString(),
+      json.encode(user.toJson()),
+    );
   }
 
   Future<ActorModel?> getUserProfile() async {
-    final jsonString = _prefs!.getString(UserPreferenceKey.UserProfile.toString());
+    final jsonString = _prefs!.getString(
+      UserPreferenceKey.UserProfile.toString(),
+    );
     if (jsonString == null) return null;
     return ActorModel.fromJson(json.decode(jsonString));
   }
@@ -49,7 +70,10 @@ class SharedPreferenceHelper {
   }
 
   Future<void> saveSubjects(SubjectResponseModel model) async {
-    await _prefs!.setString(UserPreferenceKey.Subjects.toString(), json.encode(model.toJson()));
+    await _prefs!.setString(
+      UserPreferenceKey.Subjects.toString(),
+      json.encode(model.toJson()),
+    );
   }
 
   Future<SubjectResponseModel?> getSubjects() async {
@@ -59,7 +83,10 @@ class SharedPreferenceHelper {
   }
 
   Future<void> saveStudent(StudentResponseModel model) async {
-    await _prefs!.setString(UserPreferenceKey.Students.toString(), json.encode(model.toJson()));
+    await _prefs!.setString(
+      UserPreferenceKey.Students.toString(),
+      json.encode(model.toJson()),
+    );
   }
 
   Future<StudentResponseModel?> getStudents() async {
@@ -76,5 +103,5 @@ enum UserPreferenceKey {
   UserProfile,
   UserName,
   Subjects,
-  Students
+  Students,
 }

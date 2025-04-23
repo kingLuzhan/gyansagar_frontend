@@ -19,9 +19,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   static MaterialPageRoute getRoute() {
-    return MaterialPageRoute(
-      builder: (_) => const LoginPage(),
-    );
+    return MaterialPageRoute(builder: (_) => const LoginPage());
   }
 
   @override
@@ -33,20 +31,18 @@ class _LoginPageState extends State<LoginPage> {
 
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-  ValueNotifier<bool> useMobile = ValueNotifier<bool>(false);
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
 
   late TextEditingController email;
   late TextEditingController password;
-  late TextEditingController mobile;
   late CustomLoader loader;
 
   @override
   void initState() {
     email = TextEditingController();
     password = TextEditingController();
-    mobile = TextEditingController();
     loader = CustomLoader();
     super.initState();
   }
@@ -55,8 +51,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     email.dispose();
     password.dispose();
-    mobile.dispose();
-    useMobile.dispose();
     isLoading.dispose();
     passwordVisibility.dispose();
     super.dispose();
@@ -70,14 +64,16 @@ class _LoginPageState extends State<LoginPage> {
         height: AppTheme.fullHeight(context),
         width: AppTheme.fullHeight(context),
         decoration: BoxDecoration(
-            color: PColors.secondary,
-            borderRadius: BorderRadius.circular(500),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Theme.of(context).dividerColor,
-                  offset: const Offset(0, 4),
-                  blurRadius: 5)
-            ]),
+          color: PColors.secondary,
+          borderRadius: BorderRadius.circular(500),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Theme.of(context).dividerColor,
+              offset: const Offset(0, 4),
+              blurRadius: 5,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -91,7 +87,6 @@ class _LoginPageState extends State<LoginPage> {
       FocusManager.instance.primaryFocus?.unfocus();
       final state = Provider.of<AuthState>(context, listen: false);
       state.setEmail = email.text;
-      state.setMobile = mobile.text;
       state.setPassword = password.text;
       isLoading.value = true;
       final isSucess = await state.login();
@@ -110,16 +105,20 @@ class _LoginPageState extends State<LoginPage> {
       final isStudent = await prefs.isStudent();
       Navigator.of(context).pushAndRemoveUntil(
         isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
-            (_) => false,
+        (_) => false,
       );
     } else {
-      Alert.success(context,
-          message: "Some error occurred. Please try again in some time!!",
-          title: "Message",
-          height: 170,
-          onPressed: () {
-            Navigator.of(context).pop(); // or any other action you want to perform
-          });
+      Alert.success(
+        context,
+        message: "Some error occurred. Please try again in some time!!",
+        title: "Message",
+        height: 170,
+        onPressed: () {
+          Navigator.of(
+            context,
+          ).pop(); // or any other action you want to perform
+        },
+      );
     }
     loader.hideLoader();
   }
@@ -128,7 +127,9 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: const EdgeInsets.symmetric(vertical: 16) + const EdgeInsets.only(top: 32),
+      margin:
+          const EdgeInsets.symmetric(vertical: 16) +
+          const EdgeInsets.only(top: 32),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
@@ -137,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
             blurRadius: 10,
-          )
+          ),
         ],
       ),
       child: Form(
@@ -147,70 +148,40 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 30),
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
             const SizedBox(height: 30),
+            PTextField(
+              key: const ValueKey(1),
+              type: FieldType.email,
+              controller: email,
+              label: "Email ID",
+              hintText: "Enter your email id",
+            ).hP16,
             ValueListenableBuilder<bool>(
-                valueListenable: useMobile,
-                builder: (context, value, child) {
-                  return customSwitcherWidget(
-                      duraton: const Duration(milliseconds: 300),
-                      child: value
-                          ? PTextField(
-                        key: const ValueKey(1),
-                        type: FieldType.email, // Changed from Type.email to FieldType.email
-                        controller: email,
-                        label: "Email ID",
-                        hintText: "Enter your email id",
-                      ).hP16
-                          : PTextField(
-                        key: const ValueKey(2),
-                        type: FieldType.phone, // Changed from Type.phone to FieldType.phone
-                        controller: mobile,
-                        label: "Mobile No.",
-                        hintText: "Enter your mobile no",
-                      ).hP16);
-                }),
-            ValueListenableBuilder<bool>(
-                valueListenable: useMobile,
-                builder: (context, value, child) {
-                  return Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      value ? "Use Phone Number" : "Use Email Id",
-                      style: theme.textTheme.labelLarge
-                          ?.copyWith(color: PColors.secondary, fontSize: 12),
-                    ).p(8).ripple(() {
-                      useMobile.value = !useMobile.value;
-                      if (value) {
-                        email.clear();
-                      } else {
-                        mobile.clear();
-                      }
-                    }).pR(8),
-                  );
-                }),
-            ValueListenableBuilder<bool>(
-                valueListenable: passwordVisibility,
-                builder: (context, value, child) {
-                  return PTextField(
-                      type: FieldType.password, // Changed from Type.password to FieldType.password
-                      controller: password,
-                      label: "Password",
-                      hintText: "Enter password here",
-                      obscureText: value,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          passwordVisibility.value = !passwordVisibility.value;
-                        },
-                        icon: Icon(
-                            value ? Icons.visibility_off : Icons.visibility),
-                      )).hP16;
-                }),
+              valueListenable: passwordVisibility,
+              builder: (context, value, child) {
+                return PTextField(
+                  type: FieldType.password,
+                  controller: password,
+                  label: "Password",
+                  hintText: "Enter password here",
+                  obscureText: value,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      passwordVisibility.value = !passwordVisibility.value;
+                    },
+                    icon: Icon(value ? Icons.visibility_off : Icons.visibility),
+                  ),
+                ).hP16;
+              },
+            ),
             Align(
               alignment: Alignment.centerRight,
-              child: Text("Forgot password?",
-                  style: theme.textTheme.labelLarge
-                      ?.copyWith(color: PColors.secondary, fontSize: 12))
-                  .p16
-                  .ripple(() {
+              child: Text(
+                "Forgot password?",
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: PColors.secondary,
+                  fontSize: 12,
+                ),
+              ).p16.ripple(() {
                 Provider.of<AuthState>(context, listen: false).clearData();
                 Navigator.push(context, ForgotPasswordPage.getRoute());
               }),
@@ -226,15 +197,17 @@ class _LoginPageState extends State<LoginPage> {
                   _submit(context);
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget customSwitcherWidget(
-      {required Widget child, Duration duraton = const Duration(milliseconds: 500)}) {
+  Widget customSwitcherWidget({
+    required Widget child,
+    Duration duraton = const Duration(milliseconds: 500),
+  }) {
     return AnimatedSwitcher(
       duration: duraton,
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -246,35 +219,39 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _googleLogin(BuildContext context) {
     return Center(
-      child: Container(
-        height: 50,
-        width: AppTheme.fullWidth(context) - 32,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: const <BoxShadow>[
-            BoxShadow(
-              color: Color(0xffeaeaea),
-              offset: Offset(4, 4),
-              blurRadius: 10,
-            )
-          ],
-        ),
-        child: Row(
-          children: <Widget>[
-            Image.asset("assets/google_icon.png", height: 30),
-            const Spacer(),
-            const Text("Continue with Google"),
-            const Spacer(),
-          ],
-        ),
-      ).ripple(() async {
-        loader.showLoader(context);
-        var isSucess = await Provider.of<AuthState>(context, listen: false)
-            .signInWithGoogle();
-        checkLoginStatus(isSucess);
-      }).p16,
+      child:
+          Container(
+            height: 50,
+            width: AppTheme.fullWidth(context) - 32,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onPrimary,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: const <BoxShadow>[
+                BoxShadow(
+                  color: Color(0xffeaeaea),
+                  offset: Offset(4, 4),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            child: Row(
+              children: <Widget>[
+                Image.asset("assets/google_icon.png", height: 30),
+                const Spacer(),
+                const Text("Continue with Google"),
+                const Spacer(),
+              ],
+            ),
+          ).ripple(() async {
+            loader.showLoader(context);
+            var isSucess =
+                await Provider.of<AuthState>(
+                  context,
+                  listen: false,
+                ).signInWithGoogle();
+            checkLoginStatus(isSucess);
+          }).p16,
     );
   }
 
@@ -301,24 +278,27 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 10),
                       const SizedBox(
                         width: 150,
-                        child: Divider(
-                          color: Colors.black,
-                          thickness: 1,
-                        ),
+                        child: Divider(color: Colors.black, thickness: 1),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Don't have an account ?",
-                              style: theme.textTheme.bodyMedium
-                                  ?.copyWith(color: Colors.grey)),
-                          Text("SIGN UP",
-                              style: theme.textTheme.bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold))
-                              .p16
-                              .ripple(() {
-                            Provider.of<AuthState>(context, listen: false)
-                                .clearData();
+                          Text(
+                            "Don't have an account ?",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            "SIGN UP",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ).p16.ripple(() {
+                            Provider.of<AuthState>(
+                              context,
+                              listen: false,
+                            ).clearData();
                             Navigator.push(context, SignUp.getRoute());
                           }),
                         ],

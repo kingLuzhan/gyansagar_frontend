@@ -14,9 +14,7 @@ class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
   static MaterialPageRoute getRoute() {
-    return MaterialPageRoute(
-      builder: (_) => const ForgotPasswordPage(),
-    );
+    return MaterialPageRoute(builder: (_) => const ForgotPasswordPage());
   }
 
   @override
@@ -27,41 +25,33 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
 
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-  ValueNotifier<bool> useMobile = ValueNotifier<bool>(false);
 
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   late TextEditingController email;
-  late TextEditingController mobile;
 
   @override
   void initState() {
     email = TextEditingController();
-    mobile = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    useMobile.dispose();
     isLoading.dispose();
-    mobile.dispose();
     email.dispose();
     super.dispose();
   }
 
   Widget _title(String text) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 8,
-        left: 16,
-      ),
+      padding: const EdgeInsets.only(top: 8, left: 16),
       child: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(fontSize: 26, color: Colors.white),
+        style: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(fontSize: 26, color: Colors.white),
       ),
     );
   }
@@ -74,14 +64,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         height: AppTheme.fullHeight(context),
         width: AppTheme.fullHeight(context),
         decoration: BoxDecoration(
-            color: PColors.secondary,
-            borderRadius: BorderRadius.circular(500),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Theme.of(context).dividerColor,
-                  offset: const Offset(0, 4),
-                  blurRadius: 5)
-            ]),
+          color: PColors.secondary,
+          borderRadius: BorderRadius.circular(500),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Theme.of(context).dividerColor,
+              offset: const Offset(0, 4),
+              blurRadius: 5,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -90,7 +82,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: const EdgeInsets.symmetric(vertical: 32) + const EdgeInsets.only(top: 16),
+      margin:
+          const EdgeInsets.symmetric(vertical: 32) +
+          const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
@@ -99,7 +93,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
             blurRadius: 10,
-          )
+          ),
         ],
       ),
       child: Form(
@@ -109,48 +103,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             const SizedBox(height: 30),
             Image.asset(AppConfig.of(context)!.config.appIcon, height: 150),
             const SizedBox(height: 40),
-            ValueListenableBuilder<bool>(
-                valueListenable: useMobile,
-                builder: (context, value, child) {
-                  return customSwitcherWidget(
-                      duraton: const Duration(milliseconds: 300),
-                      child: value
-                          ? PTextField(
-                        key: const ValueKey(1),
-                        type: FieldType.email, // Changed from Type.email to FieldType.email
-                        controller: email,
-                        label: "Email ID",
-                        hintText: "Enter your email id",
-                        height: 70, // Provide a non-null value
-                      ).hP16
-                          : PTextField(
-                        key: const ValueKey(2),
-                        type: FieldType.phone, // Changed from Type.phone to FieldType.phone
-                        controller: mobile,
-                        label: "Mobile No.",
-                        height: 70, // Provide a non-null value
-                        hintText: "Enter your mobile no",
-                      ).hP16);
-                }),
-            ValueListenableBuilder<bool>(
-                valueListenable: useMobile,
-                builder: (context, value, child) {
-                  return Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      value ? "Use Phone Number" : "Use Email Id",
-                      style: theme.textTheme.labelLarge
-                          ?.copyWith(color: PColors.secondary, fontSize: 12),
-                    ).p16.ripple(() {
-                      useMobile.value = !useMobile.value;
-                      if (value) {
-                        email.clear();
-                      } else {
-                        mobile.clear();
-                      }
-                    }),
-                  );
-                }),
+            PTextField(
+              key: const ValueKey(1),
+              type: FieldType.email,
+              controller: email,
+              label: "Email ID",
+              hintText: "Enter your email id",
+              height: 70,
+            ).hP16,
             const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -170,17 +130,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  Widget customSwitcherWidget(
-      {required Widget child, Duration duraton = const Duration(milliseconds: 500)}) {
-    return AnimatedSwitcher(
-      duration: duraton,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(scale: animation, child: child);
-      },
-      child: child,
-    );
-  }
-
   void _submit(BuildContext context) async {
     try {
       final isValidate = _formKey.currentState!.validate();
@@ -190,7 +139,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       FocusManager.instance.primaryFocus?.unfocus();
       final state = Provider.of<AuthState>(context, listen: false);
       state.setEmail = email.text;
-      state.setMobile = mobile.text;
       isLoading.value = true;
       final isSucess = await state.forgetPassword();
       checkLoginStatus(isSucess);
@@ -203,18 +151,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void checkLoginStatus(bool isSucess) async {
     if (isSucess) {
-      Navigator.push(context, VerifyOtpScreen.getRoute(onSucess: () {
-        Navigator.pop(context);
-        Navigator.of(context).push(UpdatePasswordPage.getRoute());
-      }));
+      Navigator.push(
+        context,
+        VerifyOtpScreen.getRoute(
+          onSucess: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(UpdatePasswordPage.getRoute());
+          },
+        ),
+      );
     } else {
-      Alert.success(context,
-          message: "Some error occurred. Please try again in some time!!",
-          title: "Message",
-          height: 170,
-          onPressed: () {
-            Navigator.of(context).pop(); // or any other action you want to perform
-          });
+      Alert.success(
+        context,
+        message: "Some error occurred. Please try again in some time!!",
+        title: "Message",
+        height: 170,
+        onPressed: () {
+          Navigator.of(
+            context,
+          ).pop(); // or any other action you want to perform
+        },
+      );
     }
   }
 

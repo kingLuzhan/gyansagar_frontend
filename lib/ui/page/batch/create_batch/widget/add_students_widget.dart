@@ -11,13 +11,17 @@ class AddStudentsWidget extends StatelessWidget {
   Widget _enterContactNo(BuildContext context) {
     return TextField(
       controller: controller,
-      keyboardType: TextInputType.phone,
+      keyboardType: TextInputType.emailAddress, // Changed to email address
       keyboardAppearance: Brightness.light,
       decoration: const InputDecoration(
-          border: InputBorder.none, hintText: "Enter contact no.."),
+        border: InputBorder.none,
+        hintText: "Enter email address..",
+      ), // Updated hint text
       onSubmitted: (contact) {
-        Provider.of<CreateBatchStates>(context, listen: false)
-            .addContact(contact);
+        Provider.of<CreateBatchStates>(
+          context,
+          listen: false,
+        ).addContact(contact);
         controller.clear();
       },
     );
@@ -32,21 +36,27 @@ class AddStudentsWidget extends StatelessWidget {
       child: Consumer<CreateBatchStates>(
         builder: (context, state, child) {
           return Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: state.contactList.isEmpty
-                  ? <Widget>[const SizedBox.shrink()]
-                  : state.contactList
-                  .map((e) => PChip(
-                label: e,
-                onDeleted: () {
-                  Provider.of<CreateBatchStates>(context,
-                      listen: false)
-                      .removeContact(e);
-                },
-              ).p(3))
-                  .toList()
-                ..add(
-                    SizedBox(width: 120, child: _enterContactNo(context)).hP8));
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children:
+                state.contactList.isEmpty
+                      ? <Widget>[const SizedBox.shrink()]
+                      : state.contactList
+                          .map(
+                            (e) => PChip(
+                              label: e,
+                              onDeleted: () {
+                                Provider.of<CreateBatchStates>(
+                                  context,
+                                  listen: false,
+                                ).removeContact(e);
+                              },
+                            ).p(3),
+                          )
+                          .toList()
+                  ..add(
+                    SizedBox(width: 120, child: _enterContactNo(context)).hP8,
+                  ),
+          );
         },
       ),
     );

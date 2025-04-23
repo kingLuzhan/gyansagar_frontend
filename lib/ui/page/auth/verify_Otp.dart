@@ -26,19 +26,20 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
 
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   late TextEditingController email;
   late TextEditingController name;
   late TextEditingController password;
-  late TextEditingController mobile;
+  // Removed mobile TextEditingController
 
   @override
   void initState() {
     name = TextEditingController();
     email = TextEditingController();
     password = TextEditingController();
-    mobile = TextEditingController();
+    // Removed mobile initialization
     super.initState();
   }
 
@@ -49,22 +50,18 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     name.dispose();
     email.dispose();
     password.dispose();
-    mobile.dispose();
+    // Removed mobile disposal
     super.dispose();
   }
 
   Widget _title(String text) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 8,
-        left: 16,
-      ),
+      padding: const EdgeInsets.only(top: 8, left: 16),
       child: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(fontSize: 26, color: Colors.white),
+        style: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(fontSize: 26, color: Colors.white),
       ),
     );
   }
@@ -77,14 +74,16 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         height: AppTheme.fullHeight(context),
         width: AppTheme.fullHeight(context),
         decoration: BoxDecoration(
-            color: PColors.secondary,
-            borderRadius: BorderRadius.circular(500),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Theme.of(context).dividerColor,
-                  offset: const Offset(0, 4),
-                  blurRadius: 5)
-            ]),
+          color: PColors.secondary,
+          borderRadius: BorderRadius.circular(500),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Theme.of(context).dividerColor,
+              offset: const Offset(0, 4),
+              blurRadius: 5,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -108,7 +107,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
           title: "Message",
           height: 170,
           onPressed: () {
-            Navigator.of(context).pop(); // or any other action you want to perform
+            Navigator.of(
+              context,
+            ).pop(); // or any other action you want to perform
           },
         );
       }
@@ -126,7 +127,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     final state = Provider.of<AuthState>(context, listen: false);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: const EdgeInsets.symmetric(vertical: 32) + const EdgeInsets.only(top: 16),
+      margin:
+          const EdgeInsets.symmetric(vertical: 32) +
+          const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
@@ -135,7 +138,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             color: Color(0xffeaeaea),
             offset: Offset(4, 4),
             blurRadius: 10,
-          )
+          ),
         ],
       ),
       child: Form(
@@ -143,10 +146,13 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 20),
-            Image.asset(AppConfig.of(context)?.config.appIcon ?? '', height: 150),
+            Image.asset(
+              AppConfig.of(context)?.config.appIcon ?? '',
+              height: 150,
+            ),
             const SizedBox(height: 10),
             Text(
-              "Please enter OTP we’ve sent you on ${state.email ?? state.mobile}",
+              "Please enter OTP we’ve sent you on ${state.email ?? 'your email'}",
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -157,7 +163,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             Consumer<AuthState>(
               builder: (context, state, child) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: OTPTextField(
                     clearOTP: true,
@@ -170,15 +179,16 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             ),
             const SizedBox(height: 30),
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: PFlatButton(
-                  label: "Verify",
-                  color: PColors.secondary,
-                  isLoading: isLoading,
-                  onPressed: () {
-                    _submit(context);
-                  },
-                )),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: PFlatButton(
+                label: "Verify",
+                color: PColors.secondary,
+                isLoading: isLoading,
+                onPressed: () {
+                  _submit(context);
+                },
+              ),
+            ),
             const SizedBox(height: 30),
           ],
         ),

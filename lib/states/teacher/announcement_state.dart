@@ -26,27 +26,28 @@ class AnnouncementState extends BaseState {
     required this.batchId,
     AnnouncementModel? announcementModel, // Make it nullable here
     this.isEditMode = false,
-  })  : announcementModel = announcementModel ?? AnnouncementModel(
-    id: '',
-    title: '',
-    description: '',
-    isForAll: false,
-    image: '',
-    file: '',
-    batches: [],
-    createdAt: DateTime.now(),
-    owner: ActorModel(
-      id: '',
-      name: '',
-      email: '',
-      password: '',
-      role: '',
-      mobile: '',
-      token: '',
-      isVerified: false,
-      lastLoginDate: DateTime.now(),
-    ),
-  );
+  }) : announcementModel =
+           announcementModel ??
+           AnnouncementModel(
+             id: '',
+             title: '',
+             description: '',
+             isForAll: false,
+             image: '',
+             file: '',
+             batches: [],
+             createdAt: DateTime.now(),
+             owner: ActorModel(
+               id: '',
+               name: '',
+               email: '',
+               password: '',
+               role: '',
+               token: '',
+               isVerified: false,
+               lastLoginDate: DateTime.now(),
+             ),
+           );
 
   set setImageForAnnouncement(File io) {
     imagefile = io;
@@ -94,10 +95,17 @@ class AnnouncementState extends BaseState {
   }) async {
     try {
       var model = announcementModel.copyWith(
-        batches: batches?.where((element) => element.isSelected).map((e) => e.id).toList(),
+        batches:
+            batches
+                ?.where((element) => element.isSelected)
+                .map((e) => e.id)
+                .toList(),
         description: description,
         title: title, // Add title here
-        isForAll: batches == null || batches.isEmpty || !batches.any((element) => element.isSelected),
+        isForAll:
+            batches == null ||
+            batches.isEmpty ||
+            !batches.any((element) => element.isSelected),
       );
 
       final getit = GetIt.instance;
@@ -121,18 +129,24 @@ class AnnouncementState extends BaseState {
   }
 
   Future<bool> upload(String id) async {
-    String endpoint = imagefile != null
-        ? Constants.uploadImageInAnnouncement(id)
-        : Constants.uploadDocInAnnouncement(id);
+    String endpoint =
+        imagefile != null
+            ? Constants.uploadImageInAnnouncement(id)
+            : Constants.uploadDocInAnnouncement(id);
 
     return (await execute(() async {
-      isBusy = true;
-      final getit = GetIt.instance;
-      final repo = getit.get<TeacherRepository>();
-      bool? result = await repo.uploadFile(imagefile ?? docfile!, id, endpoint: endpoint);
-      isBusy = false;
-      return result ?? false;  // Ensure that the result is not null
-    }, label: "Upload Image")) ?? false;  // Ensure that the final return value is not null
+          isBusy = true;
+          final getit = GetIt.instance;
+          final repo = getit.get<TeacherRepository>();
+          bool? result = await repo.uploadFile(
+            imagefile ?? docfile!,
+            id,
+            endpoint: endpoint,
+          );
+          isBusy = false;
+          return result ?? false; // Ensure that the result is not null
+        }, label: "Upload Image")) ??
+        false; // Ensure that the final return value is not null
   }
 
   void onAnnouncementDeleted(AnnouncementModel model) {
