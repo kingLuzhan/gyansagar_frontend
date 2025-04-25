@@ -186,7 +186,9 @@ class CreateBatchStates extends BaseState {
         throw "Please select at least one student with valid email";
       }
 
-      final model = editBatch.copyWith(
+      // Use the existing BatchModel to create a new batch
+      final model = BatchModel(
+        id: editBatch.id,
         name: batchName,
         description: description,
         classes: timeSlots,

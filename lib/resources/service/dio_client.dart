@@ -9,11 +9,7 @@ class DioClient {
   final String? baseEndpoint;
   final bool logging;
 
-  DioClient(
-      this._dio, {
-        this.baseEndpoint,
-        this.logging = false,
-      }) {
+  DioClient(this._dio, {this.baseEndpoint, this.logging = false}) {
     if (logging) {
       _dio.interceptors.add(
         LogInterceptor(
@@ -27,11 +23,11 @@ class DioClient {
   }
 
   Future<Response<T>> get<T>(
-      String endpoint, {
-        Options? options,
-        String? fullUrl,
-        Map<String, dynamic>? queryParameters,
-      }) async {
+    String endpoint, {
+    Options? options,
+    String? fullUrl,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
       var isConnected = await hasInternetConnection();
       if (!isConnected) {
@@ -48,10 +44,10 @@ class DioClient {
   }
 
   Future<Response<T>> post<T>(
-      String endpoint, {
-        dynamic data,
-        Options? options,
-      }) async {
+    String endpoint, {
+    dynamic data,
+    Options? options,
+  }) async {
     try {
       return await _dio.post(
         '$baseEndpoint$endpoint',
@@ -64,10 +60,10 @@ class DioClient {
   }
 
   Future<Response<T>> delete<T>(
-      String endpoint, {
-        dynamic data,
-        Options? options,
-      }) async {
+    String endpoint, {
+    dynamic data,
+    Options? options,
+  }) async {
     try {
       return await _dio.delete(
         '$baseEndpoint$endpoint',

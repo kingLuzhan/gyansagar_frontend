@@ -65,8 +65,12 @@ class BatchRepository {
   }
 
   // Add this new method
-  Future<BatchModel> getBatchDetails(String batchId) {
-    return gateway.getBatchDetails(batchId);
+  Future<BatchModel> getBatchDetails(String batchId) async {
+    print("BatchRepository: Fetching details for batch $batchId");
+    final batch = await gateway.getBatchDetails(batchId);
+    print("BatchRepository: Received batch with ${batch.studentModel.length} students");
+    print("BatchRepository: Student details: ${batch.studentModel.map((s) => '${s.name} (${s.email})').toList()}");
+    return batch;
   }
 
   Future<bool> deleteById(String typeAndId) {

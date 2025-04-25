@@ -20,18 +20,22 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => doAutoLogin());
+    // Start auto-login check immediately but delay navigation
+    _initializeApp();
   }
 
-  Future<void> doAutoLogin() async {
-    if (_hasNavigated) return;
-
+  Future<void> _initializeApp() async {
     try {
       print("Auto login started");
       final getIt = GetIt.instance;
       final prefs = getIt<SharedPreferenceHelper>();
       final accessToken = await prefs.getAccessToken();
       print("Access token: $accessToken");
+
+      // Wait for 2 seconds regardless of login status
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
 
       if (accessToken == null || accessToken.isEmpty) {
         print("No access token found, redirecting to login page");
@@ -43,6 +47,9 @@ class _SplashPageState extends State<SplashPage> {
       }
     } catch (e) {
       print("Error during auto-login: $e");
+      // Still wait for 2 seconds before showing error state
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
       _navigateTo(LoginPage());
     }
   }
@@ -52,7 +59,7 @@ class _SplashPageState extends State<SplashPage> {
       _hasNavigated = true;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => page),
-            (_) => false,
+        (_) => false,
       );
     }
   }
@@ -69,8 +76,10 @@ class _SplashPageState extends State<SplashPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             if (AppConfig.of(context)?.config.appIcon != null) ...[
-              Image.asset(AppConfig.of(context)!.config.appIcon,
-                  width: AppTheme.fullWidth(context) * .7),
+              Image.asset(
+                AppConfig.of(context)!.config.appIcon,
+                width: AppTheme.fullWidth(context) * .7,
+              ),
             ],
             // Image.asset(Images.logoText, height: 70),
           ],

@@ -19,6 +19,8 @@ class BatchDetailState extends BaseState {
         setBusy(true);
         final repo = getIt.get<BatchRepository>();
         batchDetails = await repo.getBatchDetails(batchId);
+        print("BatchDetails fetched - studentModel length: ${batchDetails?.studentModel.length}");
+        print("Students: ${batchDetails?.studentModel.map((s) => '${s.name} (${s.email})').toList()}");
         notifyListeners();
       } catch (e) {
         log("getBatchDetails Error", error: e);

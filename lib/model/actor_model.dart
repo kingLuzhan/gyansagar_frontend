@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:gyansagar_frontend/helper/enum.dart';
 
 class StudentResponseModel {
-  StudentResponseModel({
-    required this.students,
-  });
+  StudentResponseModel({required this.students});
 
   final List<ActorModel> students;
 
@@ -16,10 +14,12 @@ class StudentResponseModel {
 
   factory StudentResponseModel.fromJson(Map<String, dynamic> json) =>
       StudentResponseModel(
-        students: json["students"] == null
-            ? []
-            : List<ActorModel>.from(
-            json["students"].map((x) => ActorModel.fromJson(x))),
+        students:
+            json["students"] == null
+                ? []
+                : List<ActorModel>.from(
+                  json["students"].map((x) => ActorModel.fromJson(x)),
+                ),
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,20 +61,27 @@ class ActorModel {
 
   String toRawJson() => json.encode(toJson());
 
-  factory ActorModel.fromJson(Map<String, dynamic> json) => ActorModel(
-    isVerified: json["isVerified"] ?? false,
-    lastLoginDate: json["lastLoginDate"] == null
-        ? DateTime.now()
-        : DateTime.parse(json["lastLoginDate"]),
-    id: json["id"] ?? '',
-    name: json["name"] ?? '',
-    email: json["email"] ?? '',
-    password: json["password"] ?? '',
-    role: json["role"] ?? '',
-    token: json["token"] ?? '',
-    fcmToken: json["fcmToken"],
-    otp: json["otp"],
-  );
+  factory ActorModel.fromJson(Map<String, dynamic> json) {
+    print("ActorModel parsing JSON: $json"); // Debug print
+    return ActorModel(
+      isVerified: json["isVerified"] ?? false,
+      lastLoginDate:
+          json["lastLoginDate"] == null
+              ? DateTime.now()
+              : DateTime.parse(json["lastLoginDate"]),
+      id: json["id"] ?? '',
+      name: json["name"] ?? '',
+      email: json["email"] ?? '',
+      password: json["password"] ?? '',
+      role:
+          json["role"] ??
+          Role.STUDENT.asString(), // Default to STUDENT for batch students
+      token: json["token"] ?? '',
+      fcmToken: json["fcmToken"],
+      otp: json["otp"],
+      isSelected: false,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "isVerified": isVerified,
@@ -89,10 +96,7 @@ class ActorModel {
     "otp": otp,
   };
 
-  Map<String, dynamic> toJson1() => {
-    "name": name,
-    "isSelected": isSelected,
-  };
+  Map<String, dynamic> toJson1() => {"name": name, "isSelected": isSelected};
 
   factory ActorModel.fromError(Map<String, dynamic> json) => ActorModel(
     password: json.containsKey("password") ? json["password"][0] : '',

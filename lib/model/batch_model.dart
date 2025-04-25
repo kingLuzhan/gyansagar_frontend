@@ -14,9 +14,10 @@ class BatchResponseModel {
 
   factory BatchResponseModel.fromJson(Map<String, dynamic> json) =>
       BatchResponseModel(
-        batches: (json["batches"] as List<dynamic>?)
-            ?.map((x) => BatchModel.fromJson(x))
-            .toList() ??
+        batches:
+            (json["batches"] as List<dynamic>?)
+                ?.map((x) => BatchModel.fromJson(x))
+                .toList() ??
             [],
       );
 
@@ -73,24 +74,33 @@ class BatchModel {
     );
   }
 
-  factory BatchModel.fromJson(Map<String, dynamic> json) => BatchModel(
-    id: json["id"] ?? "",
-    name: json["name"] ?? "",
-    description: json["description"] ?? "",
-    classes: (json["classes"] as List<dynamic>?)
-        ?.map((x) => BatchTimeSlotModel.fromJson(x))
-        .toList() ??
-        [],
-    subject: json["subject"] ?? "",
-    students: (json["students"] as List<dynamic>?)
-        ?.map((x) => x.toString())
-        .toList() ??
-        [],
-    studentModel: (json["studentModel"] as List<dynamic>?)
-        ?.map((x) => ActorModel.fromJson(x))
-        .toList() ??
-        [],
-  );
+  factory BatchModel.fromJson(Map<String, dynamic> json) {
+    print("BatchModel parsing JSON: $json"); // Debug print
+
+    // Correctly parse the 'students' field into 'studentModel'
+    var studentModelData = json["students"] as List<dynamic>?;
+    print("StudentModel data: $studentModelData"); // Debug print
+
+    var model = BatchModel(
+      id: json["id"] ?? "",
+      name: json["name"] ?? "",
+      description: json["description"] ?? "",
+      classes:
+          (json["classes"] as List<dynamic>?)
+              ?.map((x) => BatchTimeSlotModel.fromJson(x))
+              .toList() ??
+          [],
+      subject: json["subject"] ?? "",
+      students: [], // This can be removed if not needed
+      studentModel:
+          studentModelData?.map((x) => ActorModel.fromJson(x)).toList() ?? [],
+    );
+
+    print(
+      "Parsed BatchModel - studentModel length: ${model.studentModel.length}",
+    ); // Debug print
+    return model;
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,

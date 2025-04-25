@@ -32,7 +32,10 @@ class Constants {
   }
 
   static String getBatchDetails(String batchId) {
-    return "$batch/$batchId";
+    print("Constructing batch details URL for batchId: $batchId");
+    final url = "$batch/$batchId";
+    print("Final URL: $url");
+    return url;
   }
 
   static String getMyAnnouncement(bool isStudent) {

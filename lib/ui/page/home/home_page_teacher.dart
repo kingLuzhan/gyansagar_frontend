@@ -17,7 +17,10 @@ import 'package:gyansagar_frontend/ui/theme/theme.dart';
 import 'package:gyansagar_frontend/ui/widget/fab/fab_button.dart';
 import 'package:gyansagar_frontend/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
-import 'package:gyansagar_frontend/ui/page/chat/chat_page.dart'; // <-- Add this import
+import 'package:gyansagar_frontend/ui/page/chat/chat_page.dart'; // Add this import
+import 'package:gyansagar_frontend/ui/page/notification/notifications_page.dart'; // Add this import
+import 'package:gyansagar_frontend/ui/page/auth/login.dart';
+import 'package:gyansagar_frontend/states/auth/auth_state.dart'; // Fixed import path
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({super.key});
@@ -152,122 +155,23 @@ class _TeacherHomePageState extends State<TeacherHomePage>
             animationValue: 1,
             onPressed: () {
               animate();
-              // Check if there are any batches available
-              if (context.read<HomeState>().batchList.isNotEmpty) {
-                // Show a dialog to select a batch or create for all
-                showDialog(
-                  context: context,
-                  builder:
-                      (context) => AlertDialog(
-                        title: const Text('Create Announcement'),
-                        content: const Text(
-                          'Do you want to create an announcement for a specific batch or for all?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              // Store the HomeState reference before navigation
-                              final homeState = context.read<HomeState>();
-                              // For "For All" option, use an empty batch list
-                              Navigator.push(
-                                context,
-                                CreateAnnouncement.getRoute(
-                                  batch: BatchModel(
-                                    id: '',
-                                    name: '',
-                                    description: '',
-                                    classes: [],
-                                    subject: '',
-                                    students: [],
-                                    studentModel: [],
-                                  ),
-                                  onAnnouncementCreated: () {
-                                    // Use the stored reference instead of reading from context
-                                    homeState.fetchAnnouncementList();
-                                  },
-                                ),
-                              );
-                            },
-                            child: const Text('For All'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              // Store the HomeState reference before navigation
-                              final homeState = context.read<HomeState>();
-                              // Show batch selection dialog
-                              showDialog(
-                                context: context,
-                                builder:
-                                    (context) => AlertDialog(
-                                      title: const Text('Select Batch'),
-                                      content: SizedBox(
-                                        width: double.maxFinite,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              context
-                                                  .read<HomeState>()
-                                                  .batchList
-                                                  .length,
-                                          itemBuilder: (context, index) {
-                                            final batch =
-                                                context
-                                                    .read<HomeState>()
-                                                    .batchList[index];
-                                            return ListTile(
-                                              title: Text(batch.name),
-                                              subtitle: Text(batch.subject),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                                Navigator.push(
-                                                  context,
-                                                  CreateAnnouncement.getRoute(
-                                                    batch: batch,
-                                                    onAnnouncementCreated: () {
-                                                      // Use the stored reference instead of reading from context
-                                                      homeState
-                                                          .fetchAnnouncementList();
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                              );
-                            },
-                            child: const Text('Select Batch'),
-                          ),
-                        ],
-                      ),
-                );
-              } else {
-                // No batches available, create for all
-                // Store the HomeState reference before navigation
-                final homeState = context.read<HomeState>();
-                Navigator.push(
-                  context,
-                  CreateAnnouncement.getRoute(
-                    batch: BatchModel(
-                      id: '',
-                      name: '',
-                      description: '',
-                      classes: [],
-                      subject: '',
-                      students: [],
-                      studentModel: [],
-                    ),
-                    onAnnouncementCreated: () {
-                      // Use the stored reference instead of reading from context
-                      homeState.fetchAnnouncementList();
-                    },
+              Navigator.push(
+                context,
+                CreateAnnouncement.getRoute(
+                  batch: BatchModel(
+                    id: '',
+                    name: '',
+                    description: '',
+                    classes: [],
+                    subject: '',
+                    students: [],
+                    studentModel: [],
                   ),
-                );
-              }
+                  onAnnouncementCreated: () {
+                    context.read<HomeState>().fetchAnnouncementList();
+                  },
+                ),
+              );
             },
           ),
         ],
@@ -282,6 +186,32 @@ class _TeacherHomePageState extends State<TeacherHomePage>
     );
   }
 
+  void _handleLogout() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Provider.of<AuthState>(context, listen: false).logout();
+                Navigator.pushReplacement(context, LoginPage.getRoute());
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return HomeScaffold<HomeState>(
@@ -290,8 +220,26 @@ class _TeacherHomePageState extends State<TeacherHomePage>
       showFabButton: showFabButton,
       slivers: const [],
       onNotificationTap: () {
-        print("Notification");
+        Navigator.push(context, NotificationPage.getRoute());
       },
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications_outlined),
+          onPressed: () {
+            Navigator.push(context, NotificationPage.getRoute());
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.chat_outlined),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ChatPage()),
+            );
+          },
+        ),
+        IconButton(icon: const Icon(Icons.logout), onPressed: _handleLogout),
+      ],
       builder: (context, state, child) {
         return CustomScrollView(
           slivers: <Widget>[
@@ -365,28 +313,8 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                   ],
                 ),
               ),
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  IconButton(
-                    icon: const Icon(Icons.chat),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => ChatPage()),
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.notifications),
-                    onPressed: () {
-                      // ... existing notification logic ...
-                    },
-                  ),
-                ],
-              ),
+            const SliverToBoxAdapter(
+              child: Column(children: [SizedBox(height: 16), Divider()]),
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
@@ -434,8 +362,6 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                     state.announcementList[index - 1],
                     loader: loader,
                     onAnnouncementEdit: (model) {
-                      // Store the HomeState reference before navigation
-                      final homeState = context.read<HomeState>();
                       Navigator.push(
                         context,
                         CreateAnnouncement.getEditRoute(
@@ -444,8 +370,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                           ),
                           announcementModel: model,
                           onAnnouncementCreated: () {
-                            // Use the stored reference instead of reading from context
-                            homeState.fetchAnnouncementList();
+                            context.read<HomeState>().fetchAnnouncementList();
                           },
                         ),
                       );

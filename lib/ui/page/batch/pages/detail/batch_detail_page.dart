@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gyansagar_frontend/helper/images.dart';
 import 'package:gyansagar_frontend/helper/utility.dart';
+import 'package:gyansagar_frontend/model/actor_model.dart'; // Add this import
 import 'package:gyansagar_frontend/model/batch_material_model.dart';
 import 'package:gyansagar_frontend/model/batch_model.dart';
 import 'package:gyansagar_frontend/model/batch_time_slot_model.dart';
@@ -57,33 +58,35 @@ class BatchDetailPage extends StatelessWidget {
   }
 
   Widget _students(ThemeData theme) {
+    print(
+      "Rendering students widget with ${batchModel.studentModel.length} students",
+    ); // Debug print
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Wrap(
-        children:
-            batchModel.studentModel
-                .map(
-                  (model) => SizedBox(
-                    height: 35,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: UsernameWidget(
-                        name: model.name,
-                        textStyle:
-                            theme.textTheme.bodyLarge?.copyWith(
-                              fontSize: 12,
-                              color: theme.colorScheme.onPrimary,
-                            ) ??
-                            TextStyle(
-                              fontSize: 12,
-                              color: theme.colorScheme.onPrimary,
-                            ),
-                        backGroundColor: PColors.randomColor(model.name),
-                      ),
+        children: batchModel.studentModel.map((model) {
+          print(
+            "Student in list: ${model.name} (${model.email})",
+          ); // Debug print
+          return SizedBox(
+            height: 35,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: UsernameWidget(
+                name: model.name,
+                textStyle: theme.textTheme.bodyLarge?.copyWith(
+                      fontSize: 12,
+                      color: theme.colorScheme.onPrimary,
+                    ) ??
+                    TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.onPrimary,
                     ),
-                  ),
-                )
-                .toList(),
+                backGroundColor: PColors.randomColor(model.name),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -100,6 +103,7 @@ class BatchDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    print("Building BatchDetailPage for batch: ${batchModel.name}");
     return DefaultTabController(
       length: 1, // Only one tab now
       child: Scaffold(
@@ -191,10 +195,23 @@ class BatchDetailPage extends StatelessWidget {
                             height: 30,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  StudentListPage.getRoute(
-                                    batchModel.studentModel,
+                                final students = batchModel.studentModel;
+                                print("Pre-navigation check:");
+                                print("Student count: ${students.length}");
+                                print(
+                                  "Student list: ${students.map((s) => '${s.name} (${s.email})').toList()}",
+                                );
+
+                                if (students.isEmpty) {
+                                  print("Warning: Student list is empty!");
+                                  return;
+                                }
+
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => StudentListPage(
+                                      list: List<ActorModel>.from(students),
+                                    ),
                                   ),
                                 );
                               },

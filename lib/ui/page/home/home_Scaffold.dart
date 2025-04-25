@@ -15,6 +15,7 @@ class HomeScaffold<T> extends StatelessWidget {
     required this.slivers,
     required this.onNotificationTap,
     required this.builder,
+    this.actions, // <-- Add this line
   });
 
   final Widget Function(BuildContext context, T value, Widget? child) builder;
@@ -23,16 +24,20 @@ class HomeScaffold<T> extends StatelessWidget {
   final ValueNotifier<bool> showFabButton;
   final VoidCallback onNotificationTap;
   final List<Widget> slivers;
+  final List<Widget>? actions; // <-- Add this line
 
   void deleteBatch(context) async {
-    Alert.yesOrNo(context,
-        message: "Are you sure, you want to logout?",
-        title: "Message",
-        barrierDismissible: true,
-        onCancel: () {}, onYes: () async {
-          Provider.of<AuthState>(context, listen: false).logout();
-          Navigator.pushReplacement(context, LoginPage.getRoute());
-        });
+    Alert.yesOrNo(
+      context,
+      message: "Are you sure, you want to logout?",
+      title: "Message",
+      barrierDismissible: true,
+      onCancel: () {},
+      onYes: () async {
+        Provider.of<AuthState>(context, listen: false).logout();
+        Navigator.pushReplacement(context, LoginPage.getRoute());
+      },
+    );
   }
 
   @override
@@ -43,19 +48,24 @@ class HomeScaffold<T> extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(AppConfig.of(context)!.config.appIcon),
         ),
-        title: Text(AppConfig.of(context)!.config.appName, style: const TextStyle(color: PColors.black)),
-        actions: <Widget>[
-          IconButton(
-            onPressed: onNotificationTap,
-            icon: const Icon(Icons.notifications_none),
-          ),
-          IconButton(
-            onPressed: () {
-              deleteBatch(context);
-            },
-            icon: const Icon(Icons.login),
-          ),
-        ],
+        title: Text(
+          AppConfig.of(context)!.config.appName,
+          style: const TextStyle(color: PColors.black),
+        ),
+        actions:
+            actions ??
+            <Widget>[
+              IconButton(
+                onPressed: onNotificationTap,
+                icon: const Icon(Icons.notifications_none),
+              ),
+              IconButton(
+                onPressed: () {
+                  deleteBatch(context);
+                },
+                icon: const Icon(Icons.login),
+              ),
+            ],
       ),
       floatingActionButton: floatingActionButton,
       body: Stack(

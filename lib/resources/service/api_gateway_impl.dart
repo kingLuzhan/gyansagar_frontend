@@ -430,14 +430,21 @@ class ApiGatewayImpl implements ApiGateway {
       String token = await pref.getAccessToken() ?? '';
       final header = {"Authorization": "Bearer $token"};
       
+      print("ApiGateway: Fetching batch details for ID: $batchId");
       var response = await _dioClient.get(
         Constants.getBatchDetails(batchId),
         options: Options(headers: header),
       );
       
       var json = _dioClient.getJsonBody(response);
+      print("ApiGateway: Raw response: $json");
+      
       if (json.containsKey('batch')) {
-        return BatchModel.fromJson(json['batch']);
+        var batchData = json['batch'];
+        print("ApiGateway: Student data in response: ${batchData['studentModel']}");
+        var batch = BatchModel.fromJson(batchData);
+        print("ApiGateway: Parsed batch students: ${batch.studentModel.length}");
+        return batch;
       }
       
       throw Exception('Failed to get batch details: Invalid response format');
